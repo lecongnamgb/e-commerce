@@ -2,6 +2,7 @@ import * as bcrypt from 'bcrypt';
 
 import { BadRequestException, Injectable } from '@nestjs/common';
 
+import { CreateUserDto } from '../user/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { UserService } from '../user/user.service';
@@ -56,7 +57,7 @@ export class AuthService {
     }
   }
 
-  async signup(data): Promise<any> {
+  async signup(data: CreateUserDto): Promise<any> {
     let user = await this.userService.findByUsername(data.username)
     if (user) {
       throw new BadRequestException()
