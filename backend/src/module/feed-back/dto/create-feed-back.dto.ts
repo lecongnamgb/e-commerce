@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateFeedBackDto {
     @ApiProperty()
-    userId: string;
+    user_id: string;
 
     @ApiProperty()
     comment: string;
@@ -11,5 +11,5 @@ export class CreateFeedBackDto {
     number_star: number;
 
     @ApiProperty()
-    productId: string;
+    product_id: string;
 }

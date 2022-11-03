@@ -15,15 +15,15 @@ export class Order {
 
   @Prop()
   @ApiProperty()
-  totalPrice: number;
+  total_price: number;
 
   @Prop()
   @ApiProperty()
-  state: string;
+  state_id: string;
 
   @Prop()
   @ApiProperty()
-  userId: string;
+  user_id: string;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);

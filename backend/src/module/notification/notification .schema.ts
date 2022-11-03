@@ -9,7 +9,7 @@ export type NotificationDocument = Notification & Document;
 export class Notification {
   @Prop()
   @ApiProperty()
-  userId: string;
+  user_id: string;
 
   @Prop()
   @ApiProperty()

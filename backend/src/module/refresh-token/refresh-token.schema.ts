@@ -9,11 +9,11 @@ export type RefreshTokenDocument = RefreshToken & Document;
 export class RefreshToken {
   @Prop()
   @ApiProperty()
-  refreshToken: string;
+  refresh_token: string;
 
   @Prop()
   @ApiProperty()
-  userId: string;
+  user_id: string;
 }
 
 export const RefreshTokenSchema = SchemaFactory.createForClass(RefreshToken);

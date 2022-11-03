@@ -9,7 +9,7 @@ export type FeedBackDocument = FeedBack & Document;
 export class FeedBack {
   @Prop()
   @ApiProperty()
-  userId: string;
+  user_id: string;
 
   @Prop()
   @ApiProperty()
@@ -21,7 +21,7 @@ export class FeedBack {
 
   @Prop()
   @ApiProperty()
-  productId: string;
+  product_id: string;
 }
 
 export const FeedBackSchema = SchemaFactory.createForClass(FeedBack);

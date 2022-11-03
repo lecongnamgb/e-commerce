@@ -11,5 +11,5 @@ export class CreateShopDto {
     name: string;
 
     @ApiProperty()
-    ownerId: string;
+    user_id: string;
 }

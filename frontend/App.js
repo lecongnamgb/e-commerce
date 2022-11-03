@@ -1,11 +1,12 @@
-import { NavigationContainer } from '@react-navigation/native';
-import BottomNavigation from './components/Navigator/BottomNavigation'
-import HomeStackNavigation from './components/Navigator/HomeStackNavigation';
+import { NavigationContainer } from "@react-navigation/native";
+import HomeStackNavigation from "./components/Navigator/HomeStackNavigation";
+import store from "./redux/store";
+import { Provider } from "react-redux";
 
 export default function App() {
   return (
-        <NavigationContainer independent = {true}>
-            <HomeStackNavigation/>
-        </NavigationContainer>
+    <NavigationContainer independent={true}>
+      <HomeStackNavigation />
+    </NavigationContainer>
   );
 }

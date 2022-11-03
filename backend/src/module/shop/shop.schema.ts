@@ -21,7 +21,7 @@ export class Shop {
 
   @Prop()
   @ApiProperty()
-  ownerId: string;
+  user_id: string;
 }
 
 export const ShopSchema = SchemaFactory.createForClass(Shop);

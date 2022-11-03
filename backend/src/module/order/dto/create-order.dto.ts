@@ -10,11 +10,11 @@ export class CreateOrderDto {
     ];
 
     @ApiProperty()
-    totalPrice: number;
+    total_price: number;
 
     @ApiProperty()
-    state: string;
+    state_id: string;
 
     @ApiProperty()
-    userId: string;
+    user_id: string;
 }

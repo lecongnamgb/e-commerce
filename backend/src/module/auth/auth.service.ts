@@ -39,15 +39,15 @@ export class AuthService {
 
     if (!token) {
       await this.refreshTokenService.create({
-        userId: user._id,
-        refreshToken,
+        user_id: user._id,
+        refresh_token: refreshToken,
       });
     } else {
       await this.refreshTokenService.update(
         token._id,
         {
-          refreshToken,
-          userId: user._id
+          refresh_token: refreshToken,
+          user_id: user._id
         }
       );
     }
