@@ -10,6 +10,7 @@ export class OrderService {
 
     async create(data: CreateOrderDto): Promise<Order> {
         const newOrder = new this.orderModel(data);
+        console.log(newOrder)
         return await newOrder.save();
     }
 
