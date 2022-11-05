@@ -1,5 +1,6 @@
+import { JwtAuthGuard } from './../auth/guard/jwt-auth.guard';
 import { CreateFeedBackDto } from './dto/create-feed-back.dto';
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 
 import { FeedBack } from './feed-back.schema';
 import { FeedBackService } from './feed-back.service';
@@ -8,6 +9,31 @@ import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 @Controller('feed-back')
 export class FeedBackController {
     constructor(private readonly feedBackService: FeedBackService) { }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('user')
+    @ApiResponse({type: FeedBack})
+    @ApiTags('Get list feed back by user id')
+    async getFeedBackByUserId(@Req() req): Promise<any> {
+        return await this.feedBackService.getFeedBackByUserId(req.user.userId);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get(':star/star')
+    @ApiResponse({type: FeedBack})
+    @ApiTags('Get list feed back by star')
+    async getFeedBackByStar(@Param('star') star: number, @Req() req): Promise<FeedBack[]> {
+        return await this.feedBackService.getFeedBackByStar(req.user.userId, star);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get(':id/product')
+    @ApiResponse({type: FeedBack})
+    @ApiTags('Get list feed back by product id')
+    async getFeedBackByProductId(@Param('id') id: string): Promise<any> {
+        return await this.feedBackService.getFeedBackByProductId(id);
+    }
+
     @Post()
     @ApiBody({type: CreateFeedBackDto})
     @ApiResponse({type: FeedBack})

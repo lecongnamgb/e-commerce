@@ -1,3 +1,4 @@
+import { UserService } from './../user/user.service';
 import { CreateNotificationDto } from './dto/create-notification .dto';
 import { Model } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
@@ -6,7 +7,10 @@ import { Notification, NotificationDocument } from './notification .schema';
 
 @Injectable()
 export class NotificationService {
-    constructor(@InjectModel(Notification.name) private notificationModel: Model<NotificationDocument>) { }
+    constructor(
+        @InjectModel(Notification.name) private notificationModel: Model<NotificationDocument>,
+        private userService: UserService
+    ) { }
 
     async create(data: CreateNotificationDto): Promise<Notification> {
         const newNotification = new this.notificationModel(data);
@@ -42,5 +46,13 @@ export class NotificationService {
         } else {
             throw new NotFoundException('Notification not found')
         }
+    }
+
+    async getNotificationByUserId(id: string): Promise<Notification[]> {
+        const user = await this.userService.findOne(id)
+        if (!user) {
+            throw new NotFoundException('User not found')
+        }
+        return await this.notificationModel.find({user_id: id})
     }
 }

@@ -8,6 +8,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { NotificationModule } from './module/notification/notification .module';
 import { OrderModule } from './module/order/order.module';
+import { OrderStateModule } from './module/order-state/order-state.module';
 import { ProductModule } from './module/product/product.module';
 import { ShopModule } from './module/shop/shop.module';
 import { UserModule } from './module/user/user.module';
@@ -23,7 +24,8 @@ import { UserModule } from './module/user/user.module';
     OrderModule,
     ProductModule,
     ShopModule,
-    UserModule
+    UserModule,
+    OrderStateModule
   ],
   controllers: [AppController],
   providers: [AppService],

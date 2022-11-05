@@ -3,10 +3,14 @@ import { Model } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Product, ProductDocument } from './product.schema';
+import { ShopService } from '../shop/shop.service';
 
 @Injectable()
 export class ProductService {
-    constructor(@InjectModel(Product.name) private productModel: Model<ProductDocument>) { }
+    constructor(
+        @InjectModel(Product.name) private productModel: Model<ProductDocument>,
+        private shopService: ShopService
+    ) { }
 
     async create(data: CreateProductDto): Promise<Product> {
         const newProduct = new this.productModel(data);
@@ -42,5 +46,23 @@ export class ProductService {
         } else {
             throw new NotFoundException('Product not found')
         }
+    }
+
+    async getListProDuctByShopId(id: string, query): Promise<Product[]> {
+        const { search } = query
+        const shop = await this.shopService.findOne(id)
+        if (!shop) {
+            throw new NotFoundException('Shop not found')
+        }
+        const productQuery = this.productModel.find({shop_id: id})
+        if (search) {
+            if (search === 'new') {
+                productQuery.sort({createdAt: 'desc'})
+            }
+            if (search === 'sell') {
+                productQuery.sort({quantity_sold: 'desc'})
+            }
+        }
+        return await productQuery
     }
 }

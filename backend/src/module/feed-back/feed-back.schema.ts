@@ -22,6 +22,14 @@ export class FeedBack {
   @Prop()
   @ApiProperty()
   product_id: string;
+
+  @Prop()
+  @ApiProperty()
+  createdAt: string;
+
+  @Prop()
+  @ApiProperty()
+  updatedAt: string;
 }
 
 export const FeedBackSchema = SchemaFactory.createForClass(FeedBack);

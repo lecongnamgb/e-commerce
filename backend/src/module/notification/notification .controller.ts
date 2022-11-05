@@ -1,5 +1,6 @@
+import { JwtAuthGuard } from './../auth/guard/jwt-auth.guard';
 import { CreateNotificationDto } from './dto/create-notification .dto';
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 
 import { Notification } from './notification .schema';
 import { NotificationService } from './notification .service';
@@ -8,6 +9,15 @@ import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 @Controller('notification')
 export class NotificationController {
     constructor(private readonly notificationService: NotificationService) { }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('user')
+    @ApiResponse({type: Notification})
+    @ApiTags('Get list notification by user id')
+    async getNotificationByUserId(@Req() req): Promise<Notification[]> {
+        return await this.notificationService.getNotificationByUserId(req.user.userId);
+    }
+
     @Post()
     @ApiBody({type: CreateNotificationDto})
     @ApiResponse({type: Notification})

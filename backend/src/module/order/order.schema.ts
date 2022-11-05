@@ -1,17 +1,18 @@
+import { Document, SchemaTypes } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { Product } from './../product/product.schema';
 
 export type OrderDocument = Order & Document;
 
 @Schema({ timestamps: true})
 export class Order {
-  @Prop()
-  @ApiProperty({
-    type:[{quantity:{type: Number}, id:{type:String}}]
+  @Prop({
+    type:[{quantity:{type:Number}, product:{type: SchemaTypes.ObjectId, ref: 'Product'}}]
   })
-  products: [{ quantity: number; id: string; }];
+  @ApiProperty()
+  products: [{ product: Product; quantity: number; }];
 
   @Prop()
   @ApiProperty()

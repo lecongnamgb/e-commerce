@@ -1,10 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Product } from './../../product/product.schema';
 
 export class CreateOrderDto {
     @ApiProperty()
     products: [
         {
-            id: string;
+            product: Product;
             quantity: number;
         }
     ];
