@@ -8,6 +8,14 @@ import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 @Controller('order')
 export class OrderController {
     constructor(private readonly orderService: OrderService) { }
+
+    @Get(':id/state')
+    @ApiResponse({type: Order})
+    @ApiTags('Get list order by state id')
+    async getListOrderByStateId(@Param('id') id: string): Promise<Order[]> {
+        return await this.orderService.getListOrderByStateId(id);
+    }
+
     @Post()
     @ApiBody({type: CreateOrderDto})
     @ApiResponse({type: Order})

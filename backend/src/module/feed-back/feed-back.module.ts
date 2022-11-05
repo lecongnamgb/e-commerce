@@ -4,9 +4,15 @@ import { FeedBackController } from './feed-back.controller';
 import { FeedBackService } from './feed-back.service';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ProductModule } from './../product/product.module';
+import { UserModule } from './../user/user.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: FeedBack.name, schema: FeedBackSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: FeedBack.name, schema: FeedBackSchema }]),
+    UserModule,
+    ProductModule
+  ],
   controllers: [FeedBackController],
   providers: [FeedBackService],
   exports: [FeedBackService]

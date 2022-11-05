@@ -1,5 +1,5 @@
 import { CreateProductDto } from './dto/create-product.dto';
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 
 import { Product } from './product.schema';
 import { ProductService } from './product.service';
@@ -42,5 +42,12 @@ export class ProductController {
     @ApiTags('Delete product by id')
     async delete(@Param('id') id: string): Promise<Product> {
         return await this.productService.delete(id);
+    }
+
+    @Get(':id/shop')
+    @ApiResponse({type: Product})
+    @ApiTags('Get list product by shop id')
+    async getListProDuctByShopId(@Param('id') id: string, @Query() query): Promise<Product[]> {
+        return await this.productService.getListProDuctByShopId(id, query);
     }
 }

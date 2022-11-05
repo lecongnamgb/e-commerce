@@ -1,3 +1,4 @@
+import { OrderStateService } from './../order-state/order-state.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Model } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
@@ -6,11 +7,13 @@ import { Order, OrderDocument } from './order.schema';
 
 @Injectable()
 export class OrderService {
-    constructor(@InjectModel(Order.name) private orderModel: Model<OrderDocument>) { }
+    constructor(
+        @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
+        private orderStateService: OrderStateService
+    ) { }
 
     async create(data: CreateOrderDto): Promise<Order> {
         const newOrder = new this.orderModel(data);
-        console.log(newOrder)
         return await newOrder.save();
     }
 
@@ -43,5 +46,13 @@ export class OrderService {
         } else {
             throw new NotFoundException('Order not found')
         }
+    }
+
+    async getListOrderByStateId(id: string): Promise<Order[]> {
+        const orderState = await this.orderStateService.findOne(id)
+        if (!orderState) {
+            throw new NotFoundException('Order State not found')
+        }
+        return await this.orderModel.find({state_id: id}).populate('products.product').exec()
     }
 }
