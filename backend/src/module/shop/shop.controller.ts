@@ -1,5 +1,6 @@
+import { JwtAuthGuard } from './../auth/guard/jwt-auth.guard';
 import { CreateShopDto } from './dto/create-shop.dto';
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 
 import { Shop } from './shop.schema';
 import { ShopService } from './shop.service';
@@ -8,11 +9,14 @@ import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 @Controller('shop')
 export class ShopController {
     constructor(private readonly shopService: ShopService) { }
+
+    @UseGuards(JwtAuthGuard)
     @Post()
     @ApiResponse({type: Shop})
     @ApiBody({type: CreateShopDto})
     @ApiTags('Create shop')
-    async create(@Body() data: CreateShopDto): Promise<Shop> {
+    async create(@Body() data: CreateShopDto, @Req() req): Promise<Shop> {
+        data.user_id = req.user.userId
         return await this.shopService.create(data)
     }
 

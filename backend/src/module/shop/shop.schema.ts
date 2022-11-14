@@ -5,7 +5,7 @@ import { Document } from 'mongoose';
 
 export type ShopDocument = Shop & Document;
 
-@Schema({ timestamps: true})
+@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }})
 export class Shop {
   @Prop()
   @ApiProperty()
@@ -22,6 +22,18 @@ export class Shop {
   @Prop()
   @ApiProperty()
   user_id: string;
+
+  @Prop()
+  @ApiProperty()
+  total_rating: number; 
+
+  @Prop()
+  @ApiProperty()
+  created_at: string;
+
+  @Prop()
+  @ApiProperty()
+  updated_at: string;
 }
 
 export const ShopSchema = SchemaFactory.createForClass(Shop);

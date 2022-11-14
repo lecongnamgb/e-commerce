@@ -23,7 +23,7 @@ export class OrderStateService {
         if (orderState) {
             return orderState
         } else {
-            throw new NotFoundException('OrderState not found')
+            throw new NotFoundException('Order State not found')
         }
     }
 
@@ -32,7 +32,7 @@ export class OrderStateService {
         if (orderState) {
             return orderState
         } else {
-            throw new NotFoundException('OrderState not found')
+            throw new NotFoundException('Order State not found')
         }
     }
 
@@ -41,7 +41,11 @@ export class OrderStateService {
         if (orderState) {
             return orderState
         } else {
-            throw new NotFoundException('OrderState not found')
+            throw new NotFoundException('Order State not found')
         }
+    }
+
+    async findByName(state: string) {
+        return await this.orderStateModel.findOne({state})
     }
 }

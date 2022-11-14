@@ -34,11 +34,13 @@ export class FeedBackController {
         return await this.feedBackService.getFeedBackByProductId(id);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     @ApiBody({type: CreateFeedBackDto})
     @ApiResponse({type: FeedBack})
     @ApiTags('Create feed back')
-    async create(@Body() data: CreateFeedBackDto): Promise<FeedBack> {
+    async create(@Body() data: CreateFeedBackDto, @Req() req): Promise<FeedBack> {
+        data.user_id = req.user.userId
         return await this.feedBackService.create(data)
     }
 

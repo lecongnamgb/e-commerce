@@ -1,5 +1,6 @@
+import { JwtAuthGuard } from './../auth/guard/jwt-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Req } from '@nestjs/common';
 
 import { User } from './user.schema';
 import { UserService } from './user.service';
@@ -8,6 +9,15 @@ import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) { }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/product')
+    @ApiResponse({type: User})
+    @ApiTags('Get count product like')
+    async getCountProductLike(@Req() req): Promise<any> {
+        return await this.userService.getCountProductLike(req.user.userId);
+    }
+
     @Post()
     @ApiResponse({type: User})
     @ApiBody({type: CreateUserDto})

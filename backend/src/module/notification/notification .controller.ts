@@ -18,11 +18,13 @@ export class NotificationController {
         return await this.notificationService.getNotificationByUserId(req.user.userId);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     @ApiBody({type: CreateNotificationDto})
     @ApiResponse({type: Notification})
     @ApiTags('Create notification')
-    async create(@Body() data: CreateNotificationDto): Promise<Notification> {
+    async create(@Body() data: CreateNotificationDto, @Req() req): Promise<Notification> {
+        data.user_id = req.user.userId
         return await this.notificationService.create(data)
     }
 
