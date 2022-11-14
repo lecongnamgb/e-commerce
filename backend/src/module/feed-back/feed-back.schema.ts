@@ -5,7 +5,7 @@ import { Document } from 'mongoose';
 
 export type FeedBackDocument = FeedBack & Document;
 
-@Schema({ timestamps: true})
+@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }})
 export class FeedBack {
   @Prop()
   @ApiProperty()
@@ -25,11 +25,11 @@ export class FeedBack {
 
   @Prop()
   @ApiProperty()
-  createdAt: string;
+  created_at: string;
 
   @Prop()
   @ApiProperty()
-  updatedAt: string;
+  updated_at: string;
 }
 
 export const FeedBackSchema = SchemaFactory.createForClass(FeedBack);

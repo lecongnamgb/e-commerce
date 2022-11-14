@@ -5,7 +5,7 @@ import { Document } from 'mongoose';
 
 export type ProductDocument = Product & Document;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class Product {
   @Prop()
   @ApiProperty()
@@ -54,6 +54,14 @@ export class Product {
   @Prop()
   @ApiProperty()
   img: string[];
+
+  @Prop()
+  @ApiProperty()
+  created_at: string;
+
+  @Prop()
+  @ApiProperty()
+  updated_at: string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

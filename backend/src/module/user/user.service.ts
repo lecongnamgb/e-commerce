@@ -47,4 +47,11 @@ export class UserService {
     async findByUsername(username: string): Promise<User> {
         return await this.userModel.findOne({username})
     }
+
+    async getCountProductLike(id: string): Promise<any> {
+        const user =  await this.findOne(id)
+        return {
+            total: user.favorite_product_ids.length
+        }
+    }
 }

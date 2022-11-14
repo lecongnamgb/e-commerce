@@ -1,5 +1,6 @@
+import { JwtAuthGuard } from './../auth/guard/jwt-auth.guard';
 import { CreateProductDto } from './dto/create-product.dto';
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 
 import { Product } from './product.schema';
 import { ProductService } from './product.service';
@@ -8,6 +9,15 @@ import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 @Controller('product')
 export class ProductController {
     constructor(private readonly productService: ProductService) { }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('user')
+    @ApiResponse({type: Product})
+    @ApiTags('Get product by user id')
+    async getByUserId(@Req() req): Promise<Product[]> {
+        return await this.productService.getByUserId(req.user.userId);
+    }
+
     @Post()
     @ApiBody({type: CreateProductDto})
     @ApiResponse({type: Product})
@@ -33,8 +43,8 @@ export class ProductController {
     @Get()
     @ApiResponse({type: [Product]})
     @ApiTags('Get list product')
-    async findAll(): Promise<Product[]> {
-        return await this.productService.findAll();
+    async findAll(@Query() query): Promise<Product[]> {
+        return await this.productService.findAll(query);
     }
 
     @Delete(':id')

@@ -49,10 +49,6 @@ export class NotificationService {
     }
 
     async getNotificationByUserId(id: string): Promise<Notification[]> {
-        const user = await this.userService.findOne(id)
-        if (!user) {
-            throw new NotFoundException('User not found')
-        }
         return await this.notificationModel.find({user_id: id})
     }
 }
