@@ -36,7 +36,7 @@ export class RefreshTokenService {
     }
 
     async findByUserId(userId: string): Promise<any> {
-        return await this.refreshTokenModel.findOne({userId})
+        return await this.refreshTokenModel.findOne({user_id: userId})
     }
 
     async update(_id: string, data: CreateRefreshTokenDto): Promise<RefreshToken> {
