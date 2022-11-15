@@ -10,13 +10,19 @@ import { NotificationModule } from './module/notification/notification .module';
 import { OrderModule } from './module/order/order.module';
 import { OrderStateModule } from './module/order-state/order-state.module';
 import { ProductModule } from './module/product/product.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { ShopModule } from './module/shop/shop.module';
 import { UserModule } from './module/user/user.module';
+import { join } from 'path';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.DB_URL),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: "/uploads"
+    }),
     AuthModule,
     CategoryModule,
     FeedBackModule,
