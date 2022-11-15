@@ -1,8 +1,8 @@
-import { ShopService } from './../shop/shop.service';
-import { OrderStateService } from './../order-state/order-state.service';
+import { Shop, ShopDocument } from './../shop/shop.schema';
+import { OrderState, OrderStateDocument } from './../order-state/order-state.schema';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Model } from 'mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Order, OrderDocument } from './order.schema';
 
@@ -10,70 +10,109 @@ import { Order, OrderDocument } from './order.schema';
 export class OrderService {
     constructor(
         @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
-        private orderStateService: OrderStateService,
-        private shopService: ShopService
+        @InjectModel(OrderState.name) private orderStateModel: Model<OrderStateDocument>,
+        @InjectModel(Shop.name) private shopModel: Model<ShopDocument>,
     ) { }
 
-    async create(data: CreateOrderDto): Promise<Order> {
-        const orderState = await this.orderStateService.findOne(data.state_id)
+    async create(data: CreateOrderDto) {
+        const orderState = await this.orderStateModel.findOne({ _id: data.state_id })
         if (!orderState) {
-            throw new NotFoundException('Order State not found')
+            return {
+                success: false,
+                data: [],
+                message: "Order State not found"
+            }
         }
         const newOrder = new this.orderModel(data);
-        return await newOrder.save();
+        await newOrder.save();
+        return {
+            success: true,
+            data: newOrder
+        }
     }
 
-    async findAll(): Promise<Order[]> {
-        return await this.orderModel.find()
+    async findAll() {
+        const order = await this.orderModel.find()
+        return {
+            success: true,
+            data: order
+        }
     }
 
-    async delete(_id: string): Promise<Order> {
+    async delete(_id: string) {
         const order = await this.orderModel.findByIdAndRemove({ _id })
         if (order) {
-            return order
+            return {
+                success: true
+            }
         } else {
-            throw new NotFoundException('Order not found')
+            return {
+                success: false,
+                data: [],
+                message: "Order not found"
+            }
         }
     }
 
-    async findOne(_id: string): Promise<Order> {
+    async findOne(_id: string) {
         const order = await this.orderModel.findById({ _id })
         if (order) {
-            return order
+            return {
+                success: true,
+                data: order
+            }
         } else {
-            throw new NotFoundException('Order not found')
+            return {
+                success: false,
+                data: [],
+                message: "Order not found"
+            }
         }
     }
 
-    async update(_id: string, data: CreateOrderDto): Promise<Order> {
+    async update(_id: string, data: CreateOrderDto) {
         const order = await this.orderModel.findByIdAndUpdate(_id, data, { new: true })
         if (order) {
-            return order
+            return {
+                success: true
+            }
         } else {
-            throw new NotFoundException('Order not found')
+            return {
+                success: false,
+                data: [],
+                message: "Order not found"
+            }
         }
     }
 
-    async getListOrderByStateId(id: string, userId: string): Promise<Order[]> {
-        const orderState = await this.orderStateService.findOne(id)
+    async getListOrderByStateId(id: string, userId: string) {
+        const orderState = await this.orderStateModel.findOne({ _id: id })
         if (!orderState) {
-            throw new NotFoundException('Order State not found')
+            return {
+                success: false,
+                data: [],
+                message: "Order State not found"
+            }
         }
-        return await this.orderModel.find({ state_id: id, user_id: userId }).populate('products.product').exec()
+        const order = await this.orderModel.find({ state_id: id, user_id: userId }).populate('products.product').exec()
+        return {
+            success: true,
+            data: order
+        }
     }
 
-    async getByUserId(id: string) {
-        return await this.orderModel.find({ user_id: id }).populate('products.product').sort({ created_at: 'desc' }).exec()
-    }
-
-    async getListOrderByShopId(id: string, userId: string): Promise<Order[]> {
-        const shop = await this.shopService.findOne(id)
+    async getListOrderByShopId(id: string, userId: string) {
+        const shop = await this.shopModel.findOne({ _id: id })
         if (!shop) {
-            throw new NotFoundException('Shop not found')
+            return {
+                success: false,
+                data: [],
+                message: "Shop not found"
+            }
         }
 
-        const wait = await this.orderStateService.findByName('wait')
-        const delivering = await this.orderStateService.findByName('delivering')
+        const wait = await this.orderStateModel.findOne({ state: 'wait' })
+        const delivering = await this.orderStateModel.findOne({ state: 'delivering' })
         const orderQuery = await this.orderModel.find({
             $and: [
                 {
@@ -93,7 +132,10 @@ export class OrderService {
                 order.push(orderQuery[i])
             }
         }
-        
-        return order
+
+        return {
+            success: true,
+            data: order
+        }
     }
 }

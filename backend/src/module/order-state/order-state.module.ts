@@ -11,4 +11,4 @@ import { OrderStateService } from './order-state.service';
   providers: [OrderStateService],
   exports: [OrderStateService]
 })
-export class OrderStateModule {}
+export class OrderStateModule { }

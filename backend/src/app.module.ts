@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { FeedBackModule } from './module/feed-back/feed-back.module';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { NotificationModule } from './module/notification/notification .module';
+import { NotificationModule } from './module/notification/notification.module';
 import { OrderModule } from './module/order/order.module';
 import { OrderStateModule } from './module/order-state/order-state.module';
 import { ProductModule } from './module/product/product.module';
@@ -36,4 +36,4 @@ import { join } from 'path';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

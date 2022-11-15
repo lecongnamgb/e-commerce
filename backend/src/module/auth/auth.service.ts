@@ -2,9 +2,9 @@ import * as bcrypt from 'bcrypt';
 
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { CreateUserDto } from '../user/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
+import { SignUpDto } from './dto/sign-up.dto';
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class AuthService {
     private refreshTokenService: RefreshTokenService,
   ) { }
 
-  async validateUser(username: string, pass: string): Promise<any> {
+  async validateUser(username: string, pass: string) {
     const user = await this.userService.findByUsername(username);
     if (user && await bcrypt.compare(pass, user.password)) {
       return user
@@ -23,7 +23,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any): Promise<any> {
+  async login(user: any) {
     const refreshToken = this.jwtService.sign(
       {
         userId: user._id,
@@ -34,7 +34,7 @@ export class AuthService {
         expiresIn: process.env.REFRESH_TOKEN_LIFE,
       },
     );
-    
+
     const token = await this.refreshTokenService.findByUserId(user._id);
 
     if (!token) {
@@ -52,28 +52,42 @@ export class AuthService {
       );
     }
 
+    const userData = await this.userService.findOne(user._id)
+    delete userData["_doc"].password
+
     return {
-      refreshToken
+      success: true,
+      data: {
+        ...userData["_doc"],
+        refreshToken
+      }
     }
   }
 
-  async signup(data: CreateUserDto): Promise<any> {
+  async signup(data: SignUpDto) {
     let user = await this.userService.findByUsername(data.username)
     if (user) {
-      throw new BadRequestException()
+      throw new BadRequestException('Username already exists')
     } else {
+      const email = await this.userService.findByEmail(data.email)
+      if (email) {
+        throw new BadRequestException('Email already exists')
+      }
       data.password = await bcrypt.hash(data.password, Number(process.env.SALT_ROUND))
       user = await this.userService.create(data)
-      delete user.password
-      return user
+      delete user["_doc"].password
+      return {
+        success: true,
+        data: user
+      }
     }
   }
 
-  async refreshToken(req): Promise<any> {
+  async refreshToken(req) {
     try {
       const refreshToken = req.headers['x-refresh-token'];
       if (!refreshToken) {
-        throw new BadRequestException()
+        throw new BadRequestException('No refresh token')
       }
 
       const decoded = await this.jwtService.verify(refreshToken, {
@@ -90,14 +104,11 @@ export class AuthService {
       });
 
       return {
-        accessToken
+        success: true,
+        data: accessToken
       }
     } catch (err) {
-      if (err.message === 'jwt expired') {
-        throw new BadRequestException('jwt expired')
-      } else if (err.message === 'Bad Request') {
-        throw new BadRequestException()
-      }
+      throw err
     }
   }
 }

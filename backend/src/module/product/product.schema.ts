@@ -10,7 +10,7 @@ export class Product {
   @Prop()
   @ApiProperty()
   name: string;
-  
+
   @Prop()
   @ApiProperty()
   category_id: string;
@@ -30,15 +30,15 @@ export class Product {
   @Prop()
   @ApiProperty()
   sale_price: number;
-  
+
   @Prop()
   @ApiProperty()
   shop_id: string;
-  
+
   @Prop()
   @ApiProperty()
   total_rating_star: number;
-  
+
   @Prop()
   @ApiProperty()
   quantity_sold: number;
@@ -50,7 +50,7 @@ export class Product {
   @Prop()
   @ApiProperty()
   avatar: string;
-  
+
   @Prop()
   @ApiProperty()
   img: string[];

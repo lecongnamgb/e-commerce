@@ -1,5 +1,4 @@
-import { ProductService } from './../product/product.service';
-import { UserService } from './../user/user.service';
+import { Product, ProductDocument } from './../product/product.schema';
 import { CreateFeedBackDto } from './dto/create-feed-back.dto';
 import { Model } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
@@ -11,72 +10,117 @@ import * as moment from 'moment';
 export class FeedBackService {
     constructor(
         @InjectModel(FeedBack.name) private feedBackModel: Model<FeedBackDocument>,
-        private userService: UserService,
-        private productService: ProductService
+        @InjectModel(Product.name) private productModel: Model<ProductDocument>,
     ) { }
 
-    async create(data: CreateFeedBackDto): Promise<FeedBack> {
-        const product = await this.productService.findOne(data.product_id)
+    async create(data: CreateFeedBackDto) {
+        const product = await this.productModel.findOne({ _id: data.product_id })
         if (!product) {
-            throw new NotFoundException('Product not found')
+            return {
+                success: false,
+                data: [],
+                message: "Product not found"
+            }
         }
         const newFeedBack = new this.feedBackModel(data);
-        return await newFeedBack.save();
-    }
-
-    async findAll(): Promise<FeedBack[]> {
-        return await this.feedBackModel.find()
-    }
-
-    async delete(_id: string): Promise<FeedBack> {
-        const feedBack = await this.feedBackModel.findByIdAndRemove({_id})
-        if (feedBack) {
-            return feedBack
-        } else {
-            throw new NotFoundException('FeedBack not found')
+        await newFeedBack.save();
+        return {
+            success: true,
+            data: newFeedBack
         }
     }
 
-    async findOne(_id: string): Promise<FeedBack> {
-        const feedBack = await this.feedBackModel.findById({_id})
-        if (feedBack) {
-            return feedBack
-        } else {
-            throw new NotFoundException('FeedBack not found')
+    async findAll() {
+        const feedBack = await this.feedBackModel.find()
+        return {
+            success: true,
+            data: feedBack
         }
     }
 
-    async update(_id: string, data: CreateFeedBackDto): Promise<FeedBack> {
-        const feedBack = await this.feedBackModel.findByIdAndUpdate(_id, data, {new: true})
+    async delete(_id: string) {
+        const feedBack = await this.feedBackModel.findByIdAndRemove({ _id })
         if (feedBack) {
-            return feedBack
+            return {
+                success: true
+            }
         } else {
-            throw new NotFoundException('FeedBack not found')
+            return {
+                success: false,
+                data: [],
+                message: "FeedBack not found"
+            }
         }
     }
 
-    async getFeedBackByUserId(id: string): Promise<FeedBack[]> {
-        return await this.feedBackModel.find({user_id: id})
+    async findOne(_id: string) {
+        const feedBack = await this.feedBackModel.findById({ _id })
+        if (feedBack) {
+            return {
+                success: true,
+                data: feedBack
+            }
+        } else {
+            return {
+                success: false,
+                data: [],
+                message: "FeedBack not found"
+            }
+        }
     }
 
-    async getFeedBackByStar(userId: string, star: number): Promise<FeedBack[]> {
-        return await this.feedBackModel.find({number_star: star, user_id: userId})
+    async update(_id: string, data: CreateFeedBackDto) {
+        const feedBack = await this.feedBackModel.findByIdAndUpdate(_id, data, { new: true })
+        if (feedBack) {
+            return {
+                success: true
+            }
+        } else {
+            return {
+                success: false,
+                data: [],
+                message: "FeedBack not found"
+            }
+        }
     }
 
-    async getFeedBackByProductId(id: string): Promise<any> {
-        const product = await this.productService.findOne(id)
+    async getFeedBackByUserId(id: string) {
+        const feedBack = await this.feedBackModel.find({ user_id: id })
+        return {
+            success: true,
+            data: feedBack
+        }
+    }
+
+    async getFeedBackByStar(userId: string, star: number) {
+        const feedBack = await this.feedBackModel.find({ number_star: star, user_id: userId })
+        return {
+            success: true,
+            data: feedBack
+        }
+    }
+
+    async getFeedBackByProductId(id: string) {
+        const product = await this.productModel.findOne({ _id: id })
         if (!product) {
-            throw new NotFoundException('Product not found')
+            return {
+                success: false,
+                data: [],
+                message: "Product not found"
+            }
         }
-        const list = await this.feedBackModel.find({product_id: id})
+        const list = await this.feedBackModel.find({ product_id: id })
         list.forEach(item => {
             item.created_at = moment(new Date(item.created_at)).format('DD-MM-YYYY hh:mm')
             item.updated_at = moment(new Date(item.updated_at)).format('DD-MM-YYYY hh:mm')
         })
         const total = list.length
         return {
-            list,
-            total
+            success: false,
+            data: {
+                list,
+                total
+            }
         }
     }
 }

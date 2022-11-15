@@ -11,4 +11,4 @@ import { ShopService } from './shop.service';
   providers: [ShopService],
   exports: [ShopService]
 })
-export class ShopModule {}
+export class ShopModule { }

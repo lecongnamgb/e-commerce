@@ -1,6 +1,6 @@
 import { CreateShopDto } from './dto/create-shop.dto';
 import { Model } from 'mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Shop, ShopDocument } from './shop.schema';
 
@@ -8,39 +8,66 @@ import { Shop, ShopDocument } from './shop.schema';
 export class ShopService {
     constructor(@InjectModel(Shop.name) private shopModel: Model<ShopDocument>) { }
 
-    async create(data: CreateShopDto): Promise<Shop> {
+    async create(data: CreateShopDto) {
         const newShop = new this.shopModel(data);
-        return await newShop.save();
-    }
-
-    async findAll(): Promise<Shop[]> {
-        return await this.shopModel.find()
-    }
-
-    async delete(_id: string): Promise<Shop> {
-        const shop = await this.shopModel.findByIdAndRemove({_id})
-        if (shop) {
-            return shop
-        } else {
-            throw new NotFoundException('Shop not found')
+        await newShop.save();
+        return {
+            success: true,
+            data: newShop
         }
     }
 
-    async findOne(_id: string): Promise<Shop> {
-        const shop = await this.shopModel.findById({_id})
-        if (shop) {
-            return shop
-        } else {
-            throw new NotFoundException('Shop not found')
+    async findAll() {
+        const shop = await this.shopModel.find()
+        return {
+            success: true,
+            data: shop
         }
     }
 
-    async update(_id: string, data: CreateShopDto): Promise<Shop> {
-        const shop = await this.shopModel.findByIdAndUpdate(_id, data, {new: true})
+    async delete(_id: string) {
+        const shop = await this.shopModel.findByIdAndRemove({ _id })
         if (shop) {
-            return shop
+            return {
+                success: true
+            }
         } else {
-            throw new NotFoundException('Shop not found')
+            return {
+                success: false,
+                data: [],
+                message: "Shop not found"
+            }
+        }
+    }
+
+    async findOne(_id: string) {
+        const shop = await this.shopModel.findById({ _id })
+        if (shop) {
+            return {
+                success: true,
+                data: shop
+            }
+        } else {
+            return {
+                success: false,
+                data: [],
+                message: "Shop not found"
+            }
+        }
+    }
+
+    async update(_id: string, data: CreateShopDto) {
+        const shop = await this.shopModel.findByIdAndUpdate(_id, data, { new: true })
+        if (shop) {
+            return {
+                success: true
+            }
+        } else {
+            return {
+                success: false,
+                data: [],
+                message: "Shop not found"
+            }
         }
     }
 }
