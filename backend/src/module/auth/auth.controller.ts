@@ -1,9 +1,9 @@
 import { LocalAuthGuard } from './guard/local-auth.guard';
-import { Body, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from '../user/dto/create-user.dto';
+import { SignUpDto } from './dto/sign-up.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -12,20 +12,20 @@ export class AuthController {
     @UseGuards(LocalAuthGuard)
     @Post('login')
     @ApiTags('Login')
-    async login(@Request() req): Promise<any> {
-        return this.authService.login(req.user);
+    async login(@Request() req) {
+        return await this.authService.login(req.user);
     }
 
     @Post('signup')
     @ApiTags('Signup')
-    @ApiBody({type: CreateUserDto})
-    async signup(@Body() data: CreateUserDto): Promise<any> {
-        return this.authService.signup(data);
+    @ApiBody({ type: SignUpDto })
+    async signup(@Body() data: SignUpDto) {
+        return await this.authService.signup(data);
     }
 
     @Post('refresh-token')
     @ApiTags('Refresh Token')
-    async refreshToken(@Request() req): Promise<any> {
-        return this.authService.refreshToken(req);
+    async refreshToken(@Request() req) {
+        return await this.authService.refreshToken(req);
     }
 }

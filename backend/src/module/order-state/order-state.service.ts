@@ -1,6 +1,6 @@
 import { CreateOrderStateDto } from './dto/create-order-state.dto';
 import { Model } from 'mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { OrderState, OrderStateDocument } from './order-state.schema';
 
@@ -8,44 +8,66 @@ import { OrderState, OrderStateDocument } from './order-state.schema';
 export class OrderStateService {
     constructor(@InjectModel(OrderState.name) private orderStateModel: Model<OrderStateDocument>) { }
 
-    async create(data: CreateOrderStateDto): Promise<OrderState> {
+    async create(data: CreateOrderStateDto) {
         const newOrderState = new this.orderStateModel(data);
-
-        return await newOrderState.save();
-    }
-
-    async findAll(): Promise<OrderState[]> {
-        return await this.orderStateModel.find()
-    }
-
-    async delete(_id: string): Promise<OrderState> {
-        const orderState = await this.orderStateModel.findByIdAndRemove({_id})
-        if (orderState) {
-            return orderState
-        } else {
-            throw new NotFoundException('Order State not found')
+        await newOrderState.save();
+        return {
+            success: true,
+            data: newOrderState
         }
     }
 
-    async findOne(_id: string): Promise<OrderState> {
-        const orderState = await this.orderStateModel.findById({_id})
-        if (orderState) {
-            return orderState
-        } else {
-            throw new NotFoundException('Order State not found')
+    async findAll() {
+        const orderState = await this.orderStateModel.find()
+        return {
+            success: true,
+            data: orderState
         }
     }
 
-    async update(_id: string, data: CreateOrderStateDto): Promise<OrderState> {
-        const orderState = await this.orderStateModel.findByIdAndUpdate(_id, data, {new: true})
+    async delete(_id: string) {
+        const orderState = await this.orderStateModel.findByIdAndRemove({ _id })
         if (orderState) {
-            return orderState
+            return {
+                success: true
+            }
         } else {
-            throw new NotFoundException('Order State not found')
+            return {
+                success: false,
+                data: [],
+                message: "Order State not found"
+            }
         }
     }
 
-    async findByName(state: string) {
-        return await this.orderStateModel.findOne({state})
+    async findOne(_id: string) {
+        const orderState = await this.orderStateModel.findById({ _id })
+        if (orderState) {
+            return {
+                success: true,
+                data: orderState
+            }
+        } else {
+            return {
+                success: false,
+                data: [],
+                message: "Order State not found"
+            }
+        }
+    }
+
+    async update(_id: string, data: CreateOrderStateDto) {
+        const orderState = await this.orderStateModel.findByIdAndUpdate(_id, data, { new: true })
+        if (orderState) {
+            return {
+                success: true
+            }
+        } else {
+            return {
+                success: false,
+                data: [],
+                message: "Order State not found"
+            }
+        }
     }
 }

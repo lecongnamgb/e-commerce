@@ -6,10 +6,10 @@ import { Product } from './../product/product.schema';
 
 export type OrderDocument = Order & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }})
+@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class Order {
   @Prop({
-    type:[{quantity:{type:Number}, product:{type: SchemaTypes.ObjectId, ref: 'Product'}}]
+    type: [{ quantity: { type: Number }, product: { type: SchemaTypes.ObjectId, ref: 'Product' } }]
   })
   @ApiProperty()
   products: [{ product: Product; quantity: number; }];

@@ -1,6 +1,6 @@
-import { CreateUserDto } from './dto/create-user.dto';
+import { SignUpDto } from './../auth/dto/sign-up.dto';
 import { Model } from 'mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.schema';
 
@@ -8,50 +8,30 @@ import { User, UserDocument } from './user.schema';
 export class UserService {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
 
-    async create(data: CreateUserDto): Promise<User> {
+    async create(data: SignUpDto) {
         const newUser = new this.userModel(data);
         return await newUser.save();
     }
 
-    async findAll(): Promise<User[]> {
-        return await this.userModel.find()
+    async findOne(_id: string) {
+        return await this.userModel.findById({ _id })
     }
 
-    async delete(_id: string): Promise<User> {
-        const user = await this.userModel.findByIdAndRemove({_id})
-        if (user) {
-            return user 
-        } else {
-            throw new NotFoundException('User not found')
-        }
+    async findByUsername(username: string) {
+        return await this.userModel.findOne({ username })
     }
 
-    async findOne(_id: string): Promise<User> {
-        const user = await this.userModel.findById({_id})
-        if (user) {
-            return user 
-        } else {
-            throw new NotFoundException('User not found')
-        }
+    async findByEmail(email: string) {
+        return await this.userModel.findOne({ email })
     }
 
-    async update(_id: string, data: CreateUserDto): Promise<User> {
-        const user = await this.userModel.findByIdAndUpdate(_id, data, {new: true})
-        if (user) {
-            return user 
-        } else {
-            throw new NotFoundException('User not found')
-        }
-    }
-
-    async findByUsername(username: string): Promise<User> {
-        return await this.userModel.findOne({username})
-    }
-
-    async getCountProductLike(id: string): Promise<any> {
-        const user =  await this.findOne(id)
+    async getCountProductLike(id: string) {
+        const user = await this.findOne(id)
         return {
-            total: user.favorite_product_ids.length
+            success: true,
+            data: {
+                total: user.favorite_product_ids.length
+            }
         }
     }
 }

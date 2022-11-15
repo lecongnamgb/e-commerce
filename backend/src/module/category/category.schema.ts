@@ -5,7 +5,7 @@ import { Document } from 'mongoose';
 
 export type CategoryDocument = Category & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }})
+@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class Category {
   @Prop()
   @ApiProperty()

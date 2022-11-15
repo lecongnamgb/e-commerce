@@ -5,7 +5,7 @@ import { Document } from 'mongoose';
 
 export type ShopDocument = Shop & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }})
+@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class Shop {
   @Prop()
   @ApiProperty()
@@ -25,7 +25,7 @@ export class Shop {
 
   @Prop()
   @ApiProperty()
-  total_rating: number; 
+  total_rating: number;
 
   @Prop()
   @ApiProperty()

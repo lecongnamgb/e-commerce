@@ -1,82 +1,123 @@
-import { CategoryService } from './../category/category.service';
-import { OrderService } from './../order/order.service';
+import { QueryProductDto } from './dto/query-product.dto';
+import { Category, CategoryDocument } from './../category/category.schema';
+import { Order, OrderDocument } from './../order/order.schema';
+import { Shop, ShopDocument } from './../shop/shop.schema';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Model } from 'mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Product, ProductDocument } from './product.schema';
-import { ShopService } from '../shop/shop.service';
 
 @Injectable()
 export class ProductService {
     constructor(
         @InjectModel(Product.name) private productModel: Model<ProductDocument>,
-        private shopService: ShopService,
-        private orderService: OrderService,
-        private categoryService: CategoryService
+        @InjectModel(Shop.name) private shopModel: Model<ShopDocument>,
+        @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
+        @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
     ) { }
 
-    async create(data: CreateProductDto): Promise<Product> {
-        const shop = await this.shopService.findOne(data.shop_id)
+    async create(data: CreateProductDto) {
+        const shop = await this.shopModel.findOne({ _id: data.shop_id })
         if (!shop) {
-            throw new NotFoundException('Shop not found')
+            return {
+                success: false,
+                data: [],
+                message: "Shop not found"
+            }
         }
 
-        const category = await this.categoryService.findOne(data.category_id)
+        const category = await this.categoryModel.findOne({ _id: data.category_id })
         if (!category) {
-            throw new NotFoundException('Category not found')
+            return {
+                success: false,
+                data: [],
+                message: "Category not found"
+            }
         }
 
         const newProduct = new this.productModel(data);
-        return await newProduct.save();
+        await newProduct.save();
+        return {
+            success: true,
+            data: newProduct
+        }
     }
 
-    async findAll(query): Promise<Product[]> {
+    async findAll(query: QueryProductDto) {
         const { search } = query
         const productQuery = this.productModel.find()
         if (search === 'date') {
-            return await productQuery.sort({ created_at: 'desc' })
+            productQuery.sort({ created_at: 'desc' })
         } else if (search === 'quantity_sold') {
-            return await productQuery.sort({ quantity_sold: 'desc' })
+            productQuery.sort({ quantity_sold: 'desc' })
         } else if (query.search === 'price_desc') {
-            return await productQuery.sort({ sale_price: 'desc' })
+            productQuery.sort({ sale_price: 'desc' })
         } else if (search === 'price_asc') {
-            return await productQuery.sort({ sale_price: 'asc' })
+            productQuery.sort({ sale_price: 'asc' })
+        }
+        const product = await productQuery
+        return {
+            success: true,
+            data: product
         }
     }
 
-    async delete(_id: string): Promise<Product> {
+    async delete(_id: string) {
         const product = await this.productModel.findByIdAndRemove({ _id })
         if (product) {
-            return product
+            return {
+                success: true
+            }
         } else {
-            throw new NotFoundException('Product not found')
+            return {
+                success: false,
+                data: [],
+                message: "Product not found"
+            }
         }
     }
 
-    async findOne(_id: string): Promise<Product> {
+    async findOne(_id: string) {
         const product = await this.productModel.findById({ _id })
         if (product) {
-            return product
+            return {
+                success: true,
+                data: product
+            }
         } else {
-            throw new NotFoundException('Product not found')
+            return {
+                success: false,
+                data: [],
+                message: "Product not found"
+            }
         }
     }
 
-    async update(_id: string, data: CreateProductDto): Promise<Product> {
+    async update(_id: string, data: CreateProductDto) {
         const product = await this.productModel.findByIdAndUpdate(_id, data, { new: true })
         if (product) {
-            return product
+            return {
+                success: true
+            }
         } else {
-            throw new NotFoundException('Product not found')
+            return {
+                success: false,
+                data: [],
+                message: "Product not found"
+            }
         }
     }
 
-    async getListProDuctByShopId(id: string, query): Promise<Product[]> {
+    async getListProDuctByShopId(id: string, query: QueryProductDto) {
         const { search } = query
-        const shop = await this.shopService.findOne(id)
+        const shop = await this.shopModel.findOne({ _id: id })
         if (!shop) {
-            throw new NotFoundException('Shop not found')
+            return {
+                success: false,
+                data: [],
+                message: "Shop not found"
+            }
         }
         const productQuery = this.productModel.find({ shop_id: id })
         if (search) {
@@ -87,11 +128,15 @@ export class ProductService {
                 productQuery.sort({ quantity_sold: 'desc' })
             }
         }
-        return await productQuery
+        const product = await productQuery
+        return {
+            success: true,
+            data: product
+        }
     }
 
-    async getByUserId(id: string): Promise<Product[]> {
-        const order = await this.orderService.getByUserId(id)
+    async getByUserId(id: string) {
+        const order = await this.orderModel.find({ user_id: id }).populate('products.product').sort({ created_at: 'desc' }).exec()
         const product = []
         for (let i = 0; i < order.length; i++) {
             for (let j = 0; j < order[i].products.length; j++) {
@@ -103,6 +148,9 @@ export class ProductService {
                 }
             }
         }
-        return product
+        return {
+            success: true,
+            data: product
+        }
     }
 }

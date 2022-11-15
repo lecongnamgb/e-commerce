@@ -1,6 +1,6 @@
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Model } from 'mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Category, CategoryDocument } from './category.schema';
 
@@ -8,39 +8,66 @@ import { Category, CategoryDocument } from './category.schema';
 export class CategoryService {
     constructor(@InjectModel(Category.name) private categoryModel: Model<CategoryDocument>) { }
 
-    async create(data: CreateCategoryDto): Promise<Category> {
+    async create(data: CreateCategoryDto) {
         const newCategory = new this.categoryModel(data);
-        return await newCategory.save();
-    }
-
-    async findAll(): Promise<Category[]> {
-        return await this.categoryModel.find()
-    }
-
-    async delete(_id: string): Promise<Category> {
-        const category = await this.categoryModel.findByIdAndRemove({_id})
-        if (category) {
-            return category 
-        } else {
-            throw new NotFoundException('Category not found')
+        await newCategory.save();
+        return {
+            success: true,
+            data: newCategory
         }
     }
 
-    async findOne(_id: string): Promise<Category> {
-        const category = await this.categoryModel.findById({_id})
-        if (category) {
-            return category 
-        } else {
-            throw new NotFoundException('Category not found')
+    async findAll() {
+        const category = await this.categoryModel.find()
+        return {
+            success: true,
+            data: category
         }
     }
 
-    async update(_id: string, data: CreateCategoryDto): Promise<Category> {
-        const category = await this.categoryModel.findByIdAndUpdate(_id, data, {new: true})
+    async delete(_id: string) {
+        const category = await this.categoryModel.findByIdAndRemove({ _id })
         if (category) {
-            return category 
+            return {
+                success: true,
+            }
         } else {
-            throw new NotFoundException('Category not found')
+            return {
+                success: false,
+                data: [],
+                message: 'Category not found'
+            }
+        }
+    }
+
+    async findOne(_id: string) {
+        const category = await this.categoryModel.findById({ _id })
+        if (category) {
+            return {
+                success: true,
+                data: category
+            }
+        } else {
+            return {
+                success: false,
+                data: [],
+                message: 'Category not found'
+            }
+        }
+    }
+
+    async update(_id: string, data: CreateCategoryDto) {
+        const category = await this.categoryModel.findByIdAndUpdate(_id, data, { new: true })
+        if (category) {
+            return {
+                success: true
+            }
+        } else {
+            return {
+                success: false,
+                data: [],
+                message: 'Category not found'
+            }
         }
     }
 }

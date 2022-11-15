@@ -1,10 +1,9 @@
-import { JwtAuthGuard } from './../auth/guard/jwt-auth.guard';
-import { CreateNotificationDto } from './dto/create-notification .dto';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { CreateNotificationDto } from './dto/create-notification.dto';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 
-import { Notification } from './notification .schema';
-import { NotificationService } from './notification .service';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { NotificationService } from './notification.service';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 @Controller('notification')
 export class NotificationController {
@@ -12,47 +11,42 @@ export class NotificationController {
 
     @UseGuards(JwtAuthGuard)
     @Get('user')
-    @ApiResponse({type: Notification})
     @ApiTags('Get list notification by user id')
-    async getNotificationByUserId(@Req() req): Promise<Notification[]> {
+    async getNotificationByUserId(@Req() req) {
         return await this.notificationService.getNotificationByUserId(req.user.userId);
     }
 
     @UseGuards(JwtAuthGuard)
     @Post()
-    @ApiBody({type: CreateNotificationDto})
-    @ApiResponse({type: Notification})
+    @ApiBody({ type: CreateNotificationDto })
     @ApiTags('Create notification')
-    async create(@Body() data: CreateNotificationDto, @Req() req): Promise<Notification> {
+    async create(@Body() data: CreateNotificationDto, @Req() req) {
         data.user_id = req.user.userId
         return await this.notificationService.create(data)
     }
 
     @Get(':id')
-    @ApiResponse({type: Notification})
     @ApiTags('Get notification by id')
-    async findOne(@Param('id') id: string): Promise<Notification> {
+    async findOne(@Param('id') id: string) {
         return await this.notificationService.findOne(id);
     }
 
     @Patch(':id')
-    @ApiResponse({type: Notification})
+    @ApiBody({ type: CreateNotificationDto })
     @ApiTags('Update notification by id')
-    async update(@Param('id') id: string, @Body() data: CreateNotificationDto): Promise<Notification> {
+    async update(@Param('id') id: string, @Body() data: CreateNotificationDto) {
         return await this.notificationService.update(id, data)
     }
 
     @Get()
-    @ApiResponse({type: [Notification]})
     @ApiTags('Get list notification')
-    async findAll(): Promise<Notification[]> {
+    async findAll() {
         return await this.notificationService.findAll();
     }
 
     @Delete(':id')
-    @ApiResponse({type: Notification})
     @ApiTags('Delete notification by id')
-    async delete(@Param('id') id: string): Promise<Notification> {
+    async delete(@Param('id') id: string) {
         return await this.notificationService.delete(id);
     }
 }
