@@ -168,7 +168,7 @@ export class AuthService {
     }
 
     await this.mailerService.sendMail({
-      to: 'tfthark@gmail.com',
+      to: user.email,
       subject: 'Reset code',
       template: './reset-code',
       context: {
@@ -206,7 +206,7 @@ export class AuthService {
       )
       await this.userService.updateCodeReset(user._id, null)
       await this.mailerService.sendMail({
-        to: 'tfthark@gmail.com',
+        to: user.email,
         subject: 'Reset password',
         template: './reset-password',
         context: {
