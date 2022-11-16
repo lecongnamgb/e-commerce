@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class CreateNotificationDto {
+export class GetCodeResetDto {
     @ApiProperty()
-    content: string;
+    email: string;
 }

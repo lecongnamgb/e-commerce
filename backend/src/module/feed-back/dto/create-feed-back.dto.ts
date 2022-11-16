@@ -2,9 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateFeedBackDto {
     @ApiProperty()
-    user_id: string;
-
-    @ApiProperty()
     comment: string;
 
     @ApiProperty()

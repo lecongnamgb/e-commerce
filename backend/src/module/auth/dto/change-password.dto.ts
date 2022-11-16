@@ -1,9 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class SignUpDto {
-    @ApiProperty()
-    username: string;
-
+export class ChangePassWordDto {
     @ApiProperty()
     password: string;
 
@@ -11,5 +8,5 @@ export class SignUpDto {
     re_password: string;
 
     @ApiProperty()
-    email: string;
+    old_password: string;
 }

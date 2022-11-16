@@ -8,8 +8,11 @@ import { RefreshToken, RefreshTokenDocument } from './refresh-token.schema';
 export class RefreshTokenService {
     constructor(@InjectModel(RefreshToken.name) private refreshTokenModel: Model<RefreshTokenDocument>) { }
 
-    async create(data: CreateRefreshTokenDto) {
-        const newRefreshToken = new this.refreshTokenModel(data);
+    async create(userId: string, data: CreateRefreshTokenDto) {
+        const newRefreshToken = new this.refreshTokenModel({
+            user_id: userId,
+            ...data
+        });
         return await newRefreshToken.save();
     }
 

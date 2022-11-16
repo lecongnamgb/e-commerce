@@ -34,4 +34,12 @@ export class UserService {
             }
         }
     }
+
+    async update(_id: string, password: string) {
+        return await this.userModel.findByIdAndUpdate(_id, { password }, { new: true })
+    }
+
+    async updateCodeReset(_id: string, codeReset: string) {
+        return await this.userModel.findByIdAndUpdate(_id, { codeReset }, { new: true })
+    }
 }

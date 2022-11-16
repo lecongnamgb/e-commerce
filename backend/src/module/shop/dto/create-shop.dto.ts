@@ -9,7 +9,4 @@ export class CreateShopDto {
 
     @ApiProperty()
     name: string;
-
-    @ApiProperty()
-    user_id: string;
 }
