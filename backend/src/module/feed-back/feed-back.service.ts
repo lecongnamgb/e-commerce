@@ -13,7 +13,7 @@ export class FeedBackService {
         @InjectModel(Product.name) private productModel: Model<ProductDocument>,
     ) { }
 
-    async create(data: CreateFeedBackDto) {
+    async create(userId: string, data: CreateFeedBackDto) {
         const product = await this.productModel.findOne({ _id: data.product_id })
         if (!product) {
             return {
@@ -22,7 +22,10 @@ export class FeedBackService {
                 message: "Product not found"
             }
         }
-        const newFeedBack = new this.feedBackModel(data);
+        const newFeedBack = new this.feedBackModel({
+            user_id: userId,
+            ...data
+        });
         await newFeedBack.save();
         return {
             success: true,

@@ -10,8 +10,11 @@ export class NotificationService {
         @InjectModel(Notification.name) private notificationModel: Model<NotificationDocument>
     ) { }
 
-    async create(data: CreateNotificationDto) {
-        const newNotification = new this.notificationModel(data);
+    async create(userId: string, data: CreateNotificationDto) {
+        const newNotification = new this.notificationModel({
+            user_id: userId,
+            ...data
+        });
         await newNotification.save();
         return {
             success: true,

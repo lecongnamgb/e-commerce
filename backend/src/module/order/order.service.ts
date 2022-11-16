@@ -14,7 +14,7 @@ export class OrderService {
         @InjectModel(Shop.name) private shopModel: Model<ShopDocument>,
     ) { }
 
-    async create(data: CreateOrderDto) {
+    async create(userId: string, data: CreateOrderDto) {
         const orderState = await this.orderStateModel.findOne({ _id: data.state_id })
         if (!orderState) {
             return {
@@ -23,7 +23,10 @@ export class OrderService {
                 message: "Order State not found"
             }
         }
-        const newOrder = new this.orderModel(data);
+        const newOrder = new this.orderModel({
+            user_id: userId,
+            ...data
+        });
         await newOrder.save();
         return {
             success: true,

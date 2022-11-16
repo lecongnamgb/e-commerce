@@ -8,8 +8,11 @@ import { Shop, ShopDocument } from './shop.schema';
 export class ShopService {
     constructor(@InjectModel(Shop.name) private shopModel: Model<ShopDocument>) { }
 
-    async create(data: CreateShopDto) {
-        const newShop = new this.shopModel(data);
+    async create(userId: string, data: CreateShopDto) {
+        const newShop = new this.shopModel({
+            user_id: userId,
+            ...data
+        });
         await newShop.save();
         return {
             success: true,

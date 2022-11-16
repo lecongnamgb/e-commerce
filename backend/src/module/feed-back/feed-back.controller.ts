@@ -35,8 +35,7 @@ export class FeedBackController {
     @ApiBody({ type: CreateFeedBackDto })
     @ApiTags('Create feed back')
     async create(@Body() data: CreateFeedBackDto, @Req() req) {
-        data.user_id = req.user.userId
-        return await this.feedBackService.create(data)
+        return await this.feedBackService.create(req.user.userId, data)
     }
 
     @Get(':id')

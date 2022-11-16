@@ -49,6 +49,10 @@ export class User {
 
   @Prop()
   @ApiProperty()
+  codeReset: string;
+
+  @Prop()
+  @ApiProperty()
   created_at: string;
 
   @Prop()

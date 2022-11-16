@@ -1,3 +1,7 @@
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { GetCodeResetDto } from './dto/get-code-reset.dto';
+import { ChangePassWordDto } from './dto/change-password.dto';
+import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 
@@ -24,8 +28,28 @@ export class AuthController {
     }
 
     @Post('refresh-token')
-    @ApiTags('Refresh Token')
+    @ApiTags('Refresh token')
     async refreshToken(@Request() req) {
         return await this.authService.refreshToken(req);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('change-password')
+    @ApiTags('Change password')
+    @ApiBody({ type: ChangePassWordDto })
+    async changePassWord(@Request() req, @Body() data: ChangePassWordDto) {
+        return await this.authService.changePassWord(req.user.userId, data);
+    }
+
+    @Post('code-reset')
+    @ApiTags('Get code reset')
+    async getCodeReset(@Body() data: GetCodeResetDto) {
+        return await this.authService.getCodeReset(data.email);
+    }
+
+    @Post('reset-password')
+    @ApiTags('Reset password')
+    async resetPassWod(@Body() data: ResetPasswordDto) {
+        return await this.authService.resetPassWod(data);
     }
 }

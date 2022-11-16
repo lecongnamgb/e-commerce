@@ -14,8 +14,7 @@ export class ShopController {
     @ApiBody({ type: CreateShopDto })
     @ApiTags('Create shop')
     async create(@Body() data: CreateShopDto, @Req() req) {
-        data.user_id = req.user.userId
-        return await this.shopService.create(data)
+        return await this.shopService.create(req.user.userId, data)
     }
 
     @Get(':id')

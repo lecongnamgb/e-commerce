@@ -21,8 +21,7 @@ export class NotificationController {
     @ApiBody({ type: CreateNotificationDto })
     @ApiTags('Create notification')
     async create(@Body() data: CreateNotificationDto, @Req() req) {
-        data.user_id = req.user.userId
-        return await this.notificationService.create(data)
+        return await this.notificationService.create(req.user.userId, data)
     }
 
     @Get(':id')

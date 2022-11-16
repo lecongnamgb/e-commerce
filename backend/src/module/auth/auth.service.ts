@@ -2,8 +2,11 @@ import * as bcrypt from 'bcrypt';
 
 import { BadRequestException, Injectable } from '@nestjs/common';
 
+import { ChangePassWordDto } from './dto/change-password.dto';
 import { JwtService } from '@nestjs/jwt';
+import { MailerService } from '@nestjs-modules/mailer';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { UserService } from '../user/user.service';
 
@@ -13,6 +16,7 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
     private refreshTokenService: RefreshTokenService,
+    private mailerService: MailerService
   ) { }
 
   async validateUser(username: string, pass: string) {
@@ -38,16 +42,16 @@ export class AuthService {
     const token = await this.refreshTokenService.findByUserId(user._id);
 
     if (!token) {
-      await this.refreshTokenService.create({
-        user_id: user._id,
-        refresh_token: refreshToken,
-      });
+      await this.refreshTokenService.create(
+        user._id,
+        {
+          refresh_token: refreshToken,
+        });
     } else {
       await this.refreshTokenService.update(
         token._id,
         {
           refresh_token: refreshToken,
-          user_id: user._id
         }
       );
     }
@@ -65,6 +69,9 @@ export class AuthService {
   }
 
   async signup(data: SignUpDto) {
+    if (data.password !== data.re_password) {
+      throw new BadRequestException('Password does not match')
+    }
     let user = await this.userService.findByUsername(data.username)
     if (user) {
       throw new BadRequestException('Username already exists')
@@ -73,6 +80,7 @@ export class AuthService {
       if (email) {
         throw new BadRequestException('Email already exists')
       }
+      delete data.re_password
       data.password = await bcrypt.hash(data.password, Number(process.env.SALT_ROUND))
       user = await this.userService.create(data)
       delete user["_doc"].password
@@ -109,6 +117,111 @@ export class AuthService {
       }
     } catch (err) {
       throw err
+    }
+  }
+
+  async changePassWord(userId: string, data: ChangePassWordDto) {
+    if (data.password !== data.re_password) {
+      throw new BadRequestException('Password does not match')
+    }
+    const user = await this.userService.findOne(userId)
+    if (user) {
+      if (await bcrypt.compare(data.old_password, user.password)) {
+        data.password = await bcrypt.hash(data.password, Number(process.env.SALT_ROUND))
+        await this.userService.update(
+          user._id,
+          data.password
+        )
+        return {
+          success: true
+        }
+      } else {
+        return {
+          success: false,
+          data: [],
+          message: "Password wrong"
+        }
+      }
+    } else {
+      return {
+        success: false,
+        data: [],
+        message: "User not found"
+      }
+    }
+  }
+
+  async getCodeReset(email: string) {
+    const user = await this.userService.findByEmail(email)
+    if (!user) {
+      return {
+        success: false,
+        data: [],
+        message: "User not found"
+      }
+    }
+
+    let code = "";
+    let char_list = "0123456789";
+    for (var i = 0; i < 6; i++) {
+      code += char_list.charAt(Math.floor(Math.random() * char_list.length));
+    }
+
+    await this.mailerService.sendMail({
+      to: 'tfthark@gmail.com',
+      subject: 'Reset code',
+      template: './reset-code',
+      context: {
+        code
+      },
+    });
+
+    await this.userService.updateCodeReset(user._id, code)
+
+    return {
+      success: true
+    }
+  }
+
+  async resetPassWod(data: ResetPasswordDto) {
+    const user = await this.userService.findByEmail(data.email)
+    if (!user) {
+      return {
+        success: false,
+        data: [],
+        message: "User not found"
+      }
+    }
+
+    if (user.codeReset === data.code) {
+      let password = "";
+      let char_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      for (var i = 0; i < 6; i++) {
+        password += char_list.charAt(Math.floor(Math.random() * char_list.length));
+      }
+      const hashPassword = await bcrypt.hash(password, Number(process.env.SALT_ROUND))
+      await this.userService.update(
+        user._id,
+        hashPassword
+      )
+      await this.userService.updateCodeReset(user._id, null)
+      await this.mailerService.sendMail({
+        to: 'tfthark@gmail.com',
+        subject: 'Reset password',
+        template: './reset-password',
+        context: {
+          password
+        },
+      });
+      return {
+        success: true
+      }
+    } else {
+      return {
+        success: false,
+        data: [],
+        message: "Code reset wrong"
+      }
     }
   }
 }

@@ -28,8 +28,7 @@ export class OrderController {
     @ApiBody({ type: CreateOrderDto })
     @ApiTags('Create order')
     async create(@Body() data: CreateOrderDto, @Req() req) {
-        data.user_id = req.user.userId
-        return await this.orderService.create(data)
+        return await this.orderService.create(req.user.userId, data)
     }
 
     @Get(':id')

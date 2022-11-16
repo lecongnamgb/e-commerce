@@ -15,7 +15,4 @@ export class CreateOrderDto {
 
     @ApiProperty()
     state_id: string;
-
-    @ApiProperty()
-    user_id: string;
 }
