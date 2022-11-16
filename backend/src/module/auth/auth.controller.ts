@@ -43,12 +43,14 @@ export class AuthController {
 
     @Post('code-reset')
     @ApiTags('Get code reset')
+    @ApiBody({ type: GetCodeResetDto })
     async getCodeReset(@Body() data: GetCodeResetDto) {
         return await this.authService.getCodeReset(data.email);
     }
 
     @Post('reset-password')
     @ApiTags('Reset password')
+    @ApiBody({ type: ResetPasswordDto })
     async resetPassWod(@Body() data: ResetPasswordDto) {
         return await this.authService.resetPassWod(data);
     }
