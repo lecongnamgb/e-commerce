@@ -8,8 +8,5 @@ export class SignUpDto {
     password: string;
 
     @ApiProperty()
-    re_password: string;
-
-    @ApiProperty()
     email: string;
 }

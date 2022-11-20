@@ -69,9 +69,6 @@ export class AuthService {
   }
 
   async signup(data: SignUpDto) {
-    if (data.password !== data.re_password) {
-      throw new BadRequestException('Password does not match')
-    }
     let user = await this.userService.findByUsername(data.username)
     if (user) {
       throw new BadRequestException('Username already exists')
@@ -80,7 +77,6 @@ export class AuthService {
       if (email) {
         throw new BadRequestException('Email already exists')
       }
-      delete data.re_password
       data.password = await bcrypt.hash(data.password, Number(process.env.SALT_ROUND))
       user = await this.userService.create(data)
       delete user["_doc"].password
@@ -121,9 +117,6 @@ export class AuthService {
   }
 
   async changePassWord(userId: string, data: ChangePassWordDto) {
-    if (data.password !== data.re_password) {
-      throw new BadRequestException('Password does not match')
-    }
     const user = await this.userService.findOne(userId)
     if (user) {
       if (await bcrypt.compare(data.old_password, user.password)) {
