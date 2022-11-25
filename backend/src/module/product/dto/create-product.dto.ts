@@ -5,31 +5,31 @@ export class CreateProductDto {
     name: string;
 
     @ApiProperty()
-    category_id: string;
+    categoryId: string;
 
     @ApiProperty()
     description: string;
 
     @ApiProperty()
-    standard_price: number;
+    standardPrice: number;
 
     @ApiProperty()
-    sale_percent: number;
+    salePercent: number;
 
     @ApiProperty()
-    sale_price: number;
+    salePrice: number;
 
     @ApiProperty()
-    shop_id: string;
+    shopId: string;
 
     @ApiProperty()
-    total_rating_star: number;
+    totalRatingStar: number;
 
     @ApiProperty()
-    quantity_sold: number;
+    quantitySold: number;
 
     @ApiProperty()
-    quantity_in_inventory: number;
+    quantityInInventory: number;
 
     @ApiProperty()
     avatar: string;

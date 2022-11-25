@@ -5,47 +5,47 @@ import { Document } from 'mongoose';
 
 export type ProductDocument = Product & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
+@Schema({ timestamps: true })
 export class Product {
   @Prop()
   @ApiProperty()
   name: string;
 
   @Prop()
-  @ApiProperty()
-  category_id: string;
+  @ApiProperty({name: 'category_id'})
+  categoryId: string;
 
   @Prop()
   @ApiProperty()
   description: string;
 
   @Prop()
-  @ApiProperty()
-  standard_price: number;
+  @ApiProperty({name: 'standard_price'})
+  standardPrice: number;
 
   @Prop()
-  @ApiProperty()
-  sale_percent: number;
+  @ApiProperty({name: 'sale_percent'})
+  salePercent: number;
 
   @Prop()
-  @ApiProperty()
-  sale_price: number;
+  @ApiProperty({name: 'sale_price'})
+  salePrice: number;
 
   @Prop()
-  @ApiProperty()
-  shop_id: string;
+  @ApiProperty({name: 'shop_id'})
+  shopId: string;
 
   @Prop()
-  @ApiProperty()
-  total_rating_star: number;
+  @ApiProperty({name: 'total_rating_star'})
+  totalRatingStar: number;
 
   @Prop()
-  @ApiProperty()
-  quantity_sold: number;
+  @ApiProperty({name: 'quantity_sold'})
+  quantitySold: number;
 
   @Prop()
-  @ApiProperty()
-  quantity_in_inventory: number;
+  @ApiProperty({name: 'quantity_in_inventory'})
+  quantityInInventory: number;
 
   @Prop()
   @ApiProperty()
@@ -57,11 +57,11 @@ export class Product {
 
   @Prop()
   @ApiProperty()
-  created_at: string;
+  createdAt: string;
 
   @Prop()
   @ApiProperty()
-  updated_at: string;
+  updatedAt: string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

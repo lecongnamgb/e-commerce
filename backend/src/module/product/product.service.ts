@@ -1,3 +1,4 @@
+import { TypeSearchProduct } from './enum/type-search-product.enum';
 import { QueryProductDto } from './dto/query-product.dto';
 import { Category, CategoryDocument } from './../category/category.schema';
 import { Order, OrderDocument } from './../order/order.schema';
@@ -18,7 +19,7 @@ export class ProductService {
     ) { }
 
     async create(data: CreateProductDto) {
-        const shop = await this.shopModel.findOne({ _id: data.shop_id })
+        const shop = await this.shopModel.findOne({ _id: data.shopId })
         if (!shop) {
             return {
                 success: false,
@@ -27,7 +28,7 @@ export class ProductService {
             }
         }
 
-        const category = await this.categoryModel.findOne({ _id: data.category_id })
+        const category = await this.categoryModel.findOne({ _id: data.categoryId })
         if (!category) {
             return {
                 success: false,
@@ -47,14 +48,14 @@ export class ProductService {
     async findAll(query: QueryProductDto) {
         const { search } = query
         const productQuery = this.productModel.find()
-        if (search === 'date') {
-            productQuery.sort({ created_at: 'desc' })
-        } else if (search === 'quantity_sold') {
-            productQuery.sort({ quantity_sold: 'desc' })
-        } else if (query.search === 'price_desc') {
-            productQuery.sort({ sale_price: 'desc' })
-        } else if (search === 'price_asc') {
-            productQuery.sort({ sale_price: 'asc' })
+        if (search === TypeSearchProduct.DATE) {
+            productQuery.sort({ createdAt: 'desc' })
+        } else if (search === TypeSearchProduct.QUANTITY_SOLD) {
+            productQuery.sort({ quantitySold: 'desc' })
+        } else if (query.search === TypeSearchProduct.PRICE_DESC) {
+            productQuery.sort({ salePrice: 'desc' })
+        } else if (search === TypeSearchProduct.PRICE_ASC) {
+            productQuery.sort({ salePrice: 'asc' })
         }
         const product = await productQuery
         return {
@@ -109,9 +110,9 @@ export class ProductService {
         }
     }
 
-    async getListProDuctByShopId(id: string, query: QueryProductDto) {
+    async getListProDuctByShopId(_id: string, query: QueryProductDto) {
         const { search } = query
-        const shop = await this.shopModel.findOne({ _id: id })
+        const shop = await this.shopModel.findOne({ _id })
         if (!shop) {
             return {
                 success: false,
@@ -119,13 +120,13 @@ export class ProductService {
                 message: "Shop not found"
             }
         }
-        const productQuery = this.productModel.find({ shop_id: id })
+        const productQuery = this.productModel.find({ shopId: _id })
         if (search) {
             if (search === 'new') {
-                productQuery.sort({ created_at: 'desc' })
+                productQuery.sort({ createdAt: 'desc' })
             }
             if (search === 'sell') {
-                productQuery.sort({ quantity_sold: 'desc' })
+                productQuery.sort({ quantitySold: 'desc' })
             }
         }
         const product = await productQuery
@@ -135,8 +136,8 @@ export class ProductService {
         }
     }
 
-    async getByUserId(id: string) {
-        const order = await this.orderModel.find({ user_id: id }).populate('products.product').sort({ created_at: 'desc' }).exec()
+    async getByUserId(userId: string) {
+        const order = await this.orderModel.find({ userId }).populate('products.product').sort({ createdAt: 'desc' }).exec()
         const product = []
         for (let i = 0; i < order.length; i++) {
             for (let j = 0; j < order[i].products.length; j++) {

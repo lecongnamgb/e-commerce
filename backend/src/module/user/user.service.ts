@@ -30,7 +30,7 @@ export class UserService {
         return {
             success: true,
             data: {
-                total: user.favorite_product_ids.length
+                total: user.favoriteProductIds.length
             }
         }
     }

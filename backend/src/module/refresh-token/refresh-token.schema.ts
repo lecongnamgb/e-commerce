@@ -5,23 +5,23 @@ import { Document } from 'mongoose';
 
 export type RefreshTokenDocument = RefreshToken & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
+@Schema({ timestamps: true })
 export class RefreshToken {
   @Prop()
-  @ApiProperty()
-  refresh_token: string;
+  @ApiProperty({name: 'refresh_token'})
+  refreshToken: string;
+
+  @Prop()
+  @ApiProperty({name: 'user_id'})
+  userId: string;
 
   @Prop()
   @ApiProperty()
-  user_id: string;
+  createdAt: string;
 
   @Prop()
   @ApiProperty()
-  created_at: string;
-
-  @Prop()
-  @ApiProperty()
-  updated_at: string;
+  updatedAt: string;
 }
 
 export const RefreshTokenSchema = SchemaFactory.createForClass(RefreshToken);

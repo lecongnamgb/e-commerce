@@ -19,9 +19,9 @@ export class AuthService {
     private mailerService: MailerService
   ) { }
 
-  async validateUser(username: string, pass: string) {
+  async validateUser(username: string, password: string) {
     const user = await this.userService.findByUsername(username);
-    if (user && await bcrypt.compare(pass, user.password)) {
+    if (user && await bcrypt.compare(password, user.password)) {
       return user
     }
     return null;
@@ -45,13 +45,13 @@ export class AuthService {
       await this.refreshTokenService.create(
         user._id,
         {
-          refresh_token: refreshToken,
+          refreshToken,
         });
     } else {
       await this.refreshTokenService.update(
         token._id,
         {
-          refresh_token: refreshToken,
+          refreshToken,
         }
       );
     }
@@ -119,7 +119,7 @@ export class AuthService {
   async changePassWord(userId: string, data: ChangePassWordDto) {
     const user = await this.userService.findOne(userId)
     if (user) {
-      if (await bcrypt.compare(data.old_password, user.password)) {
+      if (await bcrypt.compare(data.oldPassword, user.password)) {
         data.password = await bcrypt.hash(data.password, Number(process.env.SALT_ROUND))
         await this.userService.update(
           user._id,
@@ -155,9 +155,9 @@ export class AuthService {
     }
 
     let code = "";
-    let char_list = "0123456789";
+    let charList = "0123456789";
     for (var i = 0; i < 6; i++) {
-      code += char_list.charAt(Math.floor(Math.random() * char_list.length));
+      code += charList.charAt(Math.floor(Math.random() * charList.length));
     }
 
     await this.mailerService.sendMail({
@@ -188,9 +188,9 @@ export class AuthService {
 
     if (user.codeReset === data.code) {
       let password = "";
-      let char_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let charList = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 6; i++) {
-        password += char_list.charAt(Math.floor(Math.random() * char_list.length));
+        password += charList.charAt(Math.floor(Math.random() * charList.length));
       }
       const hashPassword = await bcrypt.hash(password, Number(process.env.SALT_ROUND))
       await this.userService.update(

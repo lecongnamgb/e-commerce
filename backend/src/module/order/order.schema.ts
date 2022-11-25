@@ -6,7 +6,7 @@ import { Product } from './../product/product.schema';
 
 export type OrderDocument = Order & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
+@Schema({ timestamps: true })
 export class Order {
   @Prop({
     type: [{ quantity: { type: Number }, product: { type: SchemaTypes.ObjectId, ref: 'Product' } }]
@@ -15,24 +15,24 @@ export class Order {
   products: [{ product: Product; quantity: number; }];
 
   @Prop()
-  @ApiProperty()
-  total_price: number;
+  @ApiProperty({name: 'total_price'})
+  totalPrice: number;
+
+  @Prop()
+  @ApiProperty({name: 'state_id'})
+  stateId: string;
+
+  @Prop()
+  @ApiProperty({name: 'user_id'})
+  userId: string;
 
   @Prop()
   @ApiProperty()
-  state_id: string;
+  createdAt: string;
 
   @Prop()
   @ApiProperty()
-  user_id: string;
-
-  @Prop()
-  @ApiProperty()
-  created_at: string;
-
-  @Prop()
-  @ApiProperty()
-  updated_at: string;
+  updatedAt: string;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);

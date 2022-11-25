@@ -2,10 +2,10 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateShopDto {
     @ApiProperty()
-    avatar_url: string;
+    avatarUrl: string;
 
     @ApiProperty()
-    background_url: string;
+    backgroundUrl: string;
 
     @ApiProperty()
     name: string;

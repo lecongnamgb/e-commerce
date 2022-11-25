@@ -5,35 +5,35 @@ import { Document } from 'mongoose';
 
 export type ShopDocument = Shop & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
+@Schema({ timestamps: true })
 export class Shop {
   @Prop()
-  @ApiProperty()
-  avatar_url: string;
+  @ApiProperty({name: 'avatar_url'})
+  avatarUrl: string;
 
   @Prop()
-  @ApiProperty()
-  background_url: string;
+  @ApiProperty({name: 'background_url'})
+  backgroundUrl: string;
 
   @Prop()
   @ApiProperty()
   name: string;
 
   @Prop()
-  @ApiProperty()
-  user_id: string;
+  @ApiProperty({name: 'user_id'})
+  userId: string;
+
+  @Prop()
+  @ApiProperty({name: 'total_rating'})
+  totalRating: number;
 
   @Prop()
   @ApiProperty()
-  total_rating: number;
+  createdAt: string;
 
   @Prop()
   @ApiProperty()
-  created_at: string;
-
-  @Prop()
-  @ApiProperty()
-  updated_at: string;
+  updatedAt: string;
 }
 
 export const ShopSchema = SchemaFactory.createForClass(Shop);

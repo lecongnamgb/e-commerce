@@ -5,7 +5,7 @@ import { Document } from 'mongoose';
 
 export type UserDocument = User & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
+@Schema({ timestamps: true })
 export class User {
   @Prop()
   @ApiProperty()
@@ -32,20 +32,20 @@ export class User {
   dob: Date;
 
   @Prop()
-  @ApiProperty()
-  phone_number: string;
+  @ApiProperty({name: 'phone_number'})
+  phoneNumber: string;
 
   @Prop()
   @ApiProperty()
   address: string;
 
   @Prop()
-  @ApiProperty()
-  favorite_product_ids: Array<string>
+  @ApiProperty({name: 'favorite_product_ids'})
+  favoriteProductIds: Array<string>
 
   @Prop()
-  @ApiProperty()
-  recently_view_product_ids: Array<string>
+  @ApiProperty({name: 'recently_view_product_ids'})
+  recentlyViewProductIds: Array<string>
 
   @Prop()
   @ApiProperty()
@@ -53,11 +53,11 @@ export class User {
 
   @Prop()
   @ApiProperty()
-  created_at: string;
+  createdAt: string;
 
   @Prop()
   @ApiProperty()
-  updated_at: string;
+  updatedAt: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

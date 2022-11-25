@@ -5,31 +5,31 @@ import { Document } from 'mongoose';
 
 export type FeedBackDocument = FeedBack & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
+@Schema({ timestamps: true })
 export class FeedBack {
   @Prop()
-  @ApiProperty()
-  user_id: string;
+  @ApiProperty({name: 'user_id'})
+  userId: string;
 
   @Prop()
   @ApiProperty()
   comment: string;
 
   @Prop()
-  @ApiProperty()
-  number_star: number;
+  @ApiProperty({name: 'number_star'})
+  numberStar: number;
+
+  @Prop()
+  @ApiProperty({name: 'product_id'})
+  productId: string;
 
   @Prop()
   @ApiProperty()
-  product_id: string;
+  createdAt: string;
 
   @Prop()
   @ApiProperty()
-  created_at: string;
-
-  @Prop()
-  @ApiProperty()
-  updated_at: string;
+  updatedAt: string;
 }
 
 export const FeedBackSchema = SchemaFactory.createForClass(FeedBack);
