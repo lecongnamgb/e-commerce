@@ -5,7 +5,7 @@ import { Document } from 'mongoose';
 
 export type OrderStateDocument = OrderState & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
+@Schema({ timestamps: true })
 export class OrderState {
   @Prop()
   @ApiProperty()
@@ -13,11 +13,11 @@ export class OrderState {
 
   @Prop()
   @ApiProperty()
-  created_at: string;
+  createdAt: string;
 
   @Prop()
   @ApiProperty()
-  updated_at: string;
+  updatedAt: string;
 }
 
 export const OrderStateSchema = SchemaFactory.createForClass(OrderState);

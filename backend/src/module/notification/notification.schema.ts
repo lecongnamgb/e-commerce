@@ -5,11 +5,11 @@ import { Document } from 'mongoose';
 
 export type NotificationDocument = Notification & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
+@Schema({ timestamps: true })
 export class Notification {
   @Prop()
-  @ApiProperty()
-  user_id: string;
+  @ApiProperty({name: 'user_id'})
+  userId: string;
 
   @Prop()
   @ApiProperty()
@@ -17,11 +17,11 @@ export class Notification {
 
   @Prop()
   @ApiProperty()
-  created_at: string;
+  createdAt: string;
 
   @Prop()
   @ApiProperty()
-  updated_at: string;
+  updatedAt: string;
 }
 
 export const NotificationSchema = SchemaFactory.createForClass(Notification);

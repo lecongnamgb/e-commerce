@@ -12,7 +12,7 @@ export class NotificationService {
 
     async create(userId: string, data: CreateNotificationDto) {
         const newNotification = new this.notificationModel({
-            user_id: userId,
+            userId,
             ...data
         });
         await newNotification.save();
@@ -76,8 +76,8 @@ export class NotificationService {
         }
     }
 
-    async getNotificationByUserId(id: string) {
-        const notification = await this.notificationModel.find({ user_id: id })
+    async getNotificationByUserId(userId: string) {
+        const notification = await this.notificationModel.find({ userId })
         return {
             success: true,
             data: notification

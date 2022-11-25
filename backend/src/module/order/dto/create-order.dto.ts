@@ -11,8 +11,8 @@ export class CreateOrderDto {
     ];
 
     @ApiProperty()
-    total_price: number;
+    totalPrice: number;
 
     @ApiProperty()
-    state_id: string;
+    stateId: string;
 }

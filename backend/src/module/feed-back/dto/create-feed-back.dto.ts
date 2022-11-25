@@ -5,8 +5,8 @@ export class CreateFeedBackDto {
     comment: string;
 
     @ApiProperty()
-    number_star: number;
+    numberStar: number;
 
     @ApiProperty()
-    product_id: string;
+    productId: string;
 }

@@ -10,14 +10,14 @@ export class RefreshTokenService {
 
     async create(userId: string, data: CreateRefreshTokenDto) {
         const newRefreshToken = new this.refreshTokenModel({
-            user_id: userId,
+            userId,
             ...data
         });
         return await newRefreshToken.save();
     }
 
     async findByUserId(userId: string) {
-        return await this.refreshTokenModel.findOne({ user_id: userId })
+        return await this.refreshTokenModel.findOne({ userId })
     }
 
     async update(_id: string, data: CreateRefreshTokenDto) {

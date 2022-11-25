@@ -14,7 +14,7 @@ export class FeedBackService {
     ) { }
 
     async create(userId: string, data: CreateFeedBackDto) {
-        const product = await this.productModel.findOne({ _id: data.product_id })
+        const product = await this.productModel.findOne({ _id: data.productId })
         if (!product) {
             return {
                 success: false,
@@ -23,7 +23,7 @@ export class FeedBackService {
             }
         }
         const newFeedBack = new this.feedBackModel({
-            user_id: userId,
+            userId,
             ...data
         });
         await newFeedBack.save();
@@ -87,24 +87,24 @@ export class FeedBackService {
         }
     }
 
-    async getFeedBackByUserId(id: string) {
-        const feedBack = await this.feedBackModel.find({ user_id: id })
+    async getFeedBackByUserId(userId: string) {
+        const feedBack = await this.feedBackModel.find({ userId })
         return {
             success: true,
             data: feedBack
         }
     }
 
-    async getFeedBackByStar(userId: string, star: number) {
-        const feedBack = await this.feedBackModel.find({ number_star: star, user_id: userId })
+    async getFeedBackByStar(userId: string, numberStar: number) {
+        const feedBack = await this.feedBackModel.find({ numberStar, userId })
         return {
             success: true,
             data: feedBack
         }
     }
 
-    async getFeedBackByProductId(id: string) {
-        const product = await this.productModel.findOne({ _id: id })
+    async getFeedBackByProductId(_id: string) {
+        const product = await this.productModel.findOne({ _id })
         if (!product) {
             return {
                 success: false,
@@ -112,10 +112,10 @@ export class FeedBackService {
                 message: "Product not found"
             }
         }
-        const list = await this.feedBackModel.find({ product_id: id })
+        const list = await this.feedBackModel.find({ productId: _id })
         list.forEach(item => {
-            item.created_at = moment(new Date(item.created_at)).format('DD-MM-YYYY hh:mm')
-            item.updated_at = moment(new Date(item.updated_at)).format('DD-MM-YYYY hh:mm')
+            item.createdAt = moment(new Date(item.createdAt)).format('DD-MM-YYYY hh:mm')
+            item.updatedAt = moment(new Date(item.updatedAt)).format('DD-MM-YYYY hh:mm')
         })
         const total = list.length
         return {
