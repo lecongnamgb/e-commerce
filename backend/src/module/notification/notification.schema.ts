@@ -8,7 +8,7 @@ export type NotificationDocument = Notification & Document;
 @Schema({ timestamps: true })
 export class Notification {
   @Prop()
-  @ApiProperty({name: 'user_id'})
+  @ApiProperty({ name: 'user_id' })
   userId: string;
 
   @Prop()

@@ -8,11 +8,11 @@ export type RefreshTokenDocument = RefreshToken & Document;
 @Schema({ timestamps: true })
 export class RefreshToken {
   @Prop()
-  @ApiProperty({name: 'refresh_token'})
+  @ApiProperty({ name: 'refresh_token' })
   refreshToken: string;
 
   @Prop()
-  @ApiProperty({name: 'user_id'})
+  @ApiProperty({ name: 'user_id' })
   userId: string;
 
   @Prop()

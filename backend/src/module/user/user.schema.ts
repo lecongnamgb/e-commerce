@@ -32,7 +32,7 @@ export class User {
   dob: Date;
 
   @Prop()
-  @ApiProperty({name: 'phone_number'})
+  @ApiProperty({ name: 'phone_number' })
   phoneNumber: string;
 
   @Prop()
@@ -40,11 +40,11 @@ export class User {
   address: string;
 
   @Prop()
-  @ApiProperty({name: 'favorite_product_ids'})
+  @ApiProperty({ name: 'favorite_product_ids' })
   favoriteProductIds: Array<string>
 
   @Prop()
-  @ApiProperty({name: 'recently_view_product_ids'})
+  @ApiProperty({ name: 'recently_view_product_ids' })
   recentlyViewProductIds: Array<string>
 
   @Prop()

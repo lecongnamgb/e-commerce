@@ -12,7 +12,7 @@ export class Product {
   name: string;
 
   @Prop()
-  @ApiProperty({name: 'category_id'})
+  @ApiProperty({ name: 'category_id' })
   categoryId: string;
 
   @Prop()
@@ -20,31 +20,31 @@ export class Product {
   description: string;
 
   @Prop()
-  @ApiProperty({name: 'standard_price'})
+  @ApiProperty({ name: 'standard_price' })
   standardPrice: number;
 
   @Prop()
-  @ApiProperty({name: 'sale_percent'})
+  @ApiProperty({ name: 'sale_percent' })
   salePercent: number;
 
   @Prop()
-  @ApiProperty({name: 'sale_price'})
+  @ApiProperty({ name: 'sale_price' })
   salePrice: number;
 
   @Prop()
-  @ApiProperty({name: 'shop_id'})
+  @ApiProperty({ name: 'shop_id' })
   shopId: string;
 
   @Prop()
-  @ApiProperty({name: 'total_rating_star'})
+  @ApiProperty({ name: 'total_rating_star' })
   totalRatingStar: number;
 
   @Prop()
-  @ApiProperty({name: 'quantity_sold'})
+  @ApiProperty({ name: 'quantity_sold' })
   quantitySold: number;
 
   @Prop()
-  @ApiProperty({name: 'quantity_in_inventory'})
+  @ApiProperty({ name: 'quantity_in_inventory' })
   quantityInInventory: number;
 
   @Prop()
