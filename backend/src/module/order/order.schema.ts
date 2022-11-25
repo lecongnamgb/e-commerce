@@ -15,15 +15,15 @@ export class Order {
   products: [{ product: Product; quantity: number; }];
 
   @Prop()
-  @ApiProperty({name: 'total_price'})
+  @ApiProperty({ name: 'total_price' })
   totalPrice: number;
 
   @Prop()
-  @ApiProperty({name: 'state_id'})
+  @ApiProperty({ name: 'state_id' })
   stateId: string;
 
   @Prop()
-  @ApiProperty({name: 'user_id'})
+  @ApiProperty({ name: 'user_id' })
   userId: string;
 
   @Prop()

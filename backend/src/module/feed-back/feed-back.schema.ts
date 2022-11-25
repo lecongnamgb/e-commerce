@@ -8,7 +8,7 @@ export type FeedBackDocument = FeedBack & Document;
 @Schema({ timestamps: true })
 export class FeedBack {
   @Prop()
-  @ApiProperty({name: 'user_id'})
+  @ApiProperty({ name: 'user_id' })
   userId: string;
 
   @Prop()
@@ -16,11 +16,11 @@ export class FeedBack {
   comment: string;
 
   @Prop()
-  @ApiProperty({name: 'number_star'})
+  @ApiProperty({ name: 'number_star' })
   numberStar: number;
 
   @Prop()
-  @ApiProperty({name: 'product_id'})
+  @ApiProperty({ name: 'product_id' })
   productId: string;
 
   @Prop()

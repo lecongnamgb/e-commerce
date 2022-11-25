@@ -115,7 +115,7 @@ export class OrderService {
             }
         }
 
-        const waiting = await this.orderStateModel.findOne({ state: StateOrder.WAITING  })
+        const waiting = await this.orderStateModel.findOne({ state: StateOrder.WAITING })
         const delivering = await this.orderStateModel.findOne({ state: StateOrder.DELIVERING })
         const orderQuery = await this.orderModel.find({
             $and: [
