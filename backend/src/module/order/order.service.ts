@@ -16,7 +16,7 @@ export class OrderService {
     ) { }
 
     async create(userId: string, data: CreateOrderDto) {
-        const orderState = await this.orderStateModel.findOne({ _id: data.stateId })
+        const orderState = await this.orderStateModel.findOne({ _id: data.state })
         if (!orderState) {
             return {
                 success: false,
@@ -25,7 +25,7 @@ export class OrderService {
             }
         }
         const newOrder = new this.orderModel({
-            userId,
+            user: userId,
             ...data
         });
         await newOrder.save();
@@ -98,7 +98,7 @@ export class OrderService {
                 message: "Order State not found"
             }
         }
-        const order = await this.orderModel.find({ stateId: _id, userId }).populate('products.product').exec()
+        const order = await this.orderModel.find({ state: _id, user: userId })
         return {
             success: true,
             data: order
@@ -121,18 +121,18 @@ export class OrderService {
             $and: [
                 {
                     $or: [
-                        { "stateId": waiting._id },
-                        { "stateId": delivering._id }
+                        { "state": waiting._id },
+                        { "state": delivering._id }
                     ]
                 },
-                { "userId": userId }
+                { "user": userId }
             ]
         })
-            .populate('products.product').exec()
+            
 
         const order = []
         for (let i = 0; i < orderQuery.length; i++) {
-            if (orderQuery[i].products.some(item => item.product.shopId === _id)) {
+            if (orderQuery[i].products.some(item => item.product.shop.name === shop.name)) {
                 order.push(orderQuery[i])
             }
         }

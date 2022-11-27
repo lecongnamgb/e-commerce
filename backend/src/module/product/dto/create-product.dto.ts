@@ -1,11 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Category } from './../../category/category.schema';
+import { Shop } from "src/module/shop/shop.schema";
 
 export class CreateProductDto {
     @ApiProperty()
     name: string;
 
     @ApiProperty()
-    categoryId: string;
+    category: Category;
 
     @ApiProperty()
     description: string;
@@ -20,7 +22,7 @@ export class CreateProductDto {
     salePrice: number;
 
     @ApiProperty()
-    shopId: string;
+    shop: Shop;
 
     @ApiProperty()
     totalRatingStar: number;
@@ -36,4 +38,7 @@ export class CreateProductDto {
 
     @ApiProperty()
     img: string[];
+
+    @ApiProperty()
+    location: string;
 }

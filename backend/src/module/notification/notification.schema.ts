@@ -1,15 +1,16 @@
+import { Document, SchemaTypes } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { User } from '../user/user.schema';
 
 export type NotificationDocument = Notification & Document;
 
 @Schema({ timestamps: true })
 export class Notification {
-  @Prop()
-  @ApiProperty({ name: 'user_id' })
-  userId: string;
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
+  @ApiProperty()
+  user: User;
 
   @Prop()
   @ApiProperty()
