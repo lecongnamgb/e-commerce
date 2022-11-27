@@ -48,13 +48,13 @@ export default function OverviewProduct(props) {
         ) : null}
       </View>
       <View style={styles.flex_row}>
-        <RatingStar stars={3.5} size={16} />
+        <RatingStar stars={product.total_rating_star} size={16} />
         <View style={{ borderRightColor: "#ccc", borderRightWidth: 1 }}>
           <Text style={[styles.pl_10, styles.pr_10, { fontSize: 15 }]}>
-            3.5
+            {product.total_rating_star}
           </Text>
         </View>
-        <Text style={styles.pl_15}>Đã bán 55</Text>
+        <Text style={styles.pl_15}>Đã bán {product.quantity_sold}</Text>
         <TouchableOpacity
           style={{ position: "absolute", right: 10, bottom: -2 }}
           activeOpacity={1}

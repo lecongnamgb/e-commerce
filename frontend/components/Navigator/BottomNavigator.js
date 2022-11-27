@@ -1,17 +1,15 @@
-import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
-import React, { useState } from "react";
-import styles from "../styles";
-import home_icon from "../../assets/icon/home.png";
-import home_active_icon from "../../assets/icon/home_active.png";
+import React, { useEffect, useState } from "react";
+import { Alert, View } from "react-native";
 import bell_icon from "../../assets/icon/bell.png";
 import bell_active_icon from "../../assets/icon/bell_active.png";
-import { useNavigation } from "@react-navigation/native";
-import ItemNavigator from "../bottomNavigatorComponents/ItemNavigator";
+import home_icon from "../../assets/icon/home.png";
+import home_active_icon from "../../assets/icon/home_active.png";
 import userscreen_icon from "../../assets/icon/userscreen.png";
 import userscreen_active_icon from "../../assets/icon/userscreen_active.png";
-import { useEffect } from "react";
-import { _getApi } from "../../utils/axios";
 import { API_GET_LIST_NOTI_BY_USERID } from "../../utils/api";
+import { handleRefreshToken, _getApi } from "../../utils/axios";
+import ItemNavigator from "../bottomNavigatorComponents/ItemNavigator";
+import styles from "../styles";
 
 export default function BottomNavigator(props) {
   const [numOfNoti, setNumOfNoti] = useState(0);
@@ -21,7 +19,13 @@ export default function BottomNavigator(props) {
       const response = await _getApi(API_GET_LIST_NOTI_BY_USERID);
       setNumOfNoti(response.data.length);
     } catch (err) {
-      Alert.alert("Oops!", err.message);
+      console.log(err);
+      // if (err.message === "Unauthorized") {
+      //   handleRefreshToken();
+      //   const response = await _getApi(API_GET_LIST_NOTI_BY_USERID);
+      //   setNumOfNoti(response.data.length);
+      // }
+      Alert.alert("Oops!", "Invalid access token");
     }
   }, []);
   return (

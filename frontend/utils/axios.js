@@ -14,7 +14,8 @@ const axiosInstance = axios.create({
   },
 });
 
-const handleRefreshToken = async (refreshToken) => {
+export const handleRefreshToken = async () => {
+  const refreshToken = await AsyncStorage.getItem(REFRESH_TOKEN);
   const response = await axios.post(
     `${Config.DOMAIN_SERVER_API}${API_REFRESH_TOKEN}`,
     null,
@@ -41,6 +42,7 @@ axiosInstance.interceptors.response.use(
     // }
     // console.log(error.message);
     if (error.message == "Request failed with status code 401") {
+      console.log("handle refresh");
       const refreshToken = await AsyncStorage.getItem(REFRESH_TOKEN);
       handleRefreshToken(refreshToken);
     }

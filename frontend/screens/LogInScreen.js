@@ -22,6 +22,8 @@ import {
   LOGIN_SUCCESSFULLY,
   REFRESH_TOKEN,
   NOTI,
+  SIGNUP_SCREEN,
+  FORGET_SCREEN,
 } from "../utils/const";
 
 export default function LogInScreen() {
@@ -139,6 +141,7 @@ export default function LogInScreen() {
             </Text>
           </View>
         </TouchableOpacity>
+
         <View
           style={[
             styles.ml_25,
@@ -151,10 +154,30 @@ export default function LogInScreen() {
           <TouchableOpacity
             style={{ alignSelf: "flex-start", width: "100%" }}
             onPress={() => {
-              navigation.navigate("SignIn");
+              navigation.navigate(SIGNUP_SCREEN);
             }}
           >
             <Text style={[styles.color_blue, { fontSize: 15 }]}>Đăng ký</Text>
+          </TouchableOpacity>
+        </View>
+        <View
+          style={[
+            styles.ml_25,
+            styles.mr_25,
+            styles.mt_20,
+            styles.flex_row,
+            { justifyContent: "flex-end" },
+          ]}
+        >
+          <TouchableOpacity
+            style={{ bottom: 37 }}
+            onPress={() => {
+              navigation.navigate(FORGET_SCREEN);
+            }}
+          >
+            <Text style={[styles.color_blue, { fontSize: 15 }]}>
+              Quên mật khẩu
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

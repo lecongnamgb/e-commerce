@@ -1,19 +1,17 @@
-import { View, SafeAreaView, ScrollView, Alert, Text } from "react-native";
-import React from "react";
-import HeaderProduct from "../components/productComponents/HeaderProduct";
+import React, { useEffect, useState } from "react";
+import { Alert, SafeAreaView, ScrollView, View } from "react-native";
 import Carousel from "../components/homeComponents/Carousel";
-import FooterProduct from "../components/productComponents/FooterProduct";
-import styles from "../components/styles";
-import OverviewProduct from "../components/productComponents/OverviewProduct";
-import SeparateView from "../components/userComponents/SeparateView";
-import AgentIntro from "../components/searchComponents/AgentIntro";
-import DescriptionProduct from "../components/productComponents/DescriptionProduct";
 import BestSellerList from "../components/productComponents/BestSellerList";
 import BriefEvaluation from "../components/productComponents/BriefEvaluation";
-import { useEffect, useState } from "react";
+import DescriptionProduct from "../components/productComponents/DescriptionProduct";
+import FooterProduct from "../components/productComponents/FooterProduct";
+import HeaderProduct from "../components/productComponents/HeaderProduct";
+import OverviewProduct from "../components/productComponents/OverviewProduct";
+import AgentIntro from "../components/searchComponents/AgentIntro";
+import styles from "../components/styles";
+import SeparateView from "../components/userComponents/SeparateView";
+import { API_GET_LIST_PRODUCT, API_GET_LIST_SHOP } from "../utils/api";
 import { _getApi } from "../utils/axios";
-import { API_GET_LIST_PRODUCT } from "../utils/api";
-import { nanoid } from "@reduxjs/toolkit";
 
 export default function Product({ route }) {
   const {
@@ -21,20 +19,37 @@ export default function Product({ route }) {
   } = route;
 
   const [product, setProduct] = useState();
+  const [shop, setShop] = useState();
+  const [bestSeller, setBestSeller] = useState();
 
-  useEffect(async () => {
-    try {
-      const response = await _getApi(`${API_GET_LIST_PRODUCT}/${id}`);
-      setProduct(response.data);
-    } catch (err) {
-      Alert.alert("Oops!", err.message);
+  useEffect(() => {
+    async function fetchApi() {
+      try {
+        const response = await _getApi(`${API_GET_LIST_PRODUCT}/${id}`);
+        setProduct(response.data);
+
+        const shopResponse = await _getApi(
+          `${API_GET_LIST_SHOP}/${response.data.shop_id}`
+        );
+        console.log("shop:", shopResponse);
+        setShop(shopResponse.data);
+
+        const bestSellerResponse = await _getApi(
+          `${API_GET_LIST_PRODUCT}/${response.data.shop_id}/shop?search=sell`
+        );
+        setBestSeller(bestSellerResponse.data);
+      } catch (err) {
+        Alert.alert("Oops!", err.message);
+      }
     }
+    fetchApi();
   }, []);
-  console.log("product:", product);
 
-  const images = product.img.map((img, index) => {
+  const images = product?.img.map((img, index) => {
     return { id: index, sourceIcon: img };
   });
+  //   console.log("images:", images);
+  //   console.log("product:", product);
 
   //   const images = [
   //     {
@@ -58,7 +73,7 @@ export default function Product({ route }) {
   //     },
   //   ];
   return (
-    <SafeAreaView style={[styles.bg_white]}>
+    <SafeAreaView style={[styles.bg_white]} wait>
       <View
         style={{ position: "absolute", top: 35, right: 1, left: 1, zIndex: 2 }}
       >
@@ -69,17 +84,23 @@ export default function Product({ route }) {
       </View>
       <ScrollView>
         <Carousel listData={images} />
-        <OverviewProduct product={product} />
+        {product != null ? <OverviewProduct product={product} /> : null}
+        {/* <OverviewProduct product={product} /> */}
         <SeparateView />
-        <AgentIntro
-          agentAvt={
-            "https://1.bp.blogspot.com/-MWpiekrll-g/YMW2vMk0CzI/AAAAAAAAtwo/6FwzorrofsML__bdshUQreQy0V1TPwdfgCNcBGAsYHQ/s0/mau-ao-nam.jpg"
-          }
-        />
+        {shop != null ? (
+          <AgentIntro
+            agentAvt={
+              "https://1.bp.blogspot.com/-MWpiekrll-g/YMW2vMk0CzI/AAAAAAAAtwo/6FwzorrofsML__bdshUQreQy0V1TPwdfgCNcBGAsYHQ/s0/mau-ao-nam.jpg"
+            }
+            shop={shop}
+          />
+        ) : null}
         <SeparateView />
         <BestSellerList />
         <SeparateView />
-        <DescriptionProduct />
+        <DescriptionProduct
+          description={product != null ? product.description : null}
+        />
         <SeparateView />
         <BriefEvaluation />
         <View style={{ height: 30 }} />

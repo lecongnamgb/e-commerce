@@ -149,6 +149,23 @@ const styles = StyleSheet.create({
   bold: {
     fontWeight: "bold",
   },
+  root: { flex: 1, padding: 20 },
+  title: { textAlign: "center", fontSize: 30 },
+  codeFieldRoot: { marginTop: 20 },
+  cell: {
+    width: 40,
+    borderRadius: 10,
+    height: 50,
+    lineHeight: 46,
+
+    fontSize: 24,
+    borderWidth: 2,
+    borderColor: "#00000030",
+    textAlign: "center",
+  },
+  focusCell: {
+    borderColor: "#000",
+  },
   flex_row: {
     flex: 0,
     flexDirection: "row",

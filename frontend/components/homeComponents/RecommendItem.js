@@ -34,7 +34,7 @@ export default function RecommendItem(props) {
           }}
         />
         <View style={{ position: "absolute", top: 0, right: 0 }}>
-          {recommendItem.sale_percent == 1 ? null : (
+          {recommendItem.sale_percent == 0 ? null : (
             <PromoIcon sale_percent={recommendItem.sale_percent} />
           )}
         </View>

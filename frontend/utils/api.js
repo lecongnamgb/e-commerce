@@ -5,3 +5,5 @@ export const API_GET_LIST_PRODUCT = "product";
 export const API_GET_LIST_CATEGORY = "category";
 export const API_GET_LIST_NOTI_BY_USERID = "notification/user";
 export const API_GET_LIST_SHOP = "shop";
+export const API_GET_RESET_CODE = "auth/code-reset";
+export const API_RESET_PASSWORD = "auth/reset-password";
