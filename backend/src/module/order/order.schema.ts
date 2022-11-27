@@ -2,7 +2,9 @@ import { Document, SchemaTypes } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { ApiProperty } from '@nestjs/swagger';
+import { OrderState } from '../order-state/order-state.schema';
 import { Product } from './../product/product.schema';
+import { User } from '../user/user.schema';
 
 export type OrderDocument = Order & Document;
 
@@ -18,13 +20,13 @@ export class Order {
   @ApiProperty({ name: 'total_price' })
   totalPrice: number;
 
-  @Prop()
-  @ApiProperty({ name: 'state_id' })
-  stateId: string;
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'OrderState' })
+  @ApiProperty()
+  state: OrderState;
 
-  @Prop()
-  @ApiProperty({ name: 'user_id' })
-  userId: string;
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
+  @ApiProperty()
+  user: User;
 
   @Prop()
   @ApiProperty()
@@ -36,3 +38,8 @@ export class Order {
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
+
+OrderSchema.pre(/^find/, function (next) {
+  this.populate(["products.product", "state"]);
+  next();
+});

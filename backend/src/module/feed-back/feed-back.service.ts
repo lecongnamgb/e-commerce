@@ -14,7 +14,7 @@ export class FeedBackService {
     ) { }
 
     async create(userId: string, data: CreateFeedBackDto) {
-        const product = await this.productModel.findOne({ _id: data.productId })
+        const product = await this.productModel.findOne({ _id: data.product })
         if (!product) {
             return {
                 success: false,
@@ -23,7 +23,7 @@ export class FeedBackService {
             }
         }
         const newFeedBack = new this.feedBackModel({
-            userId,
+            user: userId,
             ...data
         });
         await newFeedBack.save();
@@ -88,7 +88,7 @@ export class FeedBackService {
     }
 
     async getFeedBackByUserId(userId: string) {
-        const feedBack = await this.feedBackModel.find({ userId })
+        const feedBack = await this.feedBackModel.find({ user: userId })
         return {
             success: true,
             data: feedBack
@@ -96,7 +96,7 @@ export class FeedBackService {
     }
 
     async getFeedBackByStar(userId: string, numberStar: number) {
-        const feedBack = await this.feedBackModel.find({ numberStar, userId })
+        const feedBack = await this.feedBackModel.find({ numberStar, user: userId })
         return {
             success: true,
             data: feedBack
@@ -112,7 +112,7 @@ export class FeedBackService {
                 message: "Product not found"
             }
         }
-        const list = await this.feedBackModel.find({ productId: _id })
+        const list = await this.feedBackModel.find({ product: _id })
         list.forEach(item => {
             item.createdAt = moment(new Date(item.createdAt)).format('DD-MM-YYYY hh:mm')
             item.updatedAt = moment(new Date(item.updatedAt)).format('DD-MM-YYYY hh:mm')

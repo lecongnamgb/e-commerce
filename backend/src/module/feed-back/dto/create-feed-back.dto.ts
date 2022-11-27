@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Product } from "src/module/product/product.schema";
 
 export class CreateFeedBackDto {
     @ApiProperty()
@@ -8,5 +9,5 @@ export class CreateFeedBackDto {
     numberStar: number;
 
     @ApiProperty()
-    productId: string;
+    product: Product;
 }

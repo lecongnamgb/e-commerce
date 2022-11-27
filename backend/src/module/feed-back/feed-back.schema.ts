@@ -1,15 +1,17 @@
+import { Document, SchemaTypes } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { Product } from './../product/product.schema';
+import { User } from '../user/user.schema';
 
 export type FeedBackDocument = FeedBack & Document;
 
 @Schema({ timestamps: true })
 export class FeedBack {
-  @Prop()
-  @ApiProperty({ name: 'user_id' })
-  userId: string;
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
+  @ApiProperty()
+  user: User;
 
   @Prop()
   @ApiProperty()
@@ -19,9 +21,9 @@ export class FeedBack {
   @ApiProperty({ name: 'number_star' })
   numberStar: number;
 
-  @Prop()
-  @ApiProperty({ name: 'product_id' })
-  productId: string;
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Product' })
+  @ApiProperty()
+  product: Product;
 
   @Prop()
   @ApiProperty()
@@ -33,3 +35,8 @@ export class FeedBack {
 }
 
 export const FeedBackSchema = SchemaFactory.createForClass(FeedBack);
+
+FeedBackSchema.pre(/^find/, function (next) {
+  this.populate(["product"]);
+  next();
+});

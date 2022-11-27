@@ -1,3 +1,4 @@
+import { UpdateUserDto } from './dto/update-user.dto';
 import { SignUpDto } from './../auth/dto/sign-up.dto';
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
@@ -13,7 +14,7 @@ export class UserService {
         return await newUser.save();
     }
 
-    async findOne(_id: string) {
+    async findById(_id: string) {
         return await this.userModel.findById({ _id })
     }
 
@@ -26,7 +27,7 @@ export class UserService {
     }
 
     async getCountProductLike(id: string) {
-        const user = await this.findOne(id)
+        const user = await this.findById(id)
         return {
             success: true,
             data: {
@@ -35,11 +36,65 @@ export class UserService {
         }
     }
 
-    async update(_id: string, password: string) {
+    async updatePassword(_id: string, password: string) {
         return await this.userModel.findByIdAndUpdate(_id, { password }, { new: true })
     }
 
     async updateCodeReset(_id: string, codeReset: string) {
         return await this.userModel.findByIdAndUpdate(_id, { codeReset }, { new: true })
+    }
+
+    async findAll() {
+        const user = await this.userModel.find({}, {password: 0})
+        return {
+            success: true,
+            data: user
+        }
+    }
+
+    async delete(_id: string) {
+        const user = await this.userModel.findByIdAndRemove({ _id })
+        if (user) {
+            return {
+                success: true
+            }
+        } else {
+            return {
+                success: false,
+                data: [],
+                message: "User not found"
+            }
+        }
+    }
+
+    async findOne(_id: string) {
+        const user = await this.userModel.findById({ _id }, {password: 0})
+        if (user) {
+            return {
+                success: true,
+                data: user
+            }
+        } else {
+            return {
+                success: false,
+                data: [],
+                message: "User not found"
+            }
+        }
+    }
+
+    async update(_id: string, data: UpdateUserDto) {
+        const user = await this.userModel.findByIdAndUpdate(_id, data, { new: true })
+        if (user) {
+            return {
+                success: true
+            }
+        } else {
+            return {
+                success: false,
+                data: [],
+                message: "User not found"
+            }
+        }
     }
 }

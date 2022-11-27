@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { OrderState } from './../../order-state/order-state.schema';
 import { Product } from './../../product/product.schema';
 
 export class CreateOrderDto {
@@ -14,5 +15,5 @@ export class CreateOrderDto {
     totalPrice: number;
 
     @ApiProperty()
-    stateId: string;
+    state: OrderState;
 }

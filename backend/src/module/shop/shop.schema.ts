@@ -1,7 +1,8 @@
+import { Document, SchemaTypes } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { User } from '../user/user.schema';
 
 export type ShopDocument = Shop & Document;
 
@@ -19,9 +20,9 @@ export class Shop {
   @ApiProperty()
   name: string;
 
-  @Prop()
-  @ApiProperty({ name: 'user_id' })
-  userId: string;
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
+  @ApiProperty()
+  owner: User;
 
   @Prop()
   @ApiProperty({ name: 'total_rating' })

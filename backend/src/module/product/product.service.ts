@@ -19,7 +19,7 @@ export class ProductService {
     ) { }
 
     async create(data: CreateProductDto) {
-        const shop = await this.shopModel.findOne({ _id: data.shopId })
+        const shop = await this.shopModel.findOne({ _id: data.shop })
         if (!shop) {
             return {
                 success: false,
@@ -28,7 +28,7 @@ export class ProductService {
             }
         }
 
-        const category = await this.categoryModel.findOne({ _id: data.categoryId })
+        const category = await this.categoryModel.findOne({ _id: data.category })
         if (!category) {
             return {
                 success: false,
@@ -120,7 +120,7 @@ export class ProductService {
                 message: "Shop not found"
             }
         }
-        const productQuery = this.productModel.find({ shopId: _id })
+        const productQuery = this.productModel.find({ shop: _id })
         if (search) {
             if (search === 'new') {
                 productQuery.sort({ createdAt: 'desc' })
@@ -137,7 +137,7 @@ export class ProductService {
     }
 
     async getByUserId(userId: string) {
-        const order = await this.orderModel.find({ userId }).populate('products.product').sort({ createdAt: 'desc' }).exec()
+        const order = await this.orderModel.find({ user: userId }).sort({ createdAt: 'desc' })
         const product = []
         for (let i = 0; i < order.length; i++) {
             for (let j = 0; j < order[i].products.length; j++) {

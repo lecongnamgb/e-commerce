@@ -39,8 +39,6 @@ export class AppController {
     }),
   )
   async upload(@UploadedFile() file: Express.Multer.File) {
-    console.log(file)
-
     return {
       url: `http://localhost:8000/uploads/${file.filename}`
     }

@@ -10,7 +10,7 @@ export class ShopService {
 
     async create(userId: string, data: CreateShopDto) {
         const newShop = new this.shopModel({
-            userId,
+            owner: userId,
             ...data
         });
         await newShop.save();

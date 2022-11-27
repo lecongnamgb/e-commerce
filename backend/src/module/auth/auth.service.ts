@@ -56,7 +56,7 @@ export class AuthService {
       );
     }
 
-    const userData = await this.userService.findOne(user._id)
+    const userData = await this.userService.findById(user._id)
     delete userData["_doc"].password
 
     return {
@@ -117,11 +117,11 @@ export class AuthService {
   }
 
   async changePassWord(userId: string, data: ChangePassWordDto) {
-    const user = await this.userService.findOne(userId)
+    const user = await this.userService.findById(userId)
     if (user) {
       if (await bcrypt.compare(data.oldPassword, user.password)) {
         data.password = await bcrypt.hash(data.password, Number(process.env.SALT_ROUND))
-        await this.userService.update(
+        await this.userService.updatePassword(
           user._id,
           data.password
         )
@@ -193,7 +193,7 @@ export class AuthService {
         password += charList.charAt(Math.floor(Math.random() * charList.length));
       }
       const hashPassword = await bcrypt.hash(password, Number(process.env.SALT_ROUND))
-      await this.userService.update(
+      await this.userService.updatePassword(
         user._id,
         hashPassword
       )
@@ -203,6 +203,7 @@ export class AuthService {
         subject: 'Reset password',
         template: './reset-password',
         context: {
+          username: user.username,
           password
         },
       });
