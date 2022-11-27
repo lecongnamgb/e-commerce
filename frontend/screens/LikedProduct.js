@@ -12,7 +12,7 @@ export default function LikedProduct() {
       title:
         "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
       price: 1000,
-      quantitySold: 1700,
+      quantity_sold: 1700,
     },
     {
       id: 2,
@@ -21,7 +21,7 @@ export default function LikedProduct() {
       title:
         "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
       price: 1000,
-      quantitySold: 1700,
+      quantity_sold: 1700,
     },
     {
       id: 3,
@@ -30,7 +30,7 @@ export default function LikedProduct() {
       title:
         "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
       price: 1000,
-      quantitySold: 170,
+      quantity_sold: 170,
     },
     {
       id: 4,
@@ -39,7 +39,7 @@ export default function LikedProduct() {
       title:
         "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
       price: 1000,
-      quantitySold: 1700,
+      quantity_sold: 1700,
     },
     {
       id: 5,
@@ -48,7 +48,7 @@ export default function LikedProduct() {
       title:
         "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
       price: 1000,
-      quantitySold: 1700,
+      quantity_sold: 1700,
     },
     {
       id: 6,
@@ -57,7 +57,7 @@ export default function LikedProduct() {
       title:
         "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
       price: 1000,
-      quantitySold: 1700,
+      quantity_sold: 1700,
     },
     {
       id: 7,
@@ -66,7 +66,7 @@ export default function LikedProduct() {
       title:
         "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
       price: 1000,
-      quantitySold: 1700,
+      quantity_sold: 1700,
     },
     {
       id: 8,
@@ -75,7 +75,7 @@ export default function LikedProduct() {
       title:
         "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
       price: 1000,
-      quantitySold: 1700,
+      quantity_sold: 1700,
     },
     {
       id: 9,
@@ -84,7 +84,7 @@ export default function LikedProduct() {
       title:
         "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
       price: 1000,
-      quantitySold: 1700,
+      quantity_sold: 1700,
     },
     {
       id: 10,
@@ -93,7 +93,7 @@ export default function LikedProduct() {
       title:
         "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
       price: 1000,
-      quantitySold: 1700,
+      quantity_sold: 1700,
     },
   ];
   return (

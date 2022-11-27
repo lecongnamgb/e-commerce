@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
+import { useEffect } from "react";
 import {
   FlatList,
   Image,
@@ -10,6 +11,7 @@ import {
   View,
 } from "react-native";
 import right_arrow from "../../assets/icon/right_arrow.png";
+import { API_GET_LIST_CATEGORY, API_GET_LIST_PRODUCT } from "../../utils/api";
 import { _getApi } from "../../utils/axios";
 import Config from "../../utils/config";
 import styles from "../styles";
@@ -71,6 +73,11 @@ const listData = [
 ];
 
 export default function CategoryListItem() {
+  // useEffect(async () => {
+  //   const data = await _getApi(API_GET_LIST_CATEGORY);
+  //   console.log(data);
+  // }, []);
+
   const navigation = useNavigation();
   return (
     <SafeAreaView>

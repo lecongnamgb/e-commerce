@@ -1,5 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
+import notiSlice from "./notiSlice";
 
 export default configureStore({
-  reducer: {},
+  reducer: {
+    notifications: notiSlice,
+  },
 });
