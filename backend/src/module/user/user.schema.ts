@@ -29,7 +29,7 @@ export class User {
 
   @Prop()
   @ApiProperty()
-  dob: Date;
+  dob: string;
 
   @Prop()
   @ApiProperty({ name: 'phone_number' })
@@ -50,6 +50,10 @@ export class User {
   @Prop()
   @ApiProperty()
   codeReset: string;
+
+  @Prop()
+  @ApiProperty()
+  avatar: string;
 
   @Prop()
   @ApiProperty()

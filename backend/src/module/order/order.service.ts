@@ -172,4 +172,12 @@ export class OrderService {
             data: order
         }
     }
+
+    async getListOrderByUserId(userId: string) {
+        const list = await this.orderModel.find({user: userId})
+        return {
+            success: true,
+            list
+        }
+    }
 }
