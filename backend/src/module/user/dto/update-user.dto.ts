@@ -8,11 +8,14 @@ export class UpdateUserDto {
   gender: string;
 
   @ApiProperty()
-  dob: Date;
+  dob: string;
 
   @ApiProperty()
   phoneNumber: string;
 
   @ApiProperty()
   address: string;
+
+  @ApiProperty()
+  avatar: string;
 }

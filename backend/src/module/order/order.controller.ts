@@ -10,6 +10,13 @@ export class OrderController {
     constructor(private readonly orderService: OrderService) { }
 
     @UseGuards(JwtAuthGuard)
+    @Get('user')
+    @ApiTags('Get list order by user id')
+    async getListOrderByUserId(@Req() req) {
+        return await this.orderService.getListOrderByUserId(req.user.userId);
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Get(':id/shop')
     @ApiTags('Get list order by shop id')
     async getListOrderByShopId(@Param('id') id: string, @Req() req) {
