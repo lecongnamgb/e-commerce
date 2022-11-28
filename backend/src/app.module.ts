@@ -1,6 +1,7 @@
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './module/auth/auth.module';
+import { CartModule } from './module/cart/cart.module';
 import { CategoryModule } from './module/category/category.module';
 import { ConfigModule } from '@nestjs/config';
 import { FeedBackModule } from './module/feed-back/feed-back.module';
@@ -54,7 +55,8 @@ import { join } from 'path';
     ProductModule,
     ShopModule,
     UserModule,
-    OrderStateModule
+    OrderStateModule,
+    CartModule
   ],
   controllers: [AppController],
   providers: [AppService],

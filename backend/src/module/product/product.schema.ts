@@ -1,7 +1,9 @@
+import { Document, SchemaTypes } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
+import { Category } from './../category/category.schema';
+import { Shop } from '../shop/shop.schema';
 
 export type ProductDocument = Product & Document;
 
@@ -11,9 +13,9 @@ export class Product {
   @ApiProperty()
   name: string;
 
-  @Prop()
-  @ApiProperty({ name: 'category_id' })
-  categoryId: string;
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Category' })
+  @ApiProperty()
+  category: Category;
 
   @Prop()
   @ApiProperty()
@@ -31,9 +33,9 @@ export class Product {
   @ApiProperty({ name: 'sale_price' })
   salePrice: number;
 
-  @Prop()
-  @ApiProperty({ name: 'shop_id' })
-  shopId: string;
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Shop' })
+  @ApiProperty()
+  shop: Shop;
 
   @Prop()
   @ApiProperty({ name: 'total_rating_star' })
@@ -57,6 +59,10 @@ export class Product {
 
   @Prop()
   @ApiProperty()
+  location: string;
+
+  @Prop()
+  @ApiProperty()
   createdAt: string;
 
   @Prop()
@@ -65,3 +71,8 @@ export class Product {
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
+
+ProductSchema.pre(/^find/, function (next) {
+  this.populate(["category", "shop"]);
+  next();
+});
