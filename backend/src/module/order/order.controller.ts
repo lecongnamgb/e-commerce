@@ -1,5 +1,5 @@
 import { JwtAuthGuard } from './../auth/guard/jwt-auth.guard';
-import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderDto } from './dto/update-order.dto';
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Req } from '@nestjs/common';
 
 import { OrderService } from './order.service';
@@ -25,10 +25,9 @@ export class OrderController {
 
     @UseGuards(JwtAuthGuard)
     @Post()
-    @ApiBody({ type: CreateOrderDto })
     @ApiTags('Create order')
-    async create(@Body() data: CreateOrderDto, @Req() req) {
-        return await this.orderService.create(req.user.userId, data)
+    async create(@Req() req) {
+        return await this.orderService.create(req.user.userId)
     }
 
     @Get(':id')
@@ -38,9 +37,9 @@ export class OrderController {
     }
 
     @Patch(':id')
-    @ApiBody({ type: CreateOrderDto })
+    @ApiBody({ type: UpdateOrderDto })
     @ApiTags('Update order by id')
-    async update(@Param('id') id: string, @Body() data: CreateOrderDto) {
+    async update(@Param('id') id: string, @Body() data: UpdateOrderDto) {
         return await this.orderService.update(id, data)
     }
 

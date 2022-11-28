@@ -45,7 +45,7 @@ export class UserService {
     }
 
     async findAll() {
-        const user = await this.userModel.find({}, {password: 0})
+        const user = await this.userModel.find({}, { password: 0 })
         return {
             success: true,
             data: user
@@ -68,7 +68,7 @@ export class UserService {
     }
 
     async findOne(_id: string) {
-        const user = await this.userModel.findById({ _id }, {password: 0})
+        const user = await this.userModel.findById({ _id }, { password: 0 })
         if (user) {
             return {
                 success: true,
