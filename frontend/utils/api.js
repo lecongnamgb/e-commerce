@@ -7,3 +7,5 @@ export const API_GET_LIST_NOTI_BY_USERID = "notification/user";
 export const API_GET_LIST_SHOP = "shop";
 export const API_GET_RESET_CODE = "auth/code-reset";
 export const API_RESET_PASSWORD = "auth/reset-password";
+export const API_GET_USER = "user";
+export const API_CHANGE_PASSWORD = "auth/change-password";

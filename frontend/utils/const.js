@@ -1,5 +1,6 @@
 export const REFRESH_TOKEN = "refreshToken";
 export const ACCESS_TOKEN = "accessToken";
+export const USER_ID = "userId";
 
 export const HOME_SCREEN = "Home";
 export const LOGIN_SCREEN = "LogIn";
@@ -30,5 +31,8 @@ export const MY_REVIEW_SCREEN = "MyReview";
 export const PRODUCT_REVIEW_SCREEN = "Review";
 export const TYPE_CODE_SCREEN = "TypeCode";
 
+export const USER_SLICE = "user";
+
 export const LOGIN_SUCCESSFULLY = "Đăng nhập thành công";
 export const NOTI = "Thông báo";
+export const PASSWORD = "password";

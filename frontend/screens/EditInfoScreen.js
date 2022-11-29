@@ -1,58 +1,73 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  SafeAreaView,
   Image,
+  SafeAreaView,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
-import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/notiComponents/Header";
 import styles from "../components/styles";
-import UserOptionTag from "../components/userComponents/UserOptionTag";
 import SeparateView from "../components/userComponents/SeparateView";
-import { useNavigation } from "@react-navigation/native";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { useState } from "react";
-import { Picker } from "@react-native-picker/picker";
+import UserOptionTag from "../components/userComponents/UserOptionTag";
+import {
+  editUserInfo,
+  fetchUserInfo,
+  selectCurrentUser,
+} from "../redux/userSlice";
+import { API_GET_USER } from "../utils/api";
+import { _patchApi } from "../utils/axios";
+import {
+  EDIT_ADDRESS_SCREEN,
+  EDIT_NAME_SCREEN,
+  EDIT_PASSWORD_SCREEN,
+  EDIT_PHONE_NUMBER_SCREEN,
+  LOGIN_SCREEN,
+  USER_ID,
+} from "../utils/const";
 
-export default function EditInfoScreen() {
-  const userInfo = {
-    name: "Lê Công Nam",
-    username: "lecongnam",
-    gender: "Nam",
-    dateOfBirth: "01/02/2001",
-    phoneNumber: "0335927773",
-    address: null,
-  };
+export default function EditInfoScreen(props) {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUserInfo());
+  }, []);
+
+  const userInfo = useSelector(selectCurrentUser);
+
   const navigation = useNavigation();
+  console.log("userInfo1:", userInfo);
+
   const [openDob, setOpenDob] = useState(false);
   const [selectedGender, setSelectedGender] = useState();
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState();
   const [openGender, setOpenGender] = useState(false);
-  const [dob, setDob] = useState(
-    userInfo.dateOfBirth ? userInfo.dateOfBirth : null
-  );
-  const [gender, setGender] = useState(
-    userInfo.gender ? userInfo.gender : null
-  );
+  const [dob, setDob] = useState(userInfo.dob ? userInfo.dob : null);
+  const [gender, setGender] = useState(userInfo.gender);
+
   return (
     <SafeAreaView style={[{ backgroundColor: "#fff", height: "100%" }]}>
       <Header title={"Sửa hồ sơ"} canBack={true} />
-      <View
+      <TouchableOpacity
         style={[
           { height: 150, backgroundColor: "#99ddff" },
           styles.alignCenterItem,
           styles.alignCenterItemVertically,
         ]}
+        onPress={() => {}}
       >
         <Image
           source={require("../assets/icon/user.png")}
           style={styles.img_64x64}
         />
-      </View>
+      </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("EditName", { name: userInfo.name });
+          navigation.navigate(EDIT_NAME_SCREEN, { name: userInfo.name });
         }}
       >
         <UserOptionTag
@@ -96,7 +111,7 @@ export default function EditInfoScreen() {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("EditPhoneNumber", {
+          navigation.navigate(EDIT_PHONE_NUMBER_SCREEN, {
             phoneNumber: userInfo.phoneNumber,
           });
         }}
@@ -111,7 +126,9 @@ export default function EditInfoScreen() {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("EditAddress", { address: userInfo.address });
+          navigation.navigate(EDIT_ADDRESS_SCREEN, {
+            address: userInfo.address,
+          });
         }}
       >
         <UserOptionTag
@@ -124,7 +141,7 @@ export default function EditInfoScreen() {
       <TouchableOpacity
         style={styles.hr_bottom}
         onPress={() => {
-          navigation.navigate("EditPassword");
+          navigation.navigate(EDIT_PASSWORD_SCREEN);
         }}
       >
         <UserOptionTag title={"Thay đổi mật khẩu"} containIcon={false} />
@@ -135,7 +152,11 @@ export default function EditInfoScreen() {
           styles.alignCenterItemVertically,
           { height: 40, backgroundColor: "#ff6600", margin: 20 },
         ]}
-        onPress={() => {}}
+        onPress={() => {
+          AsyncStorage.clear();
+
+          navigation.navigate(LOGIN_SCREEN);
+        }}
       >
         <View>
           <Text style={{ fontSize: 16, color: "#fff" }}>Đăng xuất</Text>
@@ -147,8 +168,22 @@ export default function EditInfoScreen() {
         >
           <TouchableOpacity
             onPress={() => {
+              // dispatch(
+              //   editUserInfo({ date: date.toLocaleDateString("vi-VN") })
+              // );
+              // console.log(dob);
+              dispatch(
+                editUserInfo({
+                  dob:
+                    date?.toLocaleDateString("vi-VN") ||
+                    new Date().toLocaleDateString("vi-VN"),
+                })
+              );
               setOpenDob(false);
-              setDob(date.toLocaleDateString("vi-VN"));
+              setDob(
+                date?.toLocaleDateString("vi-VN") ||
+                  new Date().toLocaleDateString("vi-VN")
+              );
             }}
             style={{ alignItems: "flex-end" }}
           >
@@ -165,7 +200,7 @@ export default function EditInfoScreen() {
           </TouchableOpacity>
           <RNDateTimePicker
             mode="date"
-            value={date}
+            value={date || new Date()}
             dateFormat={"day month year"}
             onChange={(event, date) => {
               setDate(date);
@@ -180,6 +215,7 @@ export default function EditInfoScreen() {
         >
           <TouchableOpacity
             onPress={() => {
+              dispatch(editUserInfo({ gender: gender }));
               setOpenGender(false);
               setGender(selectedGender);
             }}
@@ -197,8 +233,13 @@ export default function EditInfoScreen() {
             </Text>
           </TouchableOpacity>
           <Picker
-            selectedValue={selectedGender}
-            onValueChange={(itemValue, itemIndex) => {
+            selectedValue={gender}
+            onValueChange={async (itemValue, itemIndex) => {
+              const userId = await AsyncStorage.getItem(USER_ID);
+              // await _patchApi(`${API_GET_USER}/${userId}`, {
+              //   gender: itemValue,
+              // });
+              setGender(itemValue);
               setSelectedGender(itemValue);
             }}
           >

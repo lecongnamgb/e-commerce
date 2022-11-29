@@ -7,6 +7,7 @@ import BottomNavigator from "../Navigator/BottomNavigator";
 import { useEffect, useState } from "react";
 import { _getApi } from "../../utils/axios";
 import { API_GET_LIST_PRODUCT } from "../../utils/api";
+import { useSelector } from "react-redux";
 
 const listData = [
   {
@@ -93,6 +94,9 @@ const listData = [
 
 export default function RecommendListItem({ navigation }) {
   const [products, setProducts] = React.useState(null);
+  const test = useSelector((state) => {
+    console.log(state);
+  });
   useEffect(async () => {
     try {
       const response = await _getApi(API_GET_LIST_PRODUCT);

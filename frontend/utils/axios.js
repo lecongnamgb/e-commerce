@@ -15,18 +15,22 @@ const axiosInstance = axios.create({
 });
 
 export const handleRefreshToken = async () => {
-  const refreshToken = await AsyncStorage.getItem(REFRESH_TOKEN);
-  const response = await axios.post(
-    `${Config.DOMAIN_SERVER_API}${API_REFRESH_TOKEN}`,
-    null,
-    {
-      headers: {
-        "X-Refresh-Token": refreshToken,
-      },
-    }
-  );
-  const accessToken = response.data.data;
-  _setHeader(accessToken);
+  try {
+    const refreshToken = await AsyncStorage.getItem(REFRESH_TOKEN);
+    const response = await axios.post(
+      `${Config.DOMAIN_SERVER_API}${API_REFRESH_TOKEN}`,
+      null,
+      {
+        headers: {
+          "X-Refresh-Token": refreshToken,
+        },
+      }
+    );
+    const accessToken = response.data.data;
+    _setHeader(accessToken);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 axiosInstance.interceptors.response.use(

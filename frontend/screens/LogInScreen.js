@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 import React, { useState } from "react";
 import {
   Alert,
@@ -24,15 +25,11 @@ import {
   NOTI,
   SIGNUP_SCREEN,
   FORGET_SCREEN,
+  USER_ID,
+  PASSWORD,
 } from "../utils/const";
 
 export default function LogInScreen() {
-  const listData = [
-    {
-      username: "lecongnam",
-      password: "123456",
-    },
-  ];
   const navigation = useNavigation();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
@@ -111,11 +108,13 @@ export default function LogInScreen() {
               );
               await AsyncStorage.setItem(ACCESS_TOKEN, accessToken);
               _setHeader(accessToken);
+              await AsyncStorage.setItem(PASSWORD, password);
               Alert.alert(NOTI, LOGIN_SUCCESSFULLY);
               navigation.navigate(HOME_SCREEN);
             } catch (err) {
               console.log(err);
               Alert.alert("Oops!", err.message);
+              return;
             }
           }}
         >

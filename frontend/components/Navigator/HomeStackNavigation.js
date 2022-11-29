@@ -67,6 +67,13 @@ export default function HomeStackNavigation() {
   return (
     <Stack.Navigator>
       <Stack.Screen
+        name={LOGIN_SCREEN}
+        component={LogInScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name={HOME_SCREEN}
         component={RecommendListItem}
         options={{
@@ -111,13 +118,6 @@ export default function HomeStackNavigation() {
       <Stack.Screen
         name={EVALUATION_SCREEN}
         component={EvaluationScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name={LOGIN_SCREEN}
-        component={LogInScreen}
         options={{
           headerShown: false,
         }}

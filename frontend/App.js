@@ -5,8 +5,10 @@ import { Provider } from "react-redux";
 
 export default function App() {
   return (
-    <NavigationContainer independent={true}>
-      <HomeStackNavigation />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer independent={true}>
+        <HomeStackNavigation />
+      </NavigationContainer>
+    </Provider>
   );
 }
