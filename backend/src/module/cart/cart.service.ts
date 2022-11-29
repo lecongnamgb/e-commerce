@@ -46,40 +46,9 @@ export class CartService {
         }
     }
 
-    async delete(_id: string) {
-        const cart = await this.cartModel.findByIdAndRemove({ _id })
+    async update(userId: string, data: CreateCartDto) {
+        const cart = await this.cartModel.update({ user: userId }, data, { new: true })
         if (cart) {
-            return {
-                success: true
-            }
-        } else {
-            return {
-                success: false,
-                data: [],
-                message: "Cart not found"
-            }
-        }
-    }
-
-    async findOne(_id: string) {
-        const cart = await this.cartModel.findById({ _id })
-        if (cart) {
-            return {
-                success: true,
-                data: cart
-            }
-        } else {
-            return {
-                success: false,
-                data: [],
-                message: "Cart not found"
-            }
-        }
-    }
-
-    async update(_id: string, data: CreateCartDto) {
-        const Cart = await this.cartModel.findByIdAndUpdate(_id, data, { new: true })
-        if (Cart) {
             return {
                 success: true
             }

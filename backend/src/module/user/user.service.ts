@@ -44,29 +44,6 @@ export class UserService {
         return await this.userModel.findByIdAndUpdate(_id, { codeReset }, { new: true })
     }
 
-    async findAll() {
-        const user = await this.userModel.find({}, { password: 0 })
-        return {
-            success: true,
-            data: user
-        }
-    }
-
-    async delete(_id: string) {
-        const user = await this.userModel.findByIdAndRemove({ _id })
-        if (user) {
-            return {
-                success: true
-            }
-        } else {
-            return {
-                success: false,
-                data: [],
-                message: "User not found"
-            }
-        }
-    }
-
     async findOne(_id: string) {
         const user = await this.userModel.findById({ _id }, { password: 0 })
         if (user) {
