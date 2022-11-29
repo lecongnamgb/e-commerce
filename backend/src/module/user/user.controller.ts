@@ -9,6 +9,12 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
+    @Get('all')
+    @ApiTags('Get list user')
+    async findAll() {
+        return await this.userService.findAll();
+    }
+
     @UseGuards(JwtAuthGuard)
     @Get('/product')
     @ApiTags('Get count product like')
@@ -29,10 +35,11 @@ export class UserController {
         return await this.userService.update(id, data)
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get()
-    @ApiTags('Get list user')
-    async findAll() {
-        return await this.userService.findAll();
+    @ApiTags('Get user by user id in access token')
+    async getUserById(@Req() req) {
+        return await this.userService.findOne(req.user.userId);
     }
 
     @Delete(':id')
