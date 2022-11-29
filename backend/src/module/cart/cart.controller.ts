@@ -10,8 +10,8 @@ export class CartController {
     constructor(private readonly cartService: CartService) { }
 
     @UseGuards(JwtAuthGuard)
-    @Get('user')
-    @ApiTags('Get cart by user id')
+    @Get()
+    @ApiTags('Get cart by user id in refresh token')
     async findByUserId(@Req() req) {
         return await this.cartService.findByUserId(req.user.userId);
     }
@@ -23,22 +23,11 @@ export class CartController {
         return await this.cartService.create(req.user.userId, data)
     }
 
-    @Get(':id')
-    @ApiTags('Get cart by id')
-    async findOne(@Param('id') id: string) {
-        return await this.cartService.findOne(id);
-    }
-
-    @Patch(':id')
+    @UseGuards(JwtAuthGuard)
+    @Patch()
     @ApiBody({ type: CreateCartDto })
-    @ApiTags('Update cart by id')
-    async update(@Param('id') id: string, @Body() data: CreateCartDto) {
-        return await this.cartService.update(id, data)
-    }
-
-    @Delete(':id')
-    @ApiTags('Delete cart by id')
-    async delete(@Param('id') id: string) {
-        return await this.cartService.delete(id);
+    @ApiTags('Update cart by user id in refresh token')
+    async update(@Req() req, @Body() data: CreateCartDto) {
+        return await this.cartService.update(req.user.userId, data)
     }
 }
