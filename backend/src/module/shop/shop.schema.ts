@@ -38,3 +38,8 @@ export class Shop {
 }
 
 export const ShopSchema = SchemaFactory.createForClass(Shop);
+
+ShopSchema.pre(/^find/, function (next) {
+  this.populate(["owner"]);
+  next();
+});
