@@ -26,3 +26,8 @@ export class Notification {
 }
 
 export const NotificationSchema = SchemaFactory.createForClass(Notification);
+
+NotificationSchema.pre(/^find/, function (next) {
+  this.populate(["user"]);
+  next();
+});

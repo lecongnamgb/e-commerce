@@ -40,6 +40,6 @@ export class Order {
 export const OrderSchema = SchemaFactory.createForClass(Order);
 
 OrderSchema.pre(/^find/, function (next) {
-  this.populate(["products.product", "state"]);
+  this.populate(["products.product", "state", "user"]);
   next();
 });

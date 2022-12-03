@@ -37,6 +37,6 @@ export class FeedBack {
 export const FeedBackSchema = SchemaFactory.createForClass(FeedBack);
 
 FeedBackSchema.pre(/^find/, function (next) {
-  this.populate(["product"]);
+  this.populate(["product", "user"]);
   next();
 });

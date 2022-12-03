@@ -31,6 +31,6 @@ export class Cart {
 export const CartSchema = SchemaFactory.createForClass(Cart);
 
 CartSchema.pre(/^find/, function (next) {
-  this.populate(["products.product"]);
+  this.populate(["products.product", "user"]);
   next();
 });
