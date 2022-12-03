@@ -9,3 +9,5 @@ export const API_GET_RESET_CODE = "auth/code-reset";
 export const API_RESET_PASSWORD = "auth/reset-password";
 export const API_GET_USER = "user";
 export const API_CHANGE_PASSWORD = "auth/change-password";
+export const API_UPLOAD = "upload";
+export const API_FEEDBACK = "feed-back";

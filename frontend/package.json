@@ -22,6 +22,7 @@
     "@reduxjs/toolkit": "^1.8.6",
     "axios": "^1.1.3",
     "expo": "~44.0.0",
+    "expo-image-picker": "~12.0.1",
     "expo-status-bar": "~1.2.0",
     "fs": "^0.0.1-security",
     "jwt-decode": "^3.1.2",

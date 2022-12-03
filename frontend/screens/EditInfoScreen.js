@@ -20,8 +20,6 @@ import {
   fetchUserInfo,
   selectCurrentUser,
 } from "../redux/userSlice";
-import { API_GET_USER } from "../utils/api";
-import { _patchApi } from "../utils/axios";
 import {
   EDIT_ADDRESS_SCREEN,
   EDIT_NAME_SCREEN,
@@ -30,6 +28,10 @@ import {
   LOGIN_SCREEN,
   USER_ID,
 } from "../utils/const";
+import * as ImagePicker from "expo-image-picker";
+import { _uploadApi } from "../utils/axios";
+import { API_UPLOAD } from "../utils/api";
+import axios from "axios";
 
 export default function EditInfoScreen(props) {
   const dispatch = useDispatch();
@@ -40,7 +42,6 @@ export default function EditInfoScreen(props) {
   const userInfo = useSelector(selectCurrentUser);
 
   const navigation = useNavigation();
-  console.log("userInfo1:", userInfo);
 
   const [openDob, setOpenDob] = useState(false);
   const [selectedGender, setSelectedGender] = useState();
@@ -48,6 +49,83 @@ export default function EditInfoScreen(props) {
   const [openGender, setOpenGender] = useState(false);
   const [dob, setDob] = useState(userInfo.dob ? userInfo.dob : null);
   const [gender, setGender] = useState(userInfo.gender);
+
+  // const createFormData = (photo, body = {}) => {
+  //   const data = new FormData();
+
+  //   data.append("photo", {
+  //     name: photo.fileName,
+  //     type: photo.type,
+  //     uri: photo.uri.replace("file://", ""),
+  //   });
+
+  //   Object.keys(body).forEach((key) => {
+  //     data.append(key, body[key]);
+  //   });
+
+  //   return data;
+  // };
+
+  // const [image, setImage] = useState(null);
+
+  // const pickImage = async () => {
+  //   // No permissions request is necessary for launching the image library
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
+
+  //   if (!result.canceled) {
+  //     console.log("result:", result.uri);
+  //     // const response = await _uploadApi(API_UPLOAD, { data: result });
+  //     const formData = new FormData();
+  //     const body = createFormData(response, { userId: 1 });
+  //     formData.append()
+
+  //     const response = await _uploadApi(API_UPLOAD, { file: body });
+  //     console.log(response);
+  //   }
+  // };
+
+  const [photo, setPhoto] = React.useState(null);
+  const [photoShow, setPhotoShow] = React.useState(null);
+
+  const takePhotoAndUpload = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      console.log(result.uri);
+      let localUri = result.uri.replace("file://", "");
+      setPhotoShow(localUri);
+      let filename = localUri.split("/").pop();
+      console.log(filename);
+
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+
+      let formData = new FormData();
+      formData.append("photo", { uri: localUri, name: filename, type });
+
+      console.log(formData);
+
+      await axios
+        .post("http://localhost:8000/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then((res) => {
+          setPhoto(res.data.photo.photo);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
+  };
 
   return (
     <SafeAreaView style={[{ backgroundColor: "#fff", height: "100%" }]}>
@@ -58,7 +136,7 @@ export default function EditInfoScreen(props) {
           styles.alignCenterItem,
           styles.alignCenterItemVertically,
         ]}
-        onPress={() => {}}
+        onPress={takePhotoAndUpload}
       >
         <Image
           source={require("../assets/icon/user.png")}

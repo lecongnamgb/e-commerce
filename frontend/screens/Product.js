@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Alert, SafeAreaView, ScrollView, View } from "react-native";
+import React, { useState } from "react";
+import { SafeAreaView, ScrollView, View } from "react-native";
+import { useSelector } from "react-redux";
 import Carousel from "../components/homeComponents/Carousel";
 import BestSellerList from "../components/productComponents/BestSellerList";
 import BriefEvaluation from "../components/productComponents/BriefEvaluation";
@@ -10,40 +11,27 @@ import OverviewProduct from "../components/productComponents/OverviewProduct";
 import AgentIntro from "../components/searchComponents/AgentIntro";
 import styles from "../components/styles";
 import SeparateView from "../components/userComponents/SeparateView";
-import { API_GET_LIST_PRODUCT, API_GET_LIST_SHOP } from "../utils/api";
-import { _getApi } from "../utils/axios";
+import { selectFeedbackByProductId } from "../redux/feedBackSlice";
+import { selectProductById } from "../redux/productSlice";
+import { selectShopById } from "../redux/shopSlice";
 
 export default function Product({ route }) {
   const {
     params: { id },
   } = route;
 
-  const [product, setProduct] = useState();
-  const [shop, setShop] = useState();
+  //const [product, setProduct] = useState();
   const [bestSeller, setBestSeller] = useState();
 
-  useEffect(() => {
-    async function fetchApi() {
-      try {
-        const response = await _getApi(`${API_GET_LIST_PRODUCT}/${id}`);
-        setProduct(response.data);
+  const product = useSelector((state) => selectProductById(state, id));
+  const shopId = product.shop_id;
 
-        const shopResponse = await _getApi(
-          `${API_GET_LIST_SHOP}/${response.data.shop_id}`
-        );
-        console.log("shop:", shopResponse);
-        setShop(shopResponse.data);
+  const shop = useSelector((state) => selectShopById(state, shopId));
+  const feedbacks = useSelector((state) =>
+    selectFeedbackByProductId(state, id)
+  );
 
-        const bestSellerResponse = await _getApi(
-          `${API_GET_LIST_PRODUCT}/${response.data.shop_id}/shop?search=sell`
-        );
-        setBestSeller(bestSellerResponse.data);
-      } catch (err) {
-        Alert.alert("Oops!", err.message);
-      }
-    }
-    fetchApi();
-  }, []);
+  console.log("shop:", shop);
 
   const images = product?.img.map((img, index) => {
     return { id: index, sourceIcon: img };
@@ -102,7 +90,7 @@ export default function Product({ route }) {
           description={product != null ? product.description : null}
         />
         <SeparateView />
-        <BriefEvaluation />
+        <BriefEvaluation feedbacks={feedbacks} />
         <View style={{ height: 30 }} />
       </ScrollView>
     </SafeAreaView>

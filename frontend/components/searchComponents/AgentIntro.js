@@ -26,7 +26,7 @@ export default function AgentIntro(props) {
       >
         <View style={[styles.pl_10, styles.pr_10]}>
           <Image
-            source={{ uri: props.agentAvt }}
+            source={{ uri: shop.avatar_url }}
             style={[styles.img_64x64, styles.rounded]}
           />
         </View>
