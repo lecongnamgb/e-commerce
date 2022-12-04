@@ -49,7 +49,6 @@ export default function Carousel(props) {
     nativeEvent là sự kiện của react native trả ra 1 object các thuộc tính của màn hình
     contentInset: 1 
     */
-    //    console.log(nativeEvent.contentOffset);
     if (slide !== active) {
       setActive(slide);
     }

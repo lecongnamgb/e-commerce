@@ -1,9 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  API_FEEDBACK,
-  API_GET_LIST_PRODUCT,
-  API_GET_LIST_SHOP,
-} from "../utils/api";
+import { API_FEEDBACK } from "../utils/api";
 import { _getApi } from "../utils/axios";
 
 export const fetchFeedbacks = createAsyncThunk(

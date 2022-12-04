@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, selectAllProducts } from "../../redux/productSlice";
 import { fetchShops } from "../../redux/shopSlice";
 import { fetchFeedbacks } from "../../redux/feedBackSlice";
+import { fetchUserInfo } from "../../redux/userSlice";
 
 const listData = [
   {
@@ -98,17 +99,14 @@ const listData = [
 export default function RecommendListItem({ navigation }) {
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(fetchUserInfo());
     dispatch(fetchProducts());
     dispatch(fetchShops());
     dispatch(fetchFeedbacks());
   }, []);
-  useSelector((state) => {
-    console.log("state:", state.feedbacks);
-  });
 
   const products = useSelector(selectAllProducts);
 
-  // console.log("prds:", products);
   return (
     <SafeAreaView style={{ backgroundColor: "#fff" }}>
       <SearchForm width={"85%"} />

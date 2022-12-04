@@ -5,7 +5,6 @@ import HeaderEvaluation from "./HeaderEvaluation";
 
 export default function BriefEvaluation(props) {
   const { feedbacks } = props;
-  console.log("feedbacks:", props);
   const listData = [
     {
       id: 1,

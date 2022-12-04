@@ -120,7 +120,7 @@ export default function SignInScreen() {
             try {
               const data = { username, password, email, re_password: password };
               const response = await _postApi(API_SIGN_UP, data);
-              console.log(response);
+
               alert("Đăng ký tài khoản thành công");
               navigation.navigate("LogIn");
             } catch (err) {

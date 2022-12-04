@@ -13,10 +13,6 @@ export const userSlice = createSlice({
     clear: (state, action) => {
       return null;
     },
-    // editInfo: (state, action) => {
-    //   console.log("action:", action);
-    //   return { ...state, ...action.payload };
-    // },
   },
   extraReducers(builder) {
     builder

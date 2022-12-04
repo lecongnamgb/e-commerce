@@ -378,6 +378,9 @@ const styles = StyleSheet.create({
   disabled: {
     opacity: 0.5,
   },
+  disabled_background: {
+    backgroundColor: "#ced9e3",
+  },
 });
 
 export default styles;

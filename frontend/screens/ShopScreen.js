@@ -9,8 +9,13 @@ import FilterItem from "../components/billStatusComponents/FilterItem";
 import ListCategoryItem from "../components/billStatusComponents/ListCategoryItem";
 import SeparateView from "../components/userComponents/SeparateView";
 import { FlatList } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
+import { selectShopById } from "../redux/shopSlice";
+import { selectProductByShopId } from "../redux/productSlice";
 
-export default function ShopScreen() {
+export default function ShopScreen({ route }) {
+  const shopId = route.params.shopId;
+  const shop = useSelector((state) => selectShopById(state, shopId));
   const navigation = useNavigation();
   // const [follow, setFollow] = useState(false)
   const listData = [
@@ -157,14 +162,10 @@ export default function ShopScreen() {
         ListHeaderComponent={
           <View>
             <HeaderShop
-              shopName={"Tên shop"}
-              ownerName={"Tên chủ shop"}
-              uriAvt={
-                "https://i.pinimg.com/474x/41/9f/f5/419ff508b894f934b4139035ffd04d41.jpg"
-              }
-              uriBg={
-                "https://img.freepik.com/free-vector/weather-seamless-pattern-background-vector-cute-doodle-illustration-kids_53876-105731.jpg?w=2000"
-              }
+              shopName={shop.name}
+              ownerName={shop.owner.name}
+              uriAvt={shop.avatarUrl}
+              uriBg={shop.backgroundUrl}
               // follow = {follow}
               // onPressFollow = {() => {
               //     setFollow(!follow)

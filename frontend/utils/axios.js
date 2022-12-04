@@ -36,17 +36,7 @@ export const handleRefreshToken = async () => {
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    // if (error.response?.status === 401) {
-    //   console.log("401");
-    //   return;
-    //   if (!refreshToken) {
-    //     console.log("forbidden resources");
-    //     return;
-    //   }
-    // }
-    // console.log(error.message);
     if (error.message == "Request failed with status code 401") {
-      console.log("handle refresh");
       const refreshToken = await AsyncStorage.getItem(REFRESH_TOKEN);
       handleRefreshToken(refreshToken);
     }

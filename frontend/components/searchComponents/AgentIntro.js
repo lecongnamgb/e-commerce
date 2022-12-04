@@ -6,7 +6,8 @@ import { SHOP_SCREEN } from "../../utils/const";
 
 export default function AgentIntro(props) {
   const navigation = useNavigation();
-  const { shop } = props;
+  const shop = props.shop || {};
+  const shopId = shop?._id;
   return (
     <View style={styles.flex_row}>
       <TouchableOpacity
@@ -21,7 +22,7 @@ export default function AgentIntro(props) {
           { width: "75%" },
         ]}
         onPress={() => {
-          navigation.navigate(SHOP_SCREEN);
+          navigation.navigate(SHOP_SCREEN, { shopId });
         }}
       >
         <View style={[styles.pl_10, styles.pr_10]}>

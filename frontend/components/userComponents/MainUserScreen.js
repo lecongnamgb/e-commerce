@@ -15,18 +15,25 @@ import { useNavigation } from "@react-navigation/native";
 import BottomNavigator from "../Navigator/BottomNavigator";
 import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { EDIT_INFO_SCREEN, USER_ID } from "../../utils/const";
+import { EDIT_INFO_SCREEN, SHOP_SCREEN, USER_ID } from "../../utils/const";
 import { _getApi } from "../../utils/axios";
 import { API_GET_USER } from "../../utils/api";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../redux/userSlice";
+import { selectShopByOwnerId } from "../../redux/shopSlice";
 
 export default function MainUserScreen() {
-  const [userInfo, setUserInfo] = useState();
-  useEffect(async () => {
-    const response = await _getApi(`${API_GET_USER}`);
-    setUserInfo(response.data);
-  }, []);
+  const userInfo = useSelector(selectCurrentUser);
+  const userId = userInfo._id;
+
+  const shop = useSelector((state) => {
+    return selectShopByOwnerId(state, userId);
+  });
+  const shopId = shop?._id;
+
   const navigation = useNavigation();
+
   return (
     <SafeAreaView style={{ height: "100%" }}>
       <BottomNavigator height={90} currentActive={"User"} />
@@ -61,11 +68,11 @@ export default function MainUserScreen() {
           />
         </TouchableOpacity>
         <SeparateView />
-        {1 == 1 ? (
+        {shop ? (
           <View>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("Shop");
+                navigation.navigate(SHOP_SCREEN, { shopId: shop._id });
               }}
             >
               <UserOptionTag
@@ -76,7 +83,7 @@ export default function MainUserScreen() {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("ProductManager");
+                navigation.navigate("ProductManager", { shopId });
               }}
             >
               <UserOptionTag

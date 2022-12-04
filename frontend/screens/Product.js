@@ -31,35 +31,10 @@ export default function Product({ route }) {
     selectFeedbackByProductId(state, id)
   );
 
-  console.log("shop:", shop);
-
   const images = product?.img.map((img, index) => {
     return { id: index, sourceIcon: img };
   });
-  //   console.log("images:", images);
-  //   console.log("product:", product);
 
-  //   const images = [
-  //     {
-  //       id: 1,
-  //       sourceIcon:
-  //         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE95InBHABknnQjWnbCwMPjkBq1Pd8EKiUi_9isA8miFV2sgaIh-tAbBj_FOuV9rLk6QA&usqp=CAU",
-  //     },
-  //     {
-  //       id: 2,
-  //       sourceIcon:
-  //         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5ltnermWFkyHkSyYTFGOhooozvPNtZGLNOvPv5ae22P2TcqKCJ3CpVvpcx7KnyMRNCv0&usqp=CAU",
-  //     },
-  //     {
-  //       id: 3,
-  //       sourceIcon:
-  //         "https://vn-test-11.slatic.net/p/8e5d568458223fbe9ed9ec0eba09642d.png",
-  //     },
-  //     {
-  //       id: 4,
-  //       sourceIcon: "https://cf.shopee.vn/file/68b45cba995b332785a7121af2819f0b",
-  //     },
-  //   ];
   return (
     <SafeAreaView style={[styles.bg_white]} wait>
       <View

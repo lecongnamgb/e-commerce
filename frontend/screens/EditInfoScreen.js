@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
+import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
 import {
   Image,
@@ -20,6 +21,8 @@ import {
   fetchUserInfo,
   selectCurrentUser,
 } from "../redux/userSlice";
+import { API_UPLOAD } from "../utils/api";
+import { _uploadApi } from "../utils/axios";
 import {
   EDIT_ADDRESS_SCREEN,
   EDIT_NAME_SCREEN,
@@ -28,10 +31,6 @@ import {
   LOGIN_SCREEN,
   USER_ID,
 } from "../utils/const";
-import * as ImagePicker from "expo-image-picker";
-import { _uploadApi } from "../utils/axios";
-import { API_UPLOAD } from "../utils/api";
-import axios from "axios";
 
 export default function EditInfoScreen(props) {
   const dispatch = useDispatch();
@@ -50,80 +49,30 @@ export default function EditInfoScreen(props) {
   const [dob, setDob] = useState(userInfo.dob ? userInfo.dob : null);
   const [gender, setGender] = useState(userInfo.gender);
 
-  // const createFormData = (photo, body = {}) => {
-  //   const data = new FormData();
-
-  //   data.append("photo", {
-  //     name: photo.fileName,
-  //     type: photo.type,
-  //     uri: photo.uri.replace("file://", ""),
-  //   });
-
-  //   Object.keys(body).forEach((key) => {
-  //     data.append(key, body[key]);
-  //   });
-
-  //   return data;
-  // };
-
-  // const [image, setImage] = useState(null);
-
-  // const pickImage = async () => {
-  //   // No permissions request is necessary for launching the image library
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-
-  //   if (!result.canceled) {
-  //     console.log("result:", result.uri);
-  //     // const response = await _uploadApi(API_UPLOAD, { data: result });
-  //     const formData = new FormData();
-  //     const body = createFormData(response, { userId: 1 });
-  //     formData.append()
-
-  //     const response = await _uploadApi(API_UPLOAD, { file: body });
-  //     console.log(response);
-  //   }
-  // };
-
   const [photo, setPhoto] = React.useState(null);
   const [photoShow, setPhotoShow] = React.useState(null);
 
   const takePhotoAndUpload = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
     if (!result.cancelled) {
-      console.log(result.uri);
       let localUri = result.uri.replace("file://", "");
       setPhotoShow(localUri);
-      let filename = localUri.split("/").pop();
-      console.log(filename);
+      const filename = localUri.split("/").pop();
 
-      let match = /\.(\w+)$/.exec(filename);
-      let type = match ? `image/${match[1]}` : `image`;
+      const match = /\.(\w+)$/.exec(filename);
+      const type = match ? `image/${match[1]}` : `image`;
 
-      let formData = new FormData();
-      formData.append("photo", { uri: localUri, name: filename, type });
+      const formData = new FormData();
+      formData.append("file", { uri: localUri, name: filename, type });
 
-      console.log(formData);
-
-      await axios
-        .post("http://localhost:8000/upload", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-        .then((res) => {
-          setPhoto(res.data.photo.photo);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
+      const response = await _uploadApi(API_UPLOAD, formData);
+      const avatar = response.url;
+      dispatch(editUserInfo({ avatar }));
     }
   };
 
@@ -139,8 +88,12 @@ export default function EditInfoScreen(props) {
         onPress={takePhotoAndUpload}
       >
         <Image
-          source={require("../assets/icon/user.png")}
-          style={styles.img_64x64}
+          source={
+            userInfo.avatar === null
+              ? require("../assets/icon/user.png")
+              : { uri: userInfo.avatar }
+          }
+          style={[styles.img_100x100, styles.rounded]}
         />
       </TouchableOpacity>
       <TouchableOpacity
@@ -246,10 +199,6 @@ export default function EditInfoScreen(props) {
         >
           <TouchableOpacity
             onPress={() => {
-              // dispatch(
-              //   editUserInfo({ date: date.toLocaleDateString("vi-VN") })
-              // );
-              // console.log(dob);
               dispatch(
                 editUserInfo({
                   dob:

@@ -73,11 +73,6 @@ const listData = [
 ];
 
 export default function CategoryListItem() {
-  // useEffect(async () => {
-  //   const data = await _getApi(API_GET_LIST_CATEGORY);
-  //   console.log(data);
-  // }, []);
-
   const navigation = useNavigation();
   return (
     <SafeAreaView>

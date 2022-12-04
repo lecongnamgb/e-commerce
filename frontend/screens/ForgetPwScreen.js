@@ -78,7 +78,6 @@ export default function ForgetPwScreen() {
               }
               navigation.navigate(TYPE_CODE_SCREEN, { email: username });
             } catch (err) {
-              console.log(err);
               Alert.alert("Oops!", err.message);
             }
           }}
