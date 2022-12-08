@@ -1,35 +1,27 @@
-import { TouchableOpacity, ScrollView, View, SafeAreaView } from "react-native";
-import HeaderUser from "./HeaderUser";
-import UserOptionTag from "./UserOptionTag";
-import record from "../../assets/icon/icon_record.png";
-import store from "../../assets/icon/store.png";
-import PurchaseStatus from "./PurchaseStatus";
-import bagIcon from "../../assets/icon/bag.png";
-import HorizontalProductList from "./HorizontalProductList";
-import SeparateView from "./SeparateView";
-import heartIcon from "../../assets/icon/heart.png";
-import clockIcon from "../../assets/icon/clock.png";
-import starIcon from "../../assets/icon/star.png";
-import profileIcon from "../../assets/icon/profile.png";
 import { useNavigation } from "@react-navigation/native";
-import BottomNavigator from "../Navigator/BottomNavigator";
-import { useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { EDIT_INFO_SCREEN, SHOP_SCREEN, USER_ID } from "../../utils/const";
-import { _getApi } from "../../utils/axios";
-import { API_GET_USER } from "../../utils/api";
-import { useState } from "react";
+import { SafeAreaView, ScrollView, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../redux/userSlice";
+import bagIcon from "../../assets/icon/bag.png";
+import clockIcon from "../../assets/icon/clock.png";
+import heartIcon from "../../assets/icon/heart.png";
+import record from "../../assets/icon/icon_record.png";
+import profileIcon from "../../assets/icon/profile.png";
+import starIcon from "../../assets/icon/star.png";
+import store from "../../assets/icon/store.png";
 import { selectShopByOwnerId } from "../../redux/shopSlice";
+import { selectCurrentUser } from "../../redux/userSlice";
+import { EDIT_INFO_SCREEN, SHOP_SCREEN } from "../../utils/const";
+import BottomNavigator from "../Navigator/BottomNavigator";
+import HeaderUser from "./HeaderUser";
+import PurchaseStatus from "./PurchaseStatus";
+import SeparateView from "./SeparateView";
+import UserOptionTag from "./UserOptionTag";
 
 export default function MainUserScreen() {
   const userInfo = useSelector(selectCurrentUser);
   const userId = userInfo._id;
 
-  const shop = useSelector((state) => {
-    return selectShopByOwnerId(state, userId);
-  });
+  const shop = useSelector((state) => selectShopByOwnerId(state, userId));
   const shopId = shop?._id;
 
   const navigation = useNavigation();
@@ -127,7 +119,7 @@ export default function MainUserScreen() {
           <UserOptionTag
             sourceIcon={heartIcon}
             title={"Đã thích"}
-            description={"1 Like"}
+            description={`${userInfo.favoriteProductIds.length} Like`}
           />
         </TouchableOpacity>
         <TouchableOpacity

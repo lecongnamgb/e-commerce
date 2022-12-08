@@ -12,7 +12,6 @@ export const takePhotoAndUpload = async () => {
     });
 
     if (!result.cancelled) {
-      console.log("1");
       const localUri = result.uri.replace("file://", "");
       const filename = localUri.split("/").pop();
 
@@ -29,8 +28,3 @@ export const takePhotoAndUpload = async () => {
     Alert(err.message);
   }
 };
-
-// export const testImgPicker = async () => {
-//   const images = await ImagePicker.openPicker({ multiple: true });
-//   console.log(images);
-// };

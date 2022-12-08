@@ -27,7 +27,7 @@ export const userSlice = createSlice({
 
 export default userSlice.reducer;
 
-export const { editInfo } = userSlice.actions;
+// export const { editInfo } = userSlice.actions;
 
 export const fetchUserInfo = createAsyncThunk(
   "users/fetchUserInfo",

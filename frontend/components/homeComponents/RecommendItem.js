@@ -11,6 +11,7 @@ const { width } = Dimensions.get("window");
 export default function RecommendItem(props) {
   const navigation = useNavigation();
   const { recommendItem } = props;
+
   return (
     <TouchableOpacity
       style={[
@@ -34,8 +35,9 @@ export default function RecommendItem(props) {
           }}
         />
         <View style={{ position: "absolute", top: 0, right: 0 }}>
-          {recommendItem.sale_percent == 0 ? null : (
-            <PromoIcon sale_percent={recommendItem.sale_percent} />
+          {recommendItem.salePercent === undefined ||
+          recommendItem.salePercent === 0 ? null : (
+            <PromoIcon sale_percent={recommendItem.salePercent} />
           )}
         </View>
         <View
@@ -53,18 +55,18 @@ export default function RecommendItem(props) {
               {recommendItem.name}{" "}
             </Text>
           </View>
-          {props.containRating == true ? (
+          {recommendItem.salePercent === 0 ? (
             <View>
               <Text style={{ color: "red", fontSize: 20 }}>
-                {recommendItem.sale_price}đ
+                {recommendItem.salePrice}đ
               </Text>
               <View style={[styles.flex_row, styles.mt_10]}>
-                <RatingStar stars={recommendItem.total_rating_star} />
+                <RatingStar stars={recommendItem.totalRatingStar} />
                 <Text style={{ fontSize: 12, paddingLeft: 10 }}>
                   Đã bán{" "}
-                  {recommendItem.quantity_sold >= 1000
-                    ? recommendItem.quantity_sold / 1000 + "k"
-                    : recommendItem.quantity_sold}
+                  {recommendItem.quantitySold >= 1000
+                    ? recommendItem.quantitySold / 1000 + "k"
+                    : recommendItem.quantitySold}
                 </Text>
               </View>
               <View style={[styles.mt_10, styles.flex_row]}>
@@ -89,14 +91,14 @@ export default function RecommendItem(props) {
                   fontSize: 16,
                 }}
               >
-                {recommendItem.standard_price}đ
+                {recommendItem.standardPrice}đ
               </Text>
               <View style={[styles.flex_row, styles.flex_end]}>
                 <Text style={{ fontSize: 12 }}>
                   Đã bán{" "}
-                  {recommendItem.quantity_sold >= 1000
-                    ? recommendItem.quantity_sold / 1000 + "k"
-                    : recommendItem.quantity_sold}
+                  {recommendItem.quantitySold >= 1000
+                    ? recommendItem.quantitySold / 1000 + "k"
+                    : recommendItem.quantitySold}
                 </Text>
               </View>
             </View>

@@ -20,19 +20,21 @@ import {
 } from "../redux/productSlice";
 import { selectShopByOwnerId } from "../redux/shopSlice";
 import { selectCurrentUser } from "../redux/userSlice";
-import { EDIT_PRODUCT_INFO_SCREEN } from "../utils/const";
+import {
+  ADD_PRODUCT_TITLE,
+  EDIT_PRODUCT_INFO_SCREEN,
+  EDIT_PRODUCT_TITLE,
+} from "../utils/const";
 import { FlatList } from "react-native-gesture-handler";
 
 export default function ProductManager() {
-  const user = useSelector(selectCurrentUser);
+  const user = useSelector(selectCurrentUser) || {};
   const userId = user._id;
-  const shop = useSelector((state) => selectShopByOwnerId(state, userId));
+  const shop = useSelector((state) => selectShopByOwnerId(state, userId)) || {};
   const shopId = shop._id;
   const products = useSelector(selectAllProducts);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
-  const handleClickDelete = () => {};
 
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "#fff" }}>
@@ -41,7 +43,7 @@ export default function ProductManager() {
         style={{ position: "absolute", top: 55, right: 10 }}
         onPress={() => {
           navigation.navigate("EditProductInfo", {
-            title: "Thêm sản phẩm",
+            title: ADD_PRODUCT_TITLE,
             shopId,
           });
         }}
@@ -71,10 +73,9 @@ export default function ProductManager() {
                 uriImg={item.avatar}
                 productName={item.name}
                 price={item.standardPrice}
-                key={item._id}
                 handleEdit={() => {
                   navigation.navigate(EDIT_PRODUCT_INFO_SCREEN, {
-                    title: EDIT_PRODUCT_INFO_SCREEN,
+                    title: EDIT_PRODUCT_TITLE,
                     productId: item._id,
                   });
                 }}

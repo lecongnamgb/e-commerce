@@ -7,21 +7,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FieldWithUpperLabel from "../components/checkInComponents/FieldWithUpperLabel";
 import Header from "../components/notiComponents/Header";
 import styles from "../components/styles";
 import SeparateView from "../components/userComponents/SeparateView";
 import { takePhotoAndUpload } from "../utils/helperFnc";
-import { createShop } from "../redux/shopSlice";
+import { createShop, updateShop } from "../redux/shopSlice";
 import { useNavigation } from "@react-navigation/native";
-import { NOTI } from "../utils/const";
+import { HOME_SCREEN, NOTI, USER_SCREEN } from "../utils/const";
+import { selectCurrentUser } from "../redux/userSlice";
 
-export default function RegisterSeller() {
-  const [shopName, setShopName] = useState("");
-  const [address, setAddress] = useState("");
-  const [shopAvatar, setShopAvatar] = useState();
-  const [shopBackground, setShopBackground] = useState();
+export default function RegisterSeller({ route }) {
+  const currentUser = useSelector(selectCurrentUser);
+  const shop = route.params?.shop || {};
+  const [shopName, setShopName] = useState(shop.name);
+  const [address, setAddress] = useState();
+  const [shopAvatar, setShopAvatar] = useState(shop.avatarUrl);
+  const [shopBackground, setShopBackground] = useState(shop.backgroundUrl);
 
   const navigation = useNavigation();
 
@@ -84,15 +87,23 @@ export default function RegisterSeller() {
           styles.alignCenterItemVertically,
         ]}
         onPress={() => {
-          dispatch(
-            createShop({
-              name: shopName,
-              avatarUrl: shopAvatar,
-              backgroundUrl: shopBackground,
-            })
-          );
-          Alert.alert(NOTI, "Tạo shop thành công");
+          const data = {
+            name: shopName,
+            avatarUrl: shopAvatar,
+            backgroundUrl: shopBackground,
+            owner: currentUser,
+          };
+          if (shop) {
+            data._id = shop._id;
+            dispatch(updateShop(data));
+            Alert.alert(NOTI, "Sửa thông tin shop thành công");
+          } else {
+            dispatch(createShop(data));
+
+            Alert.alert(NOTI, "Tạo shop thành công");
+          }
           navigation.goBack();
+          // }
         }}
       >
         <Text style={{ color: "#fff", fontSize: 16 }}>Lưu</Text>

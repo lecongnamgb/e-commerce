@@ -3,11 +3,17 @@ import React from "react";
 import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
 import { SHOP_SCREEN } from "../../utils/const";
+import { useSelector } from "react-redux";
+import {
+  selectProductById,
+  selectProductByShopId,
+} from "../../redux/productSlice";
 
 export default function AgentIntro(props) {
   const navigation = useNavigation();
   const shop = props.shop || {};
   const shopId = shop?._id;
+  const products = useSelector((state) => selectProductByShopId(state, shopId));
   return (
     <View style={styles.flex_row}>
       <TouchableOpacity
@@ -27,7 +33,7 @@ export default function AgentIntro(props) {
       >
         <View style={[styles.pl_10, styles.pr_10]}>
           <Image
-            source={{ uri: shop.avatar_url }}
+            source={{ uri: shop.avatarUrl }}
             style={[styles.img_64x64, styles.rounded]}
           />
         </View>
@@ -36,11 +42,13 @@ export default function AgentIntro(props) {
             {shop.name}
           </Text>
           <Text style={{ marginBottom: 5, color: "#595959" }}>
-            Tên chủ shop
+            {shop.owner.name}
           </Text>
           <View style={styles.flex_row}>
             <Text style={{ color: "#595959" }}>
-              <Text style={styles.filterBar_text_active}>47 </Text>
+              <Text style={styles.filterBar_text_active}>
+                {products.length}{" "}
+              </Text>
               Sản phẩm {"  "}
             </Text>
             <Text style={{ color: "#595959" }}>
@@ -82,7 +90,7 @@ export default function AgentIntro(props) {
               styles.alignCenterItemVertically,
             ]}
             onPress={() => {
-              navigation.navigate("Shop");
+              navigation.navigate("Shop", { shopId });
             }}
           >
             <Text style={{ textAlign: "center", color: "red" }}>Xem Shop</Text>

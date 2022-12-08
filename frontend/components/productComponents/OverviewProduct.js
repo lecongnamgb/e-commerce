@@ -1,27 +1,36 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import React from "react";
-import styles from "../styles";
-import PromoIcon from "../homeComponents/PromoIcon";
-import RatingStar from "./RatingStar";
+import React, { useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import basic_heart from "../../assets/icon/basic_heart.png";
 import blank_heart from "../../assets/icon/blank_heart.png";
-import { useState } from "react";
+import {
+  editInfo,
+  editUserInfo,
+  selectCurrentUser,
+} from "../../redux/userSlice";
+import PromoIcon from "../homeComponents/PromoIcon";
+import styles from "../styles";
+import RatingStar from "./RatingStar";
 
 export default function OverviewProduct(props) {
-  const [isLike, setIsLike] = useState(false);
   const { product } = props;
+  const dispatch = useDispatch();
+  const currentUser = useSelector(selectCurrentUser) || {};
+  const listFvr = currentUser.favoriteProductIds || [];
+
+  const productId = product._id;
   return (
     <View style={[styles.m_10, styles.bg_white]}>
       <View
         style={[
-          product.sale_percent != 0 ? { width: "85%" } : { width: "95%" },
+          product.salePercent != 0 ? { width: "85%" } : { width: "95%" },
           styles.flex_row,
         ]}
       >
         <Text numberOfLines={2} style={{ fontSize: 17 }}>
           {product.name}
         </Text>
-        {product.sale_percent != 0 ? (
+        {product.salePercent ? (
           <View style={[styles.pl_15, styles.pr_15]}>
             <PromoIcon />
           </View>
@@ -29,12 +38,9 @@ export default function OverviewProduct(props) {
       </View>
       <View style={[styles.mt_15, styles.mb_20]}>
         <Text style={{ color: "red", fontSize: 20 }}>
-          {product.sale_percent != 0
-            ? product.sale_price
-            : product.standard_price}
-          đ
+          {product.salePercent ? product.salePrice : product.standardPrice}đ
         </Text>
-        {product.sale_percent != 0 ? (
+        {product.salePercent ? (
           <Text
             style={{
               color: "#4d4d4d",
@@ -43,25 +49,30 @@ export default function OverviewProduct(props) {
               paddingTop: 5,
             }}
           >
-            {product.standard_price}đ
+            {product.standardPrice}đ
           </Text>
         ) : null}
       </View>
       <View style={styles.flex_row}>
-        <RatingStar stars={product.total_rating_star} size={16} />
+        <RatingStar stars={product.totalRatingStar} size={16} />
         <View style={{ borderRightColor: "#ccc", borderRightWidth: 1 }}>
           <Text style={[styles.pl_10, styles.pr_10, { fontSize: 15 }]}>
-            {product.total_rating_star}
+            {product.totalRatingStar}
           </Text>
         </View>
-        <Text style={styles.pl_15}>Đã bán {product.quantity_sold}</Text>
+        <Text style={styles.pl_15}>Đã bán {product.quantitySold}</Text>
         <TouchableOpacity
           style={{ position: "absolute", right: 10, bottom: -2 }}
           activeOpacity={1}
-          onPress={() => setIsLike(!isLike)}
+          onPress={() => {
+            const data = { favoriteProductIds: [...listFvr, productId] };
+            dispatch(editUserInfo(data));
+          }}
         >
           <Image
-            source={isLike ? basic_heart : blank_heart}
+            source={
+              listFvr.indexOf(productId) != -1 ? basic_heart : blank_heart
+            }
             style={styles.img_24x24}
           />
         </TouchableOpacity>

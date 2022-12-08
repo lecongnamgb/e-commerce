@@ -2,6 +2,9 @@ import { View, Text, SafeAreaView, FlatList } from "react-native";
 import React from "react";
 import Header from "../components/notiComponents/Header";
 import RecommendItem from "../components/homeComponents/RecommendItem";
+import { useSelector } from "react-redux";
+import { selectAllProducts } from "../redux/productSlice";
+import { selectCurrentUser } from "../redux/userSlice";
 
 export default function LikedProduct() {
   const listData = [
@@ -96,11 +99,17 @@ export default function LikedProduct() {
       quantity_sold: 1700,
     },
   ];
+  const currentUser = useSelector(selectCurrentUser) || {};
+  const fvtPrdIds = currentUser.favoriteProductIds || [];
+  const allPrds = useSelector(selectAllProducts);
+  const products = fvtPrdIds.map((id) => {
+    return allPrds.find((prd) => prd._id === id);
+  });
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "#fff" }}>
       <Header title={"Sản phẩm đã thích"} canBack={true} />
       <FlatList
-        data={listData}
+        data={products}
         renderItem={({ item }) => (
           <RecommendItem recommendItem={item} containRating={false} />
         )}

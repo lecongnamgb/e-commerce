@@ -36,4 +36,6 @@ export const USER_SLICE = "user";
 export const LOGIN_SUCCESSFULLY = "Đăng nhập thành công";
 export const NOTI = "Thông báo";
 export const PASSWORD = "password";
+
 export const EDIT_PRODUCT_TITLE = "Sửa thông tin sản phẩm";
+export const ADD_PRODUCT_TITLE = "Thêm sản phẩm";

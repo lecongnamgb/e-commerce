@@ -20,18 +20,17 @@ export default function Product({ route }) {
     params: { id },
   } = route;
 
-  //const [product, setProduct] = useState();
-  const [bestSeller, setBestSeller] = useState();
+  const product = useSelector((state) => selectProductById(state, id)) || {};
+  const shopId = product.shop?._id;
 
-  const product = useSelector((state) => selectProductById(state, id));
-  const shopId = product.shop_id;
-
-  const shop = useSelector((state) => selectShopById(state, shopId));
+  const shop = useSelector((state) => selectShopById(state, shopId)) || {};
   const feedbacks = useSelector((state) =>
     selectFeedbackByProductId(state, id)
   );
+  const arr = [...product.img];
+  arr.unshift(product.avatar);
 
-  const images = product?.img.map((img, index) => {
+  const images = arr.map((img, index) => {
     return { id: index, sourceIcon: img };
   });
 
@@ -50,14 +49,7 @@ export default function Product({ route }) {
         {product != null ? <OverviewProduct product={product} /> : null}
         {/* <OverviewProduct product={product} /> */}
         <SeparateView />
-        {shop != null ? (
-          <AgentIntro
-            agentAvt={
-              "https://1.bp.blogspot.com/-MWpiekrll-g/YMW2vMk0CzI/AAAAAAAAtwo/6FwzorrofsML__bdshUQreQy0V1TPwdfgCNcBGAsYHQ/s0/mau-ao-nam.jpg"
-            }
-            shop={shop}
-          />
-        ) : null}
+        {shop != null ? <AgentIntro shop={shop} /> : null}
         <SeparateView />
         <BestSellerList />
         <SeparateView />

@@ -1,41 +1,49 @@
+import { Picker } from "@react-native-picker/picker";
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import {
-  View,
-  Text,
+  Alert,
+  Image,
   SafeAreaView,
+  ScrollView,
+  Text,
   TextInput,
   TouchableOpacity,
-  Image,
-  ScrollView,
-  Alert,
+  View,
 } from "react-native";
-import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import FieldWithUpperLabel from "../components/checkInComponents/FieldWithUpperLabel";
 import Header from "../components/notiComponents/Header";
 import styles from "../components/styles";
 import SeparateView from "../components/userComponents/SeparateView";
-import UserOptionTag from "../components/userComponents/UserOptionTag";
-import { Picker } from "@react-native-picker/picker";
-import { takePhotoAndUpload } from "../utils/helperFnc";
-import { useDispatch, useSelector } from "react-redux";
-import { createProduct, selectProductById } from "../redux/productSlice";
-import { selectShopById, selectShopByOwnerId } from "../redux/shopSlice";
-import { NOTI, PRODUCT_MANAGER_SCREEN } from "../utils/const";
-import { useNavigation } from "@react-navigation/native";
+import {
+  createProduct,
+  selectProductById,
+  updateProduct,
+} from "../redux/productSlice";
+import { selectShopByOwnerId } from "../redux/shopSlice";
 import { selectCurrentUser } from "../redux/userSlice";
+import {
+  ADD_PRODUCT_TITLE,
+  NOTI,
+  PRODUCT_MANAGER_SCREEN,
+} from "../utils/const";
+import { takePhotoAndUpload } from "../utils/helperFnc";
 
 export default function EditProductInfo({ route }) {
   const userId = useSelector(selectCurrentUser)._id;
   const shopId = useSelector((state) => selectShopByOwnerId(state, userId))._id;
 
   const productId = route.params.productId;
-  const product =
-    useSelector((state) => selectProductById(state, productId)) || {};
+  const product = productId
+    ? useSelector((state) => selectProductById(state, productId))
+    : {};
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const [productName, setProductName] = useState(product.name);
-  const [price, setPrice] = useState(Number(product.standardPrice));
+  const [price, setPrice] = useState(product.standardPrice?.toString());
   const [uriProductAvt, setUriProductAvt] = useState(product.avatar);
   const [uriProductImg1, setUriProductImg1] = useState(
     route.params?.uriProductImg1
@@ -46,11 +54,11 @@ export default function EditProductInfo({ route }) {
   const [uriProductImg3, setUriProductImg3] = useState(
     route.params?.uriProductImg3
   );
-  const [description, setDescription] = useState(route.params?.description);
-  const [origin, setOrigin] = useState(route.params?.origin);
+  const [description, setDescription] = useState(product.description);
+  const [origin, setOrigin] = useState(product.location);
   const [openCategory, setOpenCategory] = useState(false);
   const [quantityInInventory, setQuantityInInventory] = useState(
-    route.params?.quantityInInventory
+    product.quantityInInventory?.toString()
   );
   const listCategory = [
     {
@@ -95,7 +103,9 @@ export default function EditProductInfo({ route }) {
     },
   ];
 
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(
+    product.category ? product.category : "Quần áo nam"
+  );
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "#fff" }}>
       <ScrollView style={{ height: "100%", backgroundColor: "#fff" }}>
@@ -113,8 +123,8 @@ export default function EditProductInfo({ route }) {
             label={"Giá sản phẩm"}
             plhdTitle={"Giá"}
             value={price}
-            keyboardType={"numeric"}
-            onChangeText={(txt) => setPrice(txt.replace(/[^0-9]/g, ""))}
+            // keyboardType={"numeric"}
+            onChangeText={(txt) => setPrice(txt)}
           />
         </View>
         <View style={styles.hr_light_bottom}>
@@ -170,14 +180,14 @@ export default function EditProductInfo({ route }) {
             </View>
           </View>
         </TouchableOpacity>
-        {/* <View style={styles.hr_light_bottom}>
+        <View style={styles.hr_light_bottom}>
           <FieldWithUpperLabel
             label={"Xuất sứ sản phẩm"}
             plhdTitle={"Xuất sứ"}
             value={origin}
             onChangeText={(txt) => setOrigin(txt)}
           />
-        </View> */}
+        </View>
         <SeparateView />
         <View style={styles.hr_light_bottom}>
           <FieldWithUpperLabel
@@ -230,7 +240,13 @@ export default function EditProductInfo({ route }) {
         </View>
         <TouchableOpacity
           disabled={
-            !(productName && price && uriProductAvt && quantityInInventory)
+            !(
+              productName &&
+              price &&
+              uriProductAvt &&
+              quantityInInventory &&
+              origin
+            )
           }
           style={[
             {
@@ -243,7 +259,13 @@ export default function EditProductInfo({ route }) {
             },
             styles.alignCenterItem,
             styles.alignCenterItemVertically,
-            !(productName && price && uriProductAvt && quantityInInventory)
+            !(
+              productName &&
+              price &&
+              uriProductAvt &&
+              quantityInInventory &&
+              origin
+            )
               ? { backgroundColor: "#ced9e3" }
               : null,
           ]}
@@ -265,11 +287,19 @@ export default function EditProductInfo({ route }) {
                 quantityInInventory,
                 avatar: uriProductAvt,
                 img: [...img],
+                location: origin,
+                shopId,
               };
+              if (route.params.title === ADD_PRODUCT_TITLE) {
+                dispatch(createProduct(data));
 
-              dispatch(createProduct(data));
+                Alert.alert(NOTI, "Thêm sản phẩm thành công");
+              } else {
+                data.id = productId;
+                dispatch(updateProduct(data));
 
-              Alert.alert(NOTI, "Thêm sản phẩm thành công");
+                Alert.alert(NOTI, "Chỉnh sửa sản phẩm thành công");
+              }
               navigation.navigate(PRODUCT_MANAGER_SCREEN, { shopId });
             } catch (err) {
               Alert.alert("Oops!", err.message);

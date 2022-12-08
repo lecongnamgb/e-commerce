@@ -1,7 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import jwtDecode from "jwt-decode";
 import React, { useState } from "react";
 import {
   Alert,
@@ -19,15 +18,15 @@ import { _postApi, _setHeader } from "../utils/axios";
 import Config from "../utils/config";
 import {
   ACCESS_TOKEN,
+  FORGET_SCREEN,
   HOME_SCREEN,
   LOGIN_SUCCESSFULLY,
-  REFRESH_TOKEN,
   NOTI,
-  SIGNUP_SCREEN,
-  FORGET_SCREEN,
-  USER_ID,
   PASSWORD,
+  REFRESH_TOKEN,
 } from "../utils/const";
+
+import { SIGNUP_SCREEN } from "../utils/const";
 
 export default function LogInScreen() {
   const navigation = useNavigation();

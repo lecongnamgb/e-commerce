@@ -1,115 +1,27 @@
-import { View, ScrollView, TouchableOpacity, Image, Text } from "react-native";
-import React, { useState } from "react";
-import styles from "../components/styles";
 import { useNavigation } from "@react-navigation/native";
-import RecommendItem from "../components/homeComponents/RecommendItem";
-import HeaderProduct from "../components/productComponents/HeaderProduct";
-import HeaderShop from "../components/shopComponents/HeaderShop";
-import FilterItem from "../components/billStatusComponents/FilterItem";
-import ListCategoryItem from "../components/billStatusComponents/ListCategoryItem";
-import SeparateView from "../components/userComponents/SeparateView";
+import React, { useState } from "react";
+import { Image, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
-import { selectShopById } from "../redux/shopSlice";
+import FilterItem from "../components/billStatusComponents/FilterItem";
+import RecommendItem from "../components/homeComponents/RecommendItem";
+import HeaderShop from "../components/shopComponents/HeaderShop";
+import styles from "../components/styles";
+import SeparateView from "../components/userComponents/SeparateView";
 import { selectProductByShopId } from "../redux/productSlice";
+import { selectShopById } from "../redux/shopSlice";
 
 export default function ShopScreen({ route }) {
   const shopId = route.params.shopId;
-  const shop = useSelector((state) => selectShopById(state, shopId));
+  const shop = useSelector((state) => selectShopById(state, shopId)) || {};
+
+  const Allproducts =
+    useSelector((state) => {
+      return selectProductByShopId(state, shopId);
+    }) || [];
   const navigation = useNavigation();
-  // const [follow, setFollow] = useState(false)
-  const listData = [
-    {
-      id: 1,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-    },
-    {
-      id: 2,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-    },
-    {
-      id: 3,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 170,
-    },
-    {
-      id: 4,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-    },
-    {
-      id: 5,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-    },
-    {
-      id: 6,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-    },
-    {
-      id: 7,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-    },
-    {
-      id: 8,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-    },
-    {
-      id: 9,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-    },
-    {
-      id: 10,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-    },
-  ];
+  const [products, setProducts] = useState(Allproducts);
+
   const [listCategory, setListCatgory] = useState([
     {
       title: "Sản phẩm",
@@ -153,19 +65,16 @@ export default function ShopScreen({ route }) {
 
       <SeparateView />
       <FlatList
-        data={listData}
+        data={products}
         renderItem={({ item }) => (
           <RecommendItem recommendItem={item} containRating={false} />
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         numColumns={2}
         ListHeaderComponent={
           <View>
             <HeaderShop
-              shopName={shop.name}
-              ownerName={shop.owner.name}
-              uriAvt={shop.avatarUrl}
-              uriBg={shop.backgroundUrl}
+              shop={shop}
               // follow = {follow}
               // onPressFollow = {() => {
               //     setFollow(!follow)
@@ -177,6 +86,29 @@ export default function ShopScreen({ route }) {
                   key={index}
                   activeOpacity={1}
                   onPress={() => {
+                    if (item.title === "Hàng mới về") {
+                      setProducts(
+                        products.sort((a, b) => {
+                          if (a.createdAt > b.createdAt) {
+                            return -1;
+                          } else {
+                            return 1;
+                          }
+                        })
+                      );
+                    } else if (item.title === "Sản phẩm") {
+                      setProducts(Allproducts);
+                    } else if (item.title === "Top bán chạy") {
+                      setProducts(
+                        products.sort((a, b) => {
+                          if (a.quantitySold > b.quantitySold) {
+                            return -1;
+                          } else {
+                            return 1;
+                          }
+                        })
+                      );
+                    }
                     setListCatgory(
                       listCategory.map((subItem, subIndex) => {
                         if (index === subIndex) {
