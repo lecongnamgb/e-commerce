@@ -3,7 +3,7 @@ import React from "react";
 import BestSellerItem from "./BestSellerItem";
 import styles from "../styles";
 
-export default function BestSellerList() {
+export default function BestSellerList(props) {
   const listData = [
     {
       id: 1,
@@ -96,6 +96,7 @@ export default function BestSellerList() {
       quantity_sold: 1700,
     },
   ];
+  const { products } = props;
   return (
     <View style={[styles.mb_10]}>
       <View style={styles.p_15}>
@@ -105,11 +106,11 @@ export default function BestSellerList() {
       </View>
       <View style={styles.pl_10}>
         <FlatList
-          data={listData}
+          data={products}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => <BestSellerItem item={item} />}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
         />
       </View>
     </View>

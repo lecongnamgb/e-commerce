@@ -11,8 +11,12 @@ import OverviewProduct from "../components/productComponents/OverviewProduct";
 import AgentIntro from "../components/searchComponents/AgentIntro";
 import styles from "../components/styles";
 import SeparateView from "../components/userComponents/SeparateView";
+import { selectCurrentCart } from "../redux/cartSlice";
 import { selectFeedbackByProductId } from "../redux/feedBackSlice";
-import { selectProductById } from "../redux/productSlice";
+import {
+  selectProductById,
+  selectProductByShopId,
+} from "../redux/productSlice";
 import { selectShopById } from "../redux/shopSlice";
 
 export default function Product({ route }) {
@@ -27,6 +31,18 @@ export default function Product({ route }) {
   const feedbacks = useSelector((state) =>
     selectFeedbackByProductId(state, id)
   );
+
+  const AllProductsInShop = useSelector((state) =>
+    selectProductByShopId(state, shopId)
+  );
+  const bestSellerList = AllProductsInShop.sort((a, b) => {
+    if (a.quantitySold > b.quantitySold) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+
   const arr = [...product.img];
   arr.unshift(product.avatar);
 
@@ -34,15 +50,20 @@ export default function Product({ route }) {
     return { id: index, sourceIcon: img };
   });
 
+  const cart = useSelector(selectCurrentCart);
   return (
     <SafeAreaView style={[styles.bg_white]} wait>
       <View
         style={{ position: "absolute", top: 35, right: 1, left: 1, zIndex: 2 }}
       >
-        <HeaderProduct numOfProductsInCart={2} />
+        <HeaderProduct
+          numOfProductsInCart={
+            cart?.products?.length ? cart.products.length : 0
+          }
+        />
       </View>
       <View style={{ position: "absolute", bottom: 0, zIndex: 1 }}>
-        <FooterProduct />
+        <FooterProduct product={product} />
       </View>
       <ScrollView>
         <Carousel listData={images} />
@@ -51,7 +72,7 @@ export default function Product({ route }) {
         <SeparateView />
         {shop != null ? <AgentIntro shop={shop} /> : null}
         <SeparateView />
-        <BestSellerList />
+        <BestSellerList products={bestSellerList} />
         <SeparateView />
         <DescriptionProduct
           description={product != null ? product.description : null}

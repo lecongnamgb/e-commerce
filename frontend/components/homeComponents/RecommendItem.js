@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import PromoIcon from "./PromoIcon";
 import RatingStar from "../productComponents/RatingStar";
 import { PRODUCT_SCREEN } from "../../utils/const";
+import { handlePrice } from "../../utils/helperFnc";
 
 const { width } = Dimensions.get("window");
 
@@ -58,7 +59,7 @@ export default function RecommendItem(props) {
           {recommendItem.salePercent === 0 ? (
             <View>
               <Text style={{ color: "red", fontSize: 20 }}>
-                {recommendItem.salePrice}đ
+                {handlePrice(recommendItem.salePrice)}đ
               </Text>
               <View style={[styles.flex_row, styles.mt_10]}>
                 <RatingStar stars={recommendItem.totalRatingStar} />
@@ -91,7 +92,7 @@ export default function RecommendItem(props) {
                   fontSize: 16,
                 }}
               >
-                {recommendItem.standardPrice}đ
+                {handlePrice(recommendItem.standardPrice)}đ
               </Text>
               <View style={[styles.flex_row, styles.flex_end]}>
                 <Text style={{ fontSize: 12 }}>

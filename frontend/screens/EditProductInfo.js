@@ -288,6 +288,7 @@ export default function EditProductInfo({ route }) {
                 avatar: uriProductAvt,
                 img: [...img],
                 location: origin,
+                salePrice: price,
                 shopId,
               };
               if (route.params.title === ADD_PRODUCT_TITLE) {

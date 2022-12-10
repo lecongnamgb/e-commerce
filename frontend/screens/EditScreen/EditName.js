@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, TextInput } from "react-native";
+import { View, Text, SafeAreaView, TextInput, Alert } from "react-native";
 import React, { useState } from "react";
 import Header from "../../components/notiComponents/Header";
 import SeparateView from "../../components/userComponents/SeparateView";
@@ -8,7 +8,7 @@ import styles from "../../components/styles";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { editInfo, editUserInfo } from "../../redux/userSlice";
-import { EDIT_INFO_SCREEN } from "../../utils/const";
+import { EDIT_INFO_SCREEN, NOTI } from "../../utils/const";
 
 export default function EditName({ route }) {
   const [name, setName] = useState(route.params?.name);
@@ -41,7 +41,7 @@ export default function EditName({ route }) {
         ]}
         onPress={() => {
           dispatch(editUserInfo({ name }));
-          alert("Đổi tên thành công");
+          Alert.alert(NOTI, "Đổi tên thành công");
           navigation.navigate(EDIT_INFO_SCREEN);
         }}
       >

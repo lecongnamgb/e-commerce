@@ -25,7 +25,6 @@ export const productSlice = createSlice({
       return action.payload;
     });
     builder.addCase(createProduct.fulfilled, (state, action) => {
-      console.log("payload:", action.payload);
       state.push(action.payload);
     });
     builder.addCase(updateProduct.fulfilled, (state, action) => {

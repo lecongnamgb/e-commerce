@@ -8,6 +8,7 @@ import {
   editUserInfo,
   selectCurrentUser,
 } from "../../redux/userSlice";
+import { handlePrice } from "../../utils/helperFnc";
 import PromoIcon from "../homeComponents/PromoIcon";
 import styles from "../styles";
 import RatingStar from "./RatingStar";
@@ -38,7 +39,10 @@ export default function OverviewProduct(props) {
       </View>
       <View style={[styles.mt_15, styles.mb_20]}>
         <Text style={{ color: "red", fontSize: 20 }}>
-          {product.salePercent ? product.salePrice : product.standardPrice}đ
+          {product.salePercent
+            ? handlePrice(product.salePrice)
+            : handlePrice(product.standardPrice)}
+          đ
         </Text>
         {product.salePercent ? (
           <Text
@@ -49,7 +53,7 @@ export default function OverviewProduct(props) {
               paddingTop: 5,
             }}
           >
-            {product.standardPrice}đ
+            {handlePrice(product.standardPrice)}đ
           </Text>
         ) : null}
       </View>

@@ -1,18 +1,12 @@
-import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Alert } from "react-native";
-import { useDispatch } from "react-redux";
 import { API_GET_LIST_SHOP } from "../utils/api";
-import { _getApi, _postApi, _patchApi } from "../utils/axios";
+import { _getApi, _patchApi, _postApi } from "../utils/axios";
 
 export const fetchShops = createAsyncThunk("shops/fetchShops", async () => {
   const response = await _getApi(API_GET_LIST_SHOP);
   return response.data;
 });
-
-export const getShops = async () => {
-  const response = await _getApi(API_GET_LIST_SHOP);
-  return response.data;
-};
 
 export const shopsSlice = createSlice({
   name: "shop",
@@ -26,8 +20,8 @@ export const shopsSlice = createSlice({
       state.push(action.payload);
     });
     builder.addCase(updateShop.fulfilled, (state, action) => {
-      const { _id, ...data } = action.meta.arg;
-      const updatedItem = state.find((prd) => prd._id === id);
+      const { _id } = action.meta.arg;
+      const updatedItem = state.find((prd) => prd._id === _id);
 
       const idx = state.indexOf(updatedItem);
       return [...state.slice(0, idx), action.meta.arg, ...state.slice(idx + 1)];

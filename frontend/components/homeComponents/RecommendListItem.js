@@ -12,6 +12,8 @@ import { fetchProducts, selectAllProducts } from "../../redux/productSlice";
 import { fetchShops } from "../../redux/shopSlice";
 import { fetchFeedbacks } from "../../redux/feedBackSlice";
 import { fetchUserInfo } from "../../redux/userSlice";
+import { fetchCarts } from "../../redux/cartSlice";
+import { fetchOrders } from "../../redux/orderSlice";
 
 export default function RecommendListItem({ navigation }) {
   const dispatch = useDispatch();
@@ -20,6 +22,8 @@ export default function RecommendListItem({ navigation }) {
     dispatch(fetchProducts());
     dispatch(fetchShops());
     dispatch(fetchFeedbacks());
+    dispatch(fetchCarts());
+    dispatch(fetchOrders());
   }, []);
 
   const products = useSelector(selectAllProducts);

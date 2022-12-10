@@ -11,3 +11,7 @@ export const API_GET_USER = "user";
 export const API_CHANGE_PASSWORD = "auth/change-password";
 export const API_UPLOAD = "upload";
 export const API_FEEDBACK = "feed-back";
+export const API_CART = "cart";
+export const API_GET_MY_ORDER = "order/user";
+export const API_CREATE_ORDER = "order";
+export const API_GET_ORDER_OF_MY_SHOP = "order/shop";

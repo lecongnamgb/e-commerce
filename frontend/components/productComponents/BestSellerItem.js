@@ -2,6 +2,7 @@ import { View, Text, Image } from "react-native";
 import React from "react";
 import styles from "../styles";
 import RatingStar from "./RatingStar";
+import { handlePrice } from "../../utils/helperFnc";
 
 export default function BestSellerItem(props) {
   const { item } = props;
@@ -16,19 +17,19 @@ export default function BestSellerItem(props) {
       }}
     >
       <Image
-        source={{ uri: item.sourceIcon }}
+        source={{ uri: item.avatar }}
         style={[styles.img_124x124, { resizeMode: "contain" }]}
       />
       <View style={[styles.mt_10, styles.ml_5, styles.mr_5, styles.mb_10]}>
         <Text numberOfLines={2} style={{ fontSize: 13 }}>
-          {item.title}
+          {item.name}
         </Text>
         <Text style={[{ color: "red" }, styles.mt_5, styles.mb_5]}>
-          {item.price}đ
+          {handlePrice(item.standardPrice)}đ
         </Text>
-        <RatingStar stars={5} />
+        <RatingStar stars={item.totalRatingStar} />
         <Text style={{ fontSize: 12, color: "#333", marginTop: 5 }}>
-          Đã bán {item.quantity_sold}
+          Đã bán {item.quantitySold}
         </Text>
       </View>
     </View>

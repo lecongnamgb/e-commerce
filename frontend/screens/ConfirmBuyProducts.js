@@ -1,15 +1,22 @@
-import { View, Text, SafeAreaView } from "react-native";
+import { View, Text, SafeAreaView, Alert } from "react-native";
 import React, { useState } from "react";
 import Header from "../components/notiComponents/Header";
 import FieldWithUpperLabel from "../components/checkInComponents/FieldWithUpperLabel";
 import SeparateView from "../components/userComponents/SeparateView";
 import styles from "../components/styles";
 import CartBill from "../components/cartComponents/CartBill";
+import { useDispatch } from "react-redux";
+import { createOrder } from "../redux/orderSlice";
+import { clearCart } from "../redux/cartSlice";
+import { useNavigation } from "@react-navigation/native";
+import { HOME_SCREEN, NOTI } from "../utils/const";
 
 export default function ConfirmBuyProducts({ route }) {
   const [receiverName, setReceiverName] = useState("");
   const [receiverPhoneNumber, setReceiverPhoneNumber] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "#fff" }}>
       <Header title={"Xác nhận thông tin thanh toán"} canBack={true} />
@@ -39,11 +46,23 @@ export default function ConfirmBuyProducts({ route }) {
         />
       </View>
       <View style={{ height: 30 }} />
-      <View style={{ top: 490 }}>
+      <View
+        style={{ position: "absolute", bottom: 20, width: "100%", height: 50 }}
+      >
         <CartBill
           type={"confirm"}
           totalValue={route.params?.totalPrice}
-          handleClickBuy={() => {}}
+          handleClickBuy={() => {
+            const data = {
+              receiverName,
+              receiverPhone: receiverPhoneNumber,
+              receiverAddress,
+            };
+            dispatch(createOrder(data));
+            dispatch(clearCart());
+            Alert.alert(NOTI, "Tạo đơn hàng thành công");
+            navigation.navigate(HOME_SCREEN);
+          }}
         />
       </View>
     </SafeAreaView>

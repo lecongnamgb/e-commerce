@@ -90,9 +90,9 @@ export default function ShopScreen({ route }) {
                       setProducts(
                         products.sort((a, b) => {
                           if (a.createdAt > b.createdAt) {
-                            return -1;
-                          } else {
                             return 1;
+                          } else {
+                            return -1;
                           }
                         })
                       );

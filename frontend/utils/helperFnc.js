@@ -28,3 +28,20 @@ export const takePhotoAndUpload = async () => {
     Alert(err.message);
   }
 };
+
+export const handlePrice = (number) => {
+  const numberStr = String(number);
+  let temp_price = [];
+  for (let i = numberStr.length - 1; i >= 0; i--) {
+    if ((numberStr.length - i) % 3 === 0 && i != 0) {
+      temp_price.unshift(`.${numberStr.charAt(i)}`);
+    } else {
+      temp_price.unshift(numberStr.charAt(i));
+    }
+  }
+  let ans = "";
+  for (let i = 0; i < temp_price.length; i++) {
+    ans += temp_price[i];
+  }
+  return ans;
+};
