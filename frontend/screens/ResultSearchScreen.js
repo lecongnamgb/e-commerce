@@ -1,156 +1,82 @@
-import { SafeAreaView, FlatList, View } from "react-native";
-import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { FlatList, SafeAreaView, Text, View } from "react-native";
+import { useSelector } from "react-redux";
+import RecommendItem from "../components/homeComponents/RecommendItem";
+import AgentIntro from "../components/searchComponents/AgentIntro";
+import FliterBar from "../components/searchComponents/FliterBar";
 import SearchBar from "../components/searchComponents/SearchBar";
 import styles from "../components/styles";
-import { useNavigation } from "@react-navigation/native";
-import FliterBar from "../components/searchComponents/FliterBar";
-import AgentIntro from "../components/searchComponents/AgentIntro";
-import RecommendItem from "../components/homeComponents/RecommendItem";
-import CategoryItem from "../components/homeComponents/CategoryItem";
+import { selectShopById } from "../redux/shopSlice";
+import { API_ELT_SEARCH } from "../utils/api";
+import { _getApi } from "../utils/axios";
 
 export default function ResultSearchScreen({ route }) {
   const navigation = useNavigation();
-  const listData = [
-    {
-      id: 101,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-      rating: 4.5,
-      location: "Hà Nội",
-    },
-    {
-      id: 102,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-      rating: 4.5,
-      location: "Hà Nội",
-    },
-    {
-      id: 103,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 170,
-      rating: 4.5,
-      location: "Hà Nội",
-    },
-    {
-      id: 104,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-      rating: 4.5,
-      location: "Hà Nội",
-    },
-    {
-      id: 105,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-      rating: 4.5,
-      location: "Hà Nội",
-    },
-    {
-      id: 106,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-      rating: 4.5,
-      location: "Hà Nội",
-    },
-    {
-      id: 107,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-      rating: 4.5,
-      location: "Hà Nội",
-    },
-    {
-      id: 108,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-      rating: 4.5,
-      location: "Hà Nội",
-    },
-    {
-      id: 109,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-      rating: 4.5,
-      location: "Hà Nội",
-    },
-    {
-      id: 110,
-      sourceIcon:
-        "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg",
-      title:
-        "Áo thun chất liệu siêu cấp vip pro, mặc co giãn thoải mái thôi rồi",
-      price: 1000,
-      quantity_sold: 1700,
-      rating: 5,
-      location: "Thành phố Hồ Chí Minh",
-    },
-  ];
+  const [data, setData] = useState([]);
+
+  useEffect(async () => {
+    const response = await _getApi(API_ELT_SEARCH, {
+      params: {
+        name: route.params.text,
+        type: route.params.type,
+      },
+    });
+
+    setData(response.data);
+  }, []);
+  const shopId = data[0]?.shop._id;
+  const shop = useSelector((state) => selectShopById(state, shopId));
+
   return (
-    <SafeAreaView style={styles.bg_white}>
+    <SafeAreaView style={[styles.bg_white, { minHeight: "100%" }]}>
       <SearchBar
         widthSearchInput={"80%"}
         value={route.params.text}
         focus={false}
       />
-      <FliterBar />
-      <FlatList
-        data={listData}
-        renderItem={({ item }) => (
-          <RecommendItem recommendItem={item} containRating={true} />
-        )}
-        numColumns={2}
-        scrollEnabled={true}
-        keyExtractor={(item) => item.id}
-        ListHeaderComponent={
-          <AgentIntro
-            agentAvt={
-              "https://khosiquanaogiare.com/wp-content/uploads/2021/05/ttl836-ao-thun-tay-lo-form-rong-hinh-dia-bay5-1.jpg"
-            }
-            seeMore={true}
-            handleSeeMore={() => {
-              navigation.navigate("resultShop", { text: route.params.text });
+      {data.length !== 0 ? (
+        <View>
+          <FliterBar
+            handlePress1={() => {
+              setData(
+                data.sort((a, b) => {
+                  if (a.standardPrice < b.standardPrice) {
+                    return 1;
+                  } else {
+                    return -1;
+                  }
+                })
+              );
+            }}
+            handlePress2={() => {
+              setData(
+                data.sort((a, b) => {
+                  if (a.standardPrice > b.standardPrice) {
+                    return 1;
+                  } else {
+                    return -1;
+                  }
+                })
+              );
             }}
           />
-        }
-        ListFooterComponent={<View style={{ height: 100 }}></View>}
-      />
+
+          <FlatList
+            data={data}
+            renderItem={({ item }) => (
+              <RecommendItem recommendItem={item} containRating={true} />
+            )}
+            numColumns={2}
+            scrollEnabled={true}
+            keyExtractor={(item) => item.id}
+            ListHeaderComponent={<AgentIntro shop={shop} />}
+            ListFooterComponent={<View style={{ height: 100 }}></View>}
+          />
+        </View>
+      ) : (
+        <Text style={{ textAlign: "center" }}>Không tìm thấy sản phẩm nào</Text>
+      )}
     </SafeAreaView>
   );
 }

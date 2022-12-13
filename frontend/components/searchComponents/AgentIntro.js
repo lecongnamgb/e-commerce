@@ -1,13 +1,10 @@
-import { View, Text, Image, Button, TouchableOpacity } from "react-native";
-import React from "react";
-import styles from "../styles";
 import { useNavigation } from "@react-navigation/native";
-import { SHOP_SCREEN } from "../../utils/const";
+import React from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
-import {
-  selectProductById,
-  selectProductByShopId,
-} from "../../redux/productSlice";
+import { selectProductByShopId } from "../../redux/productSlice";
+import { SHOP_SCREEN } from "../../utils/const";
+import styles from "../styles";
 
 export default function AgentIntro(props) {
   const navigation = useNavigation();

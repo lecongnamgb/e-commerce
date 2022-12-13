@@ -5,13 +5,20 @@ import cancelBill from "../../assets/icon/cancelBill.png";
 import packageIcon from "../../assets/icon/package.png";
 import shippingIcon from "../../assets/icon/shipping.png";
 import waitingIcon from "../../assets/icon/waiting.png";
-import { selectMyOrder } from "../../redux/orderSlice";
+import {
+  selectCanceledOrder,
+  selectDeliveredOrder,
+  selectDeliveringOrder,
+  selectWaitingOrder,
+} from "../../redux/orderSlice";
 import styles from "../styles";
 import StateItem from "./StateItem";
 
 export default function PurchaseStatus() {
-  const orders = useSelector(selectMyOrder) || [];
-  const waitingOrders = orders.map((order) => order.state === null) || [];
+  const waitingOrders = useSelector((state) => selectWaitingOrder(state));
+  const deliveringOrders = useSelector((state) => selectDeliveringOrder(state));
+  const deliveredOrders = useSelector((state) => selectDeliveredOrder(state));
+  const canceledOrders = useSelector((state) => selectCanceledOrder(state));
   return (
     <View style={[styles.borderTop, styles.flex_row, styles.width_100]}>
       <StateItem
@@ -22,13 +29,17 @@ export default function PurchaseStatus() {
       <StateItem
         sourceIcon={shippingIcon}
         title={"Đang giao"}
-        numOfProductsInCart={10}
+        numOfProductsInCart={deliveringOrders.length}
       />
-      <StateItem sourceIcon={packageIcon} title={"Đã giao"} />
+      <StateItem
+        sourceIcon={packageIcon}
+        title={"Đã giao"}
+        numOfProductsInCart={deliveredOrders.length}
+      />
       <StateItem
         sourceIcon={cancelBill}
         title={"Đã huỷ"}
-        numOfProductsInCart={0}
+        numOfProductsInCart={canceledOrders.length}
       />
     </View>
   );

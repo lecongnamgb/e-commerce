@@ -3,14 +3,13 @@ import { useEffect } from "react";
 import { SafeAreaView, ScrollView, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import bagIcon from "../../assets/icon/bag.png";
-import clockIcon from "../../assets/icon/clock.png";
 import heartIcon from "../../assets/icon/heart.png";
 import record from "../../assets/icon/icon_record.png";
 import profileIcon from "../../assets/icon/profile.png";
 import starIcon from "../../assets/icon/star.png";
 import store from "../../assets/icon/store.png";
 import { selectMyOrder } from "../../redux/orderSlice";
-import { fetchShopOrders, selectShopOrders } from "../../redux/shopOrderSlice";
+import { fetchShopOrders } from "../../redux/shopOrderSlice";
 import { selectShopByOwnerId } from "../../redux/shopSlice";
 import { selectCurrentUser } from "../../redux/userSlice";
 import { EDIT_INFO_SCREEN, SHOP_SCREEN } from "../../utils/const";
@@ -34,9 +33,8 @@ export default function MainUserScreen() {
     }
   }, []);
 
-  const orders = useSelector(selectMyOrder);
-
   const navigation = useNavigation();
+  console.log("userInfo:", userInfo);
 
   return (
     <SafeAreaView style={{ height: "100%" }}>
@@ -134,13 +132,13 @@ export default function MainUserScreen() {
             description={`${userInfo.favoriteProductIds?.length || 0} Like`}
           />
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             navigation.navigate("RecentlyView");
           }}
         >
           <UserOptionTag sourceIcon={clockIcon} title={"Đã xem gần đây"} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("MyReview");

@@ -104,7 +104,10 @@ export default function CategoryListItem() {
               <TouchableOpacity
                 onPress={async () => {
                   // const data = await _getApi();
-                  navigation.navigate("resultSearch", { text: item.title });
+                  navigation.navigate("resultSearch", {
+                    text: item.title,
+                    type: "category",
+                  });
                 }}
               >
                 <CategoryItem title={item.title} sourceIcon={item.sourceIcon} />

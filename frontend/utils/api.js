@@ -15,3 +15,5 @@ export const API_CART = "cart";
 export const API_GET_MY_ORDER = "order/user";
 export const API_CREATE_ORDER = "order";
 export const API_GET_ORDER_OF_MY_SHOP = "order/shop";
+export const API_SUGGESTER = "product/elt/suggester";
+export const API_ELT_SEARCH = "product/elt/search";

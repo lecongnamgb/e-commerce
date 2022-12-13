@@ -1,19 +1,16 @@
-import { View, FlatList, Button, SafeAreaView, Alert } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
+import { FlatList, SafeAreaView, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCarts } from "../../redux/cartSlice";
+import { fetchFeedbacks } from "../../redux/feedBackSlice";
+import { fetchOrders } from "../../redux/orderSlice";
+import { fetchProducts, selectAllProducts } from "../../redux/productSlice";
+import { fetchShops } from "../../redux/shopSlice";
+import { fetchUserInfo } from "../../redux/userSlice";
+import BottomNavigator from "../Navigator/BottomNavigator";
 import RecommendItem from "./RecommendItem";
 import RecommendToday from "./RecommendToday";
 import SearchForm from "./SearchForm";
-import BottomNavigator from "../Navigator/BottomNavigator";
-import { useEffect, useState } from "react";
-import { _getApi } from "../../utils/axios";
-import { API_GET_LIST_PRODUCT } from "../../utils/api";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts, selectAllProducts } from "../../redux/productSlice";
-import { fetchShops } from "../../redux/shopSlice";
-import { fetchFeedbacks } from "../../redux/feedBackSlice";
-import { fetchUserInfo } from "../../redux/userSlice";
-import { fetchCarts } from "../../redux/cartSlice";
-import { fetchOrders } from "../../redux/orderSlice";
 
 export default function RecommendListItem({ navigation }) {
   const dispatch = useDispatch();

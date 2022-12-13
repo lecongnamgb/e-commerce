@@ -15,6 +15,7 @@ import PasswordField from "../components/checkInComponents/PasswordField";
 import { useNavigation } from "@react-navigation/native";
 import { _getApi, _postApi } from "../utils/axios";
 import { API_SIGN_UP } from "../utils/api";
+import { NOTI } from "../utils/const";
 
 function validate(listData, email, username, pw, confirmPw) {
   if (!email.includes("@")) {
@@ -39,15 +40,15 @@ function validate(listData, email, username, pw, confirmPw) {
   }
   listData.map((item) => {
     if (item.username === username) {
-      alert("Tài khoản đã tồn tại");
+      Alert.alert(NOTI, "Tài khoản đã tồn tại");
       return false;
     }
     if (item.email === email) {
-      alert("Email đã tồn tại");
+      Alert.alert(NOTI, "Email đã tồn tại");
       return false;
     }
   });
-  alert("Đăng ký tài khoản thành công");
+  Alert.alert(NOTI, "Đăng ký tài khoản thành công");
   return true;
 }
 
@@ -121,7 +122,7 @@ export default function SignInScreen() {
               const data = { username, password, email, re_password: password };
               const response = await _postApi(API_SIGN_UP, data);
 
-              alert("Đăng ký tài khoản thành công");
+              Alert.alert(NOTI, "Đăng ký tài khoản thành công");
               navigation.navigate("LogIn");
             } catch (err) {
               Alert.alert(`Oops!`, err.message);

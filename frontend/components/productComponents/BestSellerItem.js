@@ -3,11 +3,18 @@ import React from "react";
 import styles from "../styles";
 import RatingStar from "./RatingStar";
 import { handlePrice } from "../../utils/helperFnc";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+import { PRODUCT_SCREEN } from "../../utils/const";
 
 export default function BestSellerItem(props) {
   const { item } = props;
+  const navigation = useNavigation();
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate(PRODUCT_SCREEN, { id: item._id });
+      }}
       style={{
         width: 126,
         borderColor: "#d9d9d9",
@@ -32,6 +39,6 @@ export default function BestSellerItem(props) {
           Đã bán {item.quantitySold}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }

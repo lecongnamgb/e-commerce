@@ -3,6 +3,8 @@ import React from "react";
 import Header from "../components/notiComponents/Header";
 import { FlatList } from "react-native-gesture-handler";
 import RecommendItem from "../components/homeComponents/RecommendItem";
+import { useSelector } from "react-redux";
+import { selectDeliveredOrder } from "../redux/orderSlice";
 
 export default function LikedProduct() {
   const listData = [
@@ -97,11 +99,19 @@ export default function LikedProduct() {
       quantity_sold: 1700,
     },
   ];
+  const products = [];
+  const orders = useSelector(selectDeliveredOrder);
+  orders.map((order) => {
+    order.products.map((product) => {
+      products.push(product.product);
+    });
+  });
+
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "#fff" }}>
       <Header title={"Mua lại sản phẩm"} canBack={true} containCart={true} />
       <FlatList
-        data={listData}
+        data={products}
         renderItem={({ item }) => (
           <RecommendItem recommendItem={item} containRating={false} />
         )}

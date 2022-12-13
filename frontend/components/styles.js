@@ -381,6 +381,9 @@ const styles = StyleSheet.create({
   disabled_background: {
     backgroundColor: "#ced9e3",
   },
+  highlight_prd: {
+    backgroundColor: "#add8e6",
+  },
 });
 
 export default styles;

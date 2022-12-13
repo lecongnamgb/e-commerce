@@ -53,6 +53,10 @@ export const _setHeader = (accessToken) => {
   });
 };
 
+export const _clearHeader = () => {
+  axiosInstance.interceptors.request.clear();
+};
+
 export const _getApi = (url, data) =>
   axiosInstance.get(url, data).then((response) => response.data);
 

@@ -54,7 +54,7 @@ export const selectShopById = (state, _id) => {
 };
 
 export const selectShopByOwnerId = (state, ownerId) => {
-  return state.shops.find((shop) => shop.owner._id === ownerId);
+  return state.shops.find((shop) => shop?.owner?._id === ownerId);
 };
 
 export default shopsSlice.reducer;

@@ -36,7 +36,7 @@ export default function Product({ route }) {
     selectProductByShopId(state, shopId)
   );
   const bestSellerList = AllProductsInShop.sort((a, b) => {
-    if (a.quantitySold > b.quantitySold) {
+    if (a.quantitySold < b.quantitySold) {
       return 1;
     } else {
       return -1;

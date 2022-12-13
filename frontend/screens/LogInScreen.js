@@ -14,7 +14,7 @@ import NormalField from "../components/checkInComponents/NormalField";
 import PasswordField from "../components/checkInComponents/PasswordField";
 import styles from "../components/styles";
 import { API_LOG_IN, API_REFRESH_TOKEN } from "../utils/api";
-import { _postApi, _setHeader } from "../utils/axios";
+import { _clearHeader, _postApi, _setHeader } from "../utils/axios";
 import Config from "../utils/config";
 import {
   ACCESS_TOKEN,
@@ -46,13 +46,8 @@ export default function LogInScreen() {
           onPress={() => {
             navigation.navigate("User");
           }}
-        >
-          <Image
-            source={require("../assets/icon/back_arrow.png")}
-            style={styles.img_32x32}
-          />
-        </TouchableOpacity>
-        <Text style={{ fontSize: 23, marginLeft: "28%" }}>Đăng nhập</Text>
+        ></TouchableOpacity>
+        <Text style={{ fontSize: 23, marginLeft: "35%" }}>Đăng nhập</Text>
       </View>
       <View
         style={[
@@ -105,8 +100,9 @@ export default function LogInScreen() {
                 null,
                 headers
               );
-              await AsyncStorage.setItem(ACCESS_TOKEN, accessToken);
+              _clearHeader();
               _setHeader(accessToken);
+              await AsyncStorage.setItem(ACCESS_TOKEN, accessToken);
               await AsyncStorage.setItem(PASSWORD, password);
               Alert.alert(NOTI, LOGIN_SUCCESSFULLY);
               navigation.navigate(HOME_SCREEN);

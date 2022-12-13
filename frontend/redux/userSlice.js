@@ -34,6 +34,7 @@ export const fetchUserInfo = createAsyncThunk(
   async () => {
     try {
       const response = await _getApi(API_GET_USER);
+
       return response.data;
     } catch (err) {
       Alert.alert("Oops!", err.message);

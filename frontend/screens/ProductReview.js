@@ -5,32 +5,51 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import Header from "../components/notiComponents/Header";
 import styles from "../components/styles";
+import { useDispatch } from "react-redux";
+import { createFeedback } from "../redux/feedBackSlice";
+import { NOTI } from "../utils/const";
 
-export default function ProductReview() {
-  var data = {
-    uriImg:
-      "https://top10tphcm.com/wp-content/uploads/2019/08/ao-thun-tay-lo-co-gai-sexy.png",
-    productName:
-      "Áo thun 123 dfjasidfjasic acsiajscias asdjifajs acsajidcjaisjcoas aosjcaoisjcaoisj",
-  };
+export default function ProductReview({ route }) {
+  const products = route.params.products || [];
   const [numberOfStars, setNumberOfStars] = useState(5);
   const [review, setReview] = useState("");
+  const [activePrd, setActivePrd] = useState(0);
+
+  const dispatch = useDispatch();
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "#fff" }}>
       <Header title={"Đánh giá sản phẩm"} canBack={true} />
-      <View style={[{ padding: 10 }, styles.flex_row, styles.hr_light_bottom]}>
-        <Image source={{ uri: data.uriImg }} style={styles.img_40x40} />
-        <Text
-          style={{ marginLeft: 10, top: 10, width: "80%" }}
-          numberOfLines={1}
-        >
-          {data.productName}
-        </Text>
-      </View>
+      {products.map((prd, index) => {
+        return (
+          <TouchableOpacity
+            style={[
+              { padding: 10 },
+              styles.flex_row,
+              styles.hr_light_bottom,
+              index === activePrd ? styles.highlight_prd : null,
+            ]}
+            onPress={() => {
+              setActivePrd(index);
+            }}
+          >
+            <Image
+              source={{ uri: prd.product.avatar }}
+              style={styles.img_40x40}
+            />
+            <Text
+              style={{ marginLeft: 10, top: 10, width: "80%" }}
+              numberOfLines={1}
+            >
+              {prd.product.name}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
       <View
         style={[
           styles.flex_row,
@@ -150,7 +169,15 @@ export default function ProductReview() {
           styles.alignCenterItem,
           styles.alignCenterItemVertically,
         ]}
-        onPress={() => {}}
+        onPress={() => {
+          const data = {
+            comment: review,
+            numberStar: numberOfStars,
+            productId: products[activePrd].product._id,
+          };
+          dispatch(createFeedback(data));
+          Alert.alert(NOTI, "Thêm bình luận thành công");
+        }}
       >
         <Text style={{ color: "#fff" }}>Lưu</Text>
       </TouchableOpacity>

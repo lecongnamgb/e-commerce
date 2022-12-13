@@ -93,7 +93,7 @@ export default function RegisterSeller({ route }) {
             backgroundUrl: shopBackground,
             owner: currentUser,
           };
-          if (shop) {
+          if (shop._id) {
             data._id = shop._id;
             dispatch(updateShop(data));
             Alert.alert(NOTI, "Sửa thông tin shop thành công");

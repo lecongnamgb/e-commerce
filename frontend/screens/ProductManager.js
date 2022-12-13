@@ -32,7 +32,7 @@ export default function ProductManager() {
   const userId = user._id;
   const shop = useSelector((state) => selectShopByOwnerId(state, userId)) || {};
   const shopId = shop._id;
-  const products = useSelector(selectAllProducts);
+  const products = useSelector((state) => selectProductByShopId(state, shopId));
   const navigation = useNavigation();
   const dispatch = useDispatch();
 

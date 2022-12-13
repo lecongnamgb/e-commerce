@@ -1,4 +1,5 @@
 import * as ImagePicker1 from "expo-image-picker";
+import moment from "moment";
 import { Alert } from "react-native";
 import { API_UPLOAD } from "./api";
 import { _uploadApi } from "./axios";
@@ -45,3 +46,6 @@ export const handlePrice = (number) => {
   }
   return ans;
 };
+
+export const formatDate = (dateString) =>
+  moment(dateString).format("HH:mm DD/MM/YYYY");

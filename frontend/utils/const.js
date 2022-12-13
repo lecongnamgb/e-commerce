@@ -39,3 +39,8 @@ export const PASSWORD = "password";
 
 export const EDIT_PRODUCT_TITLE = "Sửa thông tin sản phẩm";
 export const ADD_PRODUCT_TITLE = "Thêm sản phẩm";
+
+export const STATE_WAITING = "waiting";
+export const STATE_DELIVERING = "Đang giao hàng";
+export const STATE_DELIVERED = "Đã giao";
+export const STATE_CANCELED = "Đã huỷ";

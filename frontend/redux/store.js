@@ -6,6 +6,7 @@ import orderSlice from "./orderSlice";
 import productSlice from "./productSlice";
 import shopOrdersSlice from "./shopOrderSlice";
 import shopSlice from "./shopSlice";
+import suggesterSlice from "./suggesterSlice";
 import userSlice from "./userSlice";
 
 export default configureStore({
@@ -18,5 +19,6 @@ export default configureStore({
     carts: cartSlice,
     orders: orderSlice,
     shopOrders: shopOrdersSlice,
+    suggests: suggesterSlice,
   },
 });

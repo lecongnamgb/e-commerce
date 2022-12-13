@@ -2,10 +2,14 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import styles from "../styles";
 import SeparateView from "../userComponents/SeparateView";
+import moment from "moment";
+import { handlePrice } from "../../utils/helperFnc";
 
 export default function Order(props) {
   const { orderItem } = props;
-  console.log("order:", orderItem);
+
+  const dateFormat = moment(orderItem.createdAt).format("HH:mm DD/MM/YYYY");
+
   return (
     <View>
       <View style={[styles.p_10, styles.hr_bottom]}>
@@ -56,17 +60,19 @@ export default function Order(props) {
             {orderItem.receiverAddress}
           </Text>
         </View>
-        <View style={[styles.flex_row, styles.m_10]}>
-          <View style={[styles.mr_10]}>
-            <Image
-              source={require("../../assets/icon/order_product.png")}
-              style={styles.img_24x24}
-            />
+        {orderItem.products.map((product) => (
+          <View key={product._id} style={[styles.flex_row, styles.m_10]}>
+            <View style={[styles.mr_10]}>
+              <Image
+                source={require("../../assets/icon/order_product.png")}
+                style={styles.img_24x24}
+              />
+            </View>
+            <Text style={{ fontSize: 16, width: "85%" }} numberOfLines={1}>
+              {product.product.name} x{product.quantity}
+            </Text>
           </View>
-          <Text style={{ fontSize: 16, width: "85%" }} numberOfLines={1}>
-            {orderItem.productName} x{orderItem.productQuantity}
-          </Text>
-        </View>
+        ))}
         <View style={[styles.flex_row, styles.m_10]}>
           <View style={[styles.mr_10]}>
             <Image
@@ -75,7 +81,7 @@ export default function Order(props) {
             />
           </View>
           <Text style={{ fontSize: 16, width: "85%" }} numberOfLines={1}>
-            Ngày đặt đơn: {orderItem.orderDate}
+            Ngày đặt đơn: {dateFormat}
           </Text>
         </View>
         <View style={[styles.flex_row, styles.m_10]}>
@@ -86,7 +92,7 @@ export default function Order(props) {
             />
           </View>
           <Text style={{ fontSize: 16, width: "85%" }} numberOfLines={1}>
-            100000đ
+            {handlePrice(orderItem.totalPrice)}đ
           </Text>
         </View>
       </View>
@@ -100,7 +106,7 @@ export default function Order(props) {
           ]}
           onPress={props.handleConfirmPickUp}
         >
-          <Text>Xác nhận lấy hàng</Text>
+          <Text>Xác nhận đang giao</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
@@ -111,7 +117,7 @@ export default function Order(props) {
           ]}
           onPress={props.handleConfirmDelivered}
         >
-          <Text>Xác nhận giao hàng</Text>
+          <Text>Xác nhận đã giao</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[

@@ -89,9 +89,9 @@ export default function EditInfoScreen(props) {
       >
         <Image
           source={
-            userInfo.avatar === null
-              ? require("../assets/icon/user.png")
-              : { uri: userInfo.avatar }
+            userInfo.avatar
+              ? { uri: userInfo.avatar }
+              : require("../assets/icon/user.png")
           }
           style={[styles.img_100x100, styles.rounded]}
         />
@@ -183,8 +183,8 @@ export default function EditInfoScreen(props) {
           styles.alignCenterItemVertically,
           { height: 40, backgroundColor: "#ff6600", margin: 20 },
         ]}
-        onPress={() => {
-          AsyncStorage.clear();
+        onPress={async () => {
+          await AsyncStorage.clear();
 
           navigation.navigate(LOGIN_SCREEN);
         }}

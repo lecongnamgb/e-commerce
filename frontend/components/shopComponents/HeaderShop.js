@@ -1,11 +1,10 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
-import React, { useState } from "react";
-import styles from "../styles";
-import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentUser } from "../../redux/userSlice";
-import { takePhotoAndUpload } from "../../utils/helperFnc";
 import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../redux/userSlice";
 import { REGISTER_SELLER_SCREEN } from "../../utils/const";
+import styles from "../styles";
 
 export default function HeaderShop(props) {
   const currentUser = useSelector(selectCurrentUser);
